@@ -17,7 +17,7 @@ public:
 
 	VOID				Set_ObjectTag(CONST TCHAR* _OBJTAG)	{ TAG = _OBJTAG; }
 	wstring				Get_ObjectTag()						{	return TAG;	 }
-	//¤·¤©¤·
+	// Ãß°¡
 public:
 	virtual	HRESULT		Ready_GameObject();
 	virtual INT			Update_GameObject(CONST FLOAT& _DT);
