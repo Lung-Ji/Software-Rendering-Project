@@ -1,6 +1,6 @@
 #include "../Include/PCH.h"
 #include "Player.h"
-
+ 
 Player::Player(LPDIRECT3DDEVICE9 _GRPDEV)	: GameObject(_GRPDEV)	{}
 Player::Player(const GameObject& _RHS)		: GameObject(_RHS)		{}
 Player::~Player()													{}
