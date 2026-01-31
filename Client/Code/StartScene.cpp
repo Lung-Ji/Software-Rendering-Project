@@ -18,7 +18,7 @@ VOID StartScene::LateUpdate_Scene(CONST FLOAT& _DT) {
 	Scene::LateUpdate_Scene(_DT);
 }
 VOID StartScene::Render_Scene() {
-	Scene::Render_Scene();
+	//Scene::Render_Scene();
 }
 HRESULT StartScene::Ready_Enviroment_Layer(CONST TCHAR* _LTAG) {
 	Layer* LYR = Layer::Create();
@@ -34,13 +34,13 @@ HRESULT StartScene::Ready_Enviroment_Layer(CONST TCHAR* _LTAG) {
 
 	GOBJ = Player::Create(GRPDEV);
 	GOBJ->Set_ObjectTag(L"Player");
-
+	
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
-
+	
 	GOBJ = Terrain::Create(GRPDEV);
 	GOBJ->Set_ObjectTag(L"Terrain");
-
+	
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 

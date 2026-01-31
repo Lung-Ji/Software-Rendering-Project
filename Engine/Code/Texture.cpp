@@ -33,6 +33,11 @@ VOID Texture::Set_Texture(CONST TCHAR* _FileName)	{
 	if (iter == TextureList.end())	return;
 	GRPDEV->SetTexture(0, iter->second);
 }
+IDirect3DBaseTexture9* Texture::Find_Texture(const TCHAR* _FileName){
+	auto iter = find_if(TextureList.begin(), TextureList.end(), CTag_Finder(_FileName));
+	if (iter == TextureList.end())	return nullptr;
+	return iter->second;
+}
 HRESULT Texture::Import_TextureFromFolder(wstring _FolderName)	{
 	 
 	__finddata64_t Data;

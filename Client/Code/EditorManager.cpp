@@ -32,8 +32,8 @@ void EditorManager::SaveSceneAs() {
 
 void EditorManager::Initialize() {
 	IMGUIInitialize();
-    Inspector* InspectorWindow = new Inspector();
-    EditorWindows.insert({ L"InspectorWindow", InspectorWindow });
+    //Inspector* InspectorWindow = new Inspector();
+    //EditorWindows.insert({ L"InspectorWindow", InspectorWindow });
 }
 void EditorManager::Update() {
 
@@ -70,7 +70,7 @@ void EditorManager::IMGUIInitialize() {
         Style.WindowRounding = 0.f;
         Style.Colors[ImGuiCol_WindowBg].w = 1.f;
     }
-
+    ImGui_ImplWin32_EnableDpiAwareness();
     ImGui_ImplDX9_Init(GraphicDevice::GetInstance()->Get_Device());
     ImGui_ImplWin32_Init(hWnd);
 }
@@ -93,18 +93,18 @@ void EditorManager::IMGUIRender() {
         iter.second->Render();
     }
 
-    ImGuizmo::SetOrthographic(FALSE);
-    ImGuizmo::SetDrawlist(ImGui::GetCurrentWindow()->DrawList);
-
-   GameObject* Cam = SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_CAMERA);
+    //ImGuizmo::SetOrthographic(FALSE);
+    //ImGuizmo::SetDrawlist(ImGui::GetCurrentWindow()->DrawList);
+    //
+    //GameObject* Cam = SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_CAMERA);
+    //
+    //ImGuizmo::Manipulate((float*)dynamic_cast<CameraObject*>(Cam)->Get_ViewMatrix()->m,
+    //   (float*)dynamic_cast<CameraObject*>(Cam)->Get_ProjMatrix()->m,
+    //   ImGuizmo::TRANSLATE | ImGuizmo::ROTATE | ImGuizmo::SCALE, ImGuizmo::WORLD,
+    //   (float*)dynamic_cast<CameraObject*>(Cam)->Get_WorldMatrix()->m);
    
-   ImGuizmo::Manipulate((float*)dynamic_cast<CameraObject*>(Cam)->Get_ViewMatrix()->m,
-       (float*)dynamic_cast<CameraObject*>(Cam)->Get_ProjMatrix()->m,
-       ImGuizmo::TRANSLATE | ImGuizmo::ROTATE | ImGuizmo::SCALE, ImGuizmo::WORLD,
-       (float*)dynamic_cast<CameraObject*>(Cam)->Get_WorldMatrix()->m);
-   
-       if (Show_DemoWindow)
-            ImGui::ShowDemoWindow(&Show_DemoWindow);
+       //if (Show_DemoWindow)
+       //     ImGui::ShowDemoWindow(&Show_DemoWindow);
    
 
        ImGui::Begin("Camera Setting");
@@ -186,108 +186,108 @@ void EditorManager::DarkTheme() {
 void EditorManager::DockSpaceUpdate() {
     if (State == STATE::DISABLE)    return;
 
- // Flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
- // 
- // if (FullScreen) {
- //     ImGuiViewport* viewport = ImGui::GetMainViewport();
- //     ImGui::SetNextWindowPos(viewport->WorkPos);
- //     ImGui::SetNextWindowSize(viewport->WorkSize);
- //     ImGui::SetNextWindowViewport(viewport->ID);
- //     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
- //     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
- //     Flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse  | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration;
- //     Flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
- // }
- // if (DockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode)
- //     Flags |= ImGuiWindowFlags_NoBackground;
- // ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
- // bool Active = static_cast<bool>(State);
- // ImGui::Begin("EditorApplication", &Active, Flags);
- // ImGui::PopStyleVar();
- // 
- // if (FullScreen) ImGui::PopStyleVar(2);
- // 
- // ImGuiIO& io = ImGui::GetIO();
- // ImGuiStyle& style = ImGui::GetStyle();
- // float minWinSizeX = style.WindowMinSize.x;
- // style.WindowMinSize.x = 400.f;
- // if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
- // {
- //     ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
- //     ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), DockspaceFlags);
- // }
- //
- // style.WindowMinSize.x = minWinSizeX;
- // if (ImGui::BeginMenuBar())
- // {
- //     if (ImGui::BeginMenu("File"))
- //     {
- //         // Disabling fullscreen would allow the window to be moved to the front of other windows,
- //         // which we can't undo at the moment without finer window depth/z control.
- //         if (ImGui::MenuItem("Open Project", "Ctrl + 0"))                OpenProject();
- //         ImGui::Separator();
- //         if (ImGui::MenuItem("New Scene", "Ctrl + N"))                   NewScene();
- //         if (ImGui::MenuItem("Save Scene", "Ctrl + S"))                  SaveScene();
- //         if (ImGui::MenuItem("Save Scene As", "Ctrl + Shift + S"))       SaveSceneAs();
- //         ImGui::Separator();
- //         ImGui::EndMenu();
- //     }
- //         if (ImGui::BeginMenu("Script"))
- //         {
- //             if (ImGui::MenuItem("Reload assembly", "Ctrl+R"))
- //             {
- //                
- //             }
- // 
- //             ImGui::EndMenu();
- //         }
- // 
- //     }
-  // ImGui::EndMenuBar();
+    Flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    
+    if (FullScreen) {
+        ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->WorkPos);
+        ImGui::SetNextWindowSize(viewport->WorkSize);
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        Flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse  | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration;
+        Flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    }
+    if (DockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode)
+        Flags |= ImGuiWindowFlags_NoBackground;
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    bool Active = static_cast<bool>(State);
+    ImGui::Begin("EditorApplication", &Active, Flags);
+    ImGui::PopStyleVar();
+  
+    if (FullScreen) ImGui::PopStyleVar(2);
+    
+    ImGuiIO& io = ImGui::GetIO();
+    ImGuiStyle& style = ImGui::GetStyle();
+    float minWinSizeX = style.WindowMinSize.x;
+    style.WindowMinSize.x = 400.f;
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    {
+        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), DockspaceFlags);
+    }
+ 
+    style.WindowMinSize.x = minWinSizeX;
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            // Disabling fullscreen would allow the window to be moved to the front of other windows,
+            // which we can't undo at the moment without finer window depth/z control.
+            if (ImGui::MenuItem("Open Project", "Ctrl + 0"))                OpenProject();
+            ImGui::Separator();
+            if (ImGui::MenuItem("New Scene", "Ctrl + N"))                   NewScene();
+            if (ImGui::MenuItem("Save Scene", "Ctrl + S"))                  SaveScene();
+            if (ImGui::MenuItem("Save Scene As", "Ctrl + Shift + S"))       SaveSceneAs();
+            ImGui::Separator();
+            ImGui::EndMenu();
+        }
+            if (ImGui::BeginMenu("Script"))
+            {
+                if (ImGui::MenuItem("Reload assembly", "Ctrl+R"))
+                {
+                   
+                }
+    
+                ImGui::EndMenu();
+            }
+    
+        }
+    ImGui::EndMenuBar();
     for (auto iter : EditorWindows) {
         iter.second->Update();
     }
-    //ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-    //ImGui::Begin("Viewport");
-    //auto viewportMinRegion = ImGui::GetWindowContentRegionMin(); // ������ �ּ� ��ǥ
-    //auto viewportMaxRegion = ImGui::GetWindowContentRegionMax(); // ������ �ִ� ��ǥ
-    //auto viewportOffset = ImGui::GetWindowPos(); // ������ ��ġ
-    //
-    //const int letTop = 0;
-    //ViewportBounds[letTop] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
-    //
-    //const int rightBottom = 1;
-    //ViewportBounds[rightBottom] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
-    //
-    //// check if the mouse,keyboard is on the Sceneview
-    //ViewportFocused = ImGui::IsWindowFocused();
-    //ViewportHovered = ImGui::IsWindowHovered();
-    //
-    //// to do : mouse, keyboard event
-    //// 
-    //
-    //ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-    //ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-    ////ImGui::Image((ImTextureID)myTextureID, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
-    ////ya::graphics::Texture* texture = mFrameBuffer->GetAttachmentTexture(0);
-    //
-    //
-    //ImGui::Image((ImTextureID)(GraphicDevice::GetInstance()->Get_TempSurface()), ImVec2{ViewportSize.x, ViewportSize.y}
-    //, ImVec2{ 0, 0 }, ImVec2{ 1, 1 });
-    //
-    //// Open Scene by drag and drop
-    //if (ImGui::BeginDragDropTarget())
-    //{
-    //    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_ITEM"))
-    //    {
-    //        const wchar_t* path = (const wchar_t*)payload->Data;
-    //        //OpenScene(path);
-    //    }
-    //    ImGui::EndDragDropTarget();
-    //}
-    ////ImGui::End();
-    //ImGui::PopStyleVar();
-    //ImGui::End();
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+    ImGui::Begin("Viewport");
+    auto viewportMinRegion = ImGui::GetWindowContentRegionMin(); // ������ �ּ� ��ǥ
+    auto viewportMaxRegion = ImGui::GetWindowContentRegionMax(); // ������ �ִ� ��ǥ
+    auto viewportOffset = ImGui::GetWindowPos(); // ������ ��ġ
+    
+    const int letTop = 0;
+    ViewportBounds[letTop] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+    
+    const int rightBottom = 1;
+    ViewportBounds[rightBottom] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+    
+    // check if the mouse,keyboard is on the Sceneview
+    ViewportFocused = ImGui::IsWindowFocused();
+    ViewportHovered = ImGui::IsWindowHovered();
+    
+    // to do : mouse, keyboard event
+    // 
+    
+    ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+    ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+    //ImGui::Image((ImTextureID)myTextureID, ViewportSize, ImVec2(0, 1), ImVec2(1, 0));
+    //ya::graphics::Texture* texture = mFrameBuffer->GetAttachmentTexture(0);
+    
+    
+    ImGui::Image((ImTextureID)(GraphicDevice::GetInstance()->Get_TempSurface()), ImVec2{ViewportSize.x, ViewportSize.y}
+    , ImVec2{ 0, 0 }, ImVec2{ 1, 1 });
+    
+    // Open Scene by drag and drop
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PROJECT_ITEM"))
+        {
+            const wchar_t* path = (const wchar_t*)payload->Data;
+            //OpenScene(path);
+        }
+        ImGui::EndDragDropTarget();
+    }
+    ImGui::End();
+    ImGui::PopStyleVar();
+    ImGui::End();
 }
 
 void EditorManager::DockSpaceRender() {

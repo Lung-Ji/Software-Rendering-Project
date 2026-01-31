@@ -15,12 +15,12 @@ INT	Terrain::Update_GameObject(const _float& _DT) {
 	return 0;
 }
 VOID Terrain::LateUpdate_GameObject(const _float& _DT) {
-	GameObject::LateUpdate_GameObject(_DT);
+	//GameObject::LateUpdate_GameObject(_DT);
 }
 VOID Terrain::Render_GameObject() {
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	Component_Texture->Set_Texture(L"Tile0.jpg");
+	GRPDEV->SetTexture(0, StaticTexture);
 
 	Component_Buffer->Render_Buffer();
 }
@@ -29,8 +29,10 @@ HRESULT Terrain::Component_Initialize() {
 	Component_Buffer = ADD_COMPONENT_TERRAIN;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
 	Component_Texture = ADD_COMPONENT_TEXTURE;
+
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Extra/Example");
 
+	StaticTexture = Component_Texture->Find_Texture(L"Tile01.tga");
 	return S_OK;
 }
 Terrain* Terrain::Create(LPDIRECT3DDEVICE9 _GRPDEV) {

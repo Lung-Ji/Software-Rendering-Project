@@ -15,10 +15,6 @@ VOID		Layer::LateUpdate_Layer(const FLOAT& _DT) {
 	for (auto& GOBJ : GameObjectList)
 		GOBJ->LateUpdate_GameObject(_DT);
 }
-VOID		Layer::Render_Layer() {
-	for (auto& GOBJ : GameObjectList)
-		GOBJ->Render_GameObject();
-}
 GameObject* Layer::Get_GameObject(GAMEOBJECT_TYPE _OID) {
 	return GameObjectList[(LONG)_OID];
 }

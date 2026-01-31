@@ -14,25 +14,25 @@ HRESULT		GameObject::Ready_GameObject() {
 }
 INT			GameObject::Update_GameObject(const FLOAT& _DT) {
 	for (auto& COM : ComponentList) {
-		if (COM == nullptr)	 return 0;
+		if (COM == nullptr)	 continue;
 		COM->Update_Component(_DT);
 	}
 	return 0;
 }
 VOID		GameObject::LateUpdate_GameObject(const FLOAT& _DT) {
 	for (auto& COM : ComponentList) {
-		if (COM == nullptr)	 return;
+		if (COM == nullptr)	 continue;
 		COM->LateUpdate_Component(_DT);
 	}
 }
-VOID		GameObject::Render_GameObject() {
-	for (auto& COM : ComponentList) {
-		if (COM == nullptr)	 return;
-		COM->Render_Component();
-	}
-}
+//VOID		GameObject::Render_GameObject() {
+//	for (auto& COM : ComponentList) {
+//		if (COM == nullptr)	  continue;
+//		COM->Render_Component();
+//	}
+//}
 Component*	GameObject::Get_Component(COMPONENT_TYPE _CID) {
-	return ComponentList[(LONG)_CID] == nullptr ? ComponentList[(LONG)_CID] : nullptr;
+	return ComponentList[(LONG)_CID] != nullptr ? ComponentList[(LONG)_CID] : nullptr;
 }
 Component*	GameObject::Add_Component(COMPONENT_TYPE _CID) {
 	if (ComponentList[(LONG)_CID] == nullptr)

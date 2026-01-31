@@ -13,6 +13,7 @@ private:
 public:
 	HRESULT		Ready_Texture(TEXTUREID _TID, CONST TCHAR* _PATH, CONST UINT& _COUNT);
 	VOID		Set_Texture(CONST TCHAR* _FileName);
+	IDirect3DBaseTexture9* Find_Texture(CONST TCHAR* _FileName);
 
 	HRESULT		Import_TextureFromFolder(wstring _FolderName);
 

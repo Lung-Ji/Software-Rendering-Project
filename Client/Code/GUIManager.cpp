@@ -3,7 +3,7 @@
 
 IMPLEMENT_SINGLETON(GUIManager)
 
-GUIManager::GUIManager()  {};
+GUIManager::GUIManager() {};
 GUIManager::~GUIManager()	{};
 
 VOID GUIManager::Ready_GUIManager() {
@@ -14,73 +14,78 @@ VOID GUIManager::Ready_GUIManager() {
 
     GRPDEV = GraphicDevice::GetInstance()->Get_Device();
     ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_NavEnableSetMousePos 
-                        | ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableSetMousePos;
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     ImGuiStyle& Style = ImGui::GetStyle();
-    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-        Style.WindowRounding = 0.f;
-        Style.Colors[ImGuiCol_WindowBg].w = 1.f;
-    }
+
+    float main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(::MonitorFromPoint(POINT{ 0, 0 }, MONITOR_DEFAULTTOPRIMARY));
+
+    Style.ScaleAllSizes(main_scale);
+    Style.FontScaleDpi = main_scale;
+    Style.WindowRounding = 5.f;
+    Style.Colors[ImGuiCol_WindowBg].w = 1.f;
+
 
     if (!ImGui_ImplDX9_Init(GRPDEV)) {
         MSG_BOX("Cannot Initialize IMGUI.");
         return;
     }
-    if (!ImGui_ImplWin32_Init(GRPDEV)) {
+    if (!ImGui_ImplWin32_Init(hWnd)) {
         MSG_BOX("Cannot Initialize IMGUI.");
         return;
     }
 
-    Camera = SceneManager::GetInstance()->Get_CurrentScene()->
-        Get_GameObject(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_CAMERA);
+    Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
+        Get_GameObject(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_CAMERA));
    
 }
 VOID GUIManager::Update_GUIManager() {
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
-
 }
 VOID GUIManager::LateUpdate_GUIManager() {
-    
+
 }
 VOID GUIManager::Render_GUIManager() {
-    
     // 카메라 세팅
-    {
-        ImGui::Begin("Camera Setting");
+    bool CameraWindow = dynamic_cast<CameraObject*>(Camera)->Show_StateWindow();
+    if(CameraWindow){
+        ImGui::Begin("Camera Setting [F1]", &CameraWindow);
         ImGui::Text("Transform");
 
-        _vec3* EyeVec = dynamic_cast<CameraObject*>(Camera)->Get_EyeVec();
+        _vec3* EyeVec = Camera->Get_EyeVec();
         FLOAT EYEVEC[3] = { EyeVec->x, EyeVec->y, EyeVec->z };
         ImGui::InputFloat3("Eye", EYEVEC);
-        dynamic_cast<CameraObject*>(Camera)->Set_EyeVec({ EYEVEC[0], EYEVEC[1] , EYEVEC[2] });
+        Camera->Set_EyeVec({ EYEVEC[0], EYEVEC[1] , EYEVEC[2] });
 
-        _vec3* AtVec = dynamic_cast<CameraObject*>(Camera)->Get_AtVec();
+        _vec3* AtVec = Camera->Get_AtVec();
         FLOAT ATVEC[3] = { AtVec->x, AtVec->y, AtVec->z };
         ImGui::InputFloat3("At", ATVEC);
-        //dynamic_cast<CameraObject*>(Camera)->Set_EyeVec({ ATVEC[0], ATVEC[1] , ATVEC[2] });
+        //Camera->Set_EyeVec({ ATVEC[0], ATVEC[1] , ATVEC[2] });
 
-        FLOAT Speed = *dynamic_cast<CameraObject*>(Camera)->Get_Speed();
+        FLOAT Speed = *Camera->Get_Speed();
         ImGui::InputFloat("CamSpeed", &Speed);
         dynamic_cast<CameraObject*>(Camera)->Set_Speed(Speed);
 
-        ImGui::Separator();
+        //ImGui::Separator();
 
-        ImGui::SliderFloat("FOV", dynamic_cast<CameraObject*>(Camera)->Get_FOV(), D3DXToRadian(30.f), D3DXToRadian(90.f));
-        ImGui::SameLine();
-        ImGui::Button("Reset") ? dynamic_cast<CameraObject*>(Camera)->Set_FOV(D3DXToRadian(60.f)) : FALSE;
+        //ImGui::SliderFloat("FOV", Camera->Get_FOV(), D3DXToRadian(30.f), D3DXToRadian(90.f));
+        //ImGui::SameLine();
+        //ImGui::Button("Reset") ? Camera->Set_FOV(D3DXToRadian(60.f)) : FALSE;
         ImGui::Separator();
 
         ImGui::End();
     }
-   
+    
+    ImGui::EndFrame();
     ImGui::Render();
     ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
+    if (ImGui::GetIO().ConfigFlags ) {
+       ImGui::UpdatePlatformWindows();
+       ImGui::RenderPlatformWindowsDefault();
     }
 }
 

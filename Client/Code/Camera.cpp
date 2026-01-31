@@ -13,6 +13,10 @@ HRESULT CameraObject::Ready_GameObject() {
 
 	Angle = { 0.f, 0.f, 0.f };		CameraSpeed = 10.f;
 
+	MouseCheck = TRUE;
+
+	Camera_Show = TRUE;
+
 	D3DXMatrixLookAtLH(&ViewMatrix, &EyeVec, &AtVec, &UpVec);
 	D3DXMatrixPerspectiveFovLH(&ProjMatrix, FOVValue, AspectValue, NearValue, FarValue);
 
@@ -25,19 +29,18 @@ INT	CameraObject::Update_GameObject(const _float& _DT) {
 	D3DXMatrixLookAtLH(&ViewMatrix, &EyeVec, &AtVec, &UpVec);
 
 	GRPDEV->SetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	return GameObject::Update_GameObject(_DT);;
+	return 0;
 }
 VOID CameraObject::LateUpdate_GameObject(const _float& _DT) {
-	GameObject::LateUpdate_GameObject(_DT);
 	Camera_Transform_Control(_DT);
-	POINT       ptMouse{ WINCX >> 1, WINCY >> 1 };
+	if (MouseCheck) {
+		POINT       ptMouse{ WINCX >> 1, WINCY >> 1 };
 
-	ClientToScreen(hWnd, &ptMouse);
-	SetCursorPos(ptMouse.x, ptMouse.y);
+		ClientToScreen(hWnd, &ptMouse);
+		SetCursorPos(ptMouse.x, ptMouse.y);
 
-	
-	Camera_Rotation_Control(_DT);
+		Camera_Rotation_Control(_DT);
+	}
 }
 
 VOID CameraObject::Camera_Transform_Control(CONST FLOAT& _DT) {
@@ -82,6 +85,12 @@ VOID CameraObject::Camera_Transform_Control(CONST FLOAT& _DT) {
 		_vec3 Length = *D3DXVec3Normalize(&UpVector, &UpVector) * _DT * CameraSpeed;
 		EyeVec -= Length; AtVec -= Length;
 	}
+	if (KEY_DOWN(DIK_TAB)) {	//	마우스 커서 고정 여부 TRUE = 고정, FALSE = 고정 해제
+		MouseCheck	? MouseCheck = FALSE : MouseCheck = TRUE;
+	}
+	if (KEY_DOWN(DIK_F1)) {		//	GUI 상태 바 숨김 여부 TRUE = Visible, FALSE = Hide
+		Camera_Show ? Camera_Show = FALSE : Camera_Show = TRUE;
+	}
 }
 VOID CameraObject::Camera_Rotation_Control(CONST FLOAT& _DT){
 	_matrix CameraMatrix;
@@ -116,7 +125,7 @@ VOID CameraObject::Camera_Rotation_Control(CONST FLOAT& _DT){
 
 HRESULT CameraObject::Component_Initialize() {
 
-	Component_Transform = ADD_COMPONENT_TRANSFORM;
+	//Component_Transform = ADD_COMPONENT_TRANSFORM;
 
 	return S_OK;
 }

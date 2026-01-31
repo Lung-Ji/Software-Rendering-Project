@@ -19,8 +19,8 @@ HRESULT GraphicDevice::Ready_GraphicDevice(HWND _hWnd, WINMODE _WMODE, const UIN
 	
 	_ulong DeviceFlag = 0;
 
-	if (DeviceCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)	DeviceFlag |= D3DCREATE_HARDWARE_VERTEXPROCESSING;
-	else														DeviceFlag |= D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+	if (DeviceCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)	DeviceFlag |= D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED;
+	else														DeviceFlag |= D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED;
 
 	PreParam.BackBufferWidth = _SX;
 	PreParam.BackBufferHeight = _SY;

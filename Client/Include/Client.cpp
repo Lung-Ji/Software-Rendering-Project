@@ -21,23 +21,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_CLIENT, szWindowClass, MAX_LOADSTRING);
-#ifdef _DEBUG
-    if (::AllocConsole() == TRUE)
-    {
-        FILE* nfp[3];
-        freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
-        freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
-        freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
-        std::ios::sync_with_stdio();
-    }
-#endif // _DEBUG
+//#ifdef _DEBUG
+//    if (::AllocConsole() == TRUE)
+//    {
+//        FILE* nfp[3];
+//        freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
+//        freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
+//        freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
+//        std::ios::sync_with_stdio();
+//    }
+//#endif // _DEBUG
     MyRegisterClass(hInstance);
 
     if (!InitInstance(hInstance, nCmdShow)) return FALSE;
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
     GameManager* GM = GameManager::Create();
     GUIManager::GetInstance()->Ready_GUIManager();
-
+    //EditorManager::GetInstance()->Initialize();
     MSG msg;
     msg.message = WM_NULL;
 
@@ -71,12 +71,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
                 GM->Update_GameManager(TimeManager::GetInstance()->Get_DeltaTime(TIMERTYPE::TIMER_FPS));
                 GM->LateUpdate_GameManager(TimeManager::GetInstance()->Get_DeltaTime(TIMERTYPE::TIMER_FPS));
                 GM->Render_GameManager();
+
+                GUIManager::GetInstance()->Update_GUIManager();
+                GUIManager::GetInstance()->LateUpdate_GUIManager();
+                GUIManager::GetInstance()->Render_GUIManager();
+
+                GM->Get_DeviceClass()->Render_End();
             }
-            
-            GUIManager::GetInstance()->Update_GUIManager();
-            GUIManager::GetInstance()->LateUpdate_GUIManager();
-            GUIManager::GetInstance()->Render_GUIManager();
-            GM->Get_DeviceClass()->Render_End();
         }
     }
 
@@ -117,11 +118,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     RECT    rc{ 0,0, WINCX, WINCY };
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
     POINT Resolution = { GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN) };
+
+    float main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(::MonitorFromPoint(POINT{ 0, 0 }, MONITOR_DEFAULTTOPRIMARY));
     //SetProcessDPIAware();
     hWnd = CreateWindowW(szWindowClass, L"Software Rendering Project", WS_OVERLAPPEDWINDOW,
        (Resolution.x - WINCX)/2, (Resolution.y - WINCY) / 2 - 50, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
 
-
+    
     if (!hWnd) return FALSE;
 
     ShowWindow(hWnd, nCmdShow);
@@ -136,15 +139,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 
     switch (message)
     {
-    case WM_DPICHANGED:
-        if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
-        {
-            //const int dpi = HIWORD(wParam);
-            //printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
-            const RECT* suggested_rect = (RECT*)lParam;
-            ::SetWindowPos(hWnd, NULL, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
-        }
-        break;
+    //case WM_DPICHANGED:
+    //    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
+    //    {
+    //        //const int dpi = HIWORD(wParam);
+    //        //printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
+    //        const RECT* suggested_rect = (RECT*)lParam;
+    //        ::SetWindowPos(hWnd, NULL, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
+    //    }
+    //    break;
     case WM_COMMAND:
     {
         int wmId = LOWORD(wParam);

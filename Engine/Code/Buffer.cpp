@@ -9,10 +9,10 @@ Buffer::Buffer(const Buffer& _RHS)		  : Component(_RHS),
 Buffer::~Buffer() {}
 
 HRESULT Buffer::Ready_Buffer(BUFFER_TYPE _TYPE) {
-	if (_TYPE == BUFFER_TYPE::TRIANGLE	)	{ Ready_Triangle_Buffer() ;	}
-	if (_TYPE == BUFFER_TYPE::RECTANGLE	)	{ Ready_Rectangle_Buffer(); }
-	if (_TYPE == BUFFER_TYPE::TEXTURE	)	{ Ready_Texture_Buffer()  ;	}
-	if (_TYPE == BUFFER_TYPE::TERRAIN)		{ Ready_Terrain_Buffer()  ;	}
+	if		(_TYPE == BUFFER_TYPE::TRIANGLE	)		{ Ready_Triangle_Buffer() ;	}
+	else if (_TYPE == BUFFER_TYPE::RECTANGLE)		{ Ready_Rectangle_Buffer(); }
+	else if (_TYPE == BUFFER_TYPE::TEXTURE	)		{ Ready_Texture_Buffer()  ;	}
+	else if (_TYPE == BUFFER_TYPE::TERRAIN	)		{ Ready_Terrain_Buffer()  ;	}
 
 	return S_OK;
 }
@@ -167,28 +167,28 @@ HRESULT Buffer::Ready_Terrain_Buffer() {
 			INT INDEX = Z * VTXCNTX + X;
 
 			Vertex[INDEX].vPosition = { (FLOAT)X, 0.f, (FLOAT)Z };
-			Vertex[INDEX].vTexUV	= { (FLOAT)(X) / (FLOAT)(VTXCNTX), ((FLOAT)(VTXCNTZ)-(FLOAT)(Z)) / (FLOAT)(VTXCNTZ) };
+			Vertex[INDEX].vTexUV	= { ((FLOAT)(X) / (VTXCNTX-1)) * 20.f, ((FLOAT)(Z) / (VTXCNTZ - 1)) * 20.f };
 		}
 	}
 
 	VertexBuffer->Unlock();
-	INT INDEX = 0;
+	INT INDEX = 0, TriCount = 0;
 	IndexBuffer->Lock(0, 0, (void**)&Index, 0);
 
-	for (INT Z = 1; Z < VTXCNTZ - 1; ++Z) {
+	for (INT Z = 0; Z < VTXCNTZ - 1; ++Z) {
 		for (INT X = 0; X < VTXCNTX - 1; ++X) {
 
-			
+			INDEX = Z * VTXCNTX + X;
 
-			Index[INDEX]._0 = Z * VTXCNTX + X;
-			Index[INDEX]._1 = Z * VTXCNTX + X + 1;
-			Index[INDEX]._2 = X + 1;
-			INDEX++;
+			Index[TriCount]._0 = INDEX + VTXCNTX;
+			Index[TriCount]._1 = INDEX + VTXCNTX + 1;
+			Index[TriCount]._2 = INDEX + 1;
+			TriCount++;
 
-			Index[INDEX]._0 = Z * VTXCNTX + X;
-			Index[INDEX]._1 = X + 1;
-			Index[INDEX]._2 = X;
-			INDEX++;
+			Index[TriCount]._0 = INDEX + VTXCNTX;
+			Index[TriCount]._1 = INDEX + 1;
+			Index[TriCount]._2 = INDEX;
+			TriCount++;
 		}
 	}
 

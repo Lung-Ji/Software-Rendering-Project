@@ -11,6 +11,7 @@ public:
 	virtual			HRESULT		Ready_GameObject();
 	virtual			INT			Update_GameObject(CONST FLOAT& _DT);
 	virtual			VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
+	virtual			VOID		Render_GameObject() {};
 
 	VOID			Camera_Transform_Control(CONST FLOAT& _DT);
 	VOID			Camera_Rotation_Control(CONST FLOAT& _DT);
@@ -31,6 +32,8 @@ public:
 	FLOAT*			Get_Speed() { return &CameraSpeed; }
 	BOOL			Set_Speed(FLOAT _Value) { CameraSpeed = _Value; return TRUE; }
 
+	BOOL			Show_StateWindow() { return Camera_Show; }
+
 private:
 	HRESULT			Component_Initialize();
 
@@ -42,9 +45,16 @@ private:
 	_vec3		EyeVec, AtVec, RightVec, UpVec, LookVec;
 	FLOAT		FOVValue, AspectValue, NearValue, FarValue, CameraSpeed;
 
+	FLOAT		RotationX, RotationY;
+
 	_vec3		Angle;
 
+	BOOL		MouseFix;
+	BOOL		MouseCheck;
+
 	GameObject* Player;
+
+	bool		Camera_Show;
 
 public:
 	static CameraObject* Create(LPDIRECT3DDEVICE9 _GRPDEV);

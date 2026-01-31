@@ -13,7 +13,7 @@ public:
 	virtual	HRESULT		Ready_Scene();
 	virtual INT			Update_Scene(CONST FLOAT& _DT);
 	virtual VOID		LateUpdate_Scene(CONST FLOAT& _DT);
-	virtual VOID		Render_Scene();
+	virtual VOID		Render_Scene() = 0;
 
 public:
 	Layer*		Get_Layer(LAYER_TYPE _LID);

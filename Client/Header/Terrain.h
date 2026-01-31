@@ -20,6 +20,8 @@ private:
 	Transform*	Component_Transform;
 	Texture*	Component_Texture;
 
+	IDirect3DBaseTexture9* StaticTexture;
+
 public:
 	static	Terrain* Create(LPDIRECT3DDEVICE9 _GRPDEV);
 private:

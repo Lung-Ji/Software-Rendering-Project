@@ -5,12 +5,6 @@ GameManager::GameManager() : DEVCLASS(nullptr), GRPDEV(nullptr) {}
 GameManager::~GameManager() { Free(); }
 
 HRESULT GameManager::Ready_GameManager() {
-
-	SoundManager::GetInstance()->Ready_SoundManager();
-	
-	
-	//PLAY_SOUND(L"SoundTest.mp3", CHANNELID::SOUND_BGM02);
-	
 	if (FAILED(Ready_DefaultSetting()))					return E_FAIL;
 	if (FAILED(Ready_SceneSetting()))					return E_FAIL;
 	return S_OK;
@@ -43,6 +37,14 @@ HRESULT GameManager::Ready_DefaultSetting() {
 	GRPDEV = DEVCLASS->Get_Device();
 	GRPDEV->AddRef();
 	GRPDEV->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	GRPDEV->SetRenderState(D3DRS_ZENABLE, TRUE);
+	GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+
+	GRPDEV->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	GRPDEV->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+
+	SoundManager::GetInstance()->Ready_SoundManager();
 
 	return S_OK;
 }
@@ -81,5 +83,4 @@ VOID		 GameManager::Free() {
 	GUIManager	 ::DestroyInstance();
 
 	DEVCLASS     ->DestroyInstance();
-
 }

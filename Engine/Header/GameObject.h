@@ -22,7 +22,7 @@ public:
 	virtual	HRESULT		Ready_GameObject();
 	virtual INT			Update_GameObject(CONST FLOAT& _DT);
 	virtual VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
-	virtual VOID		Render_GameObject();
+	virtual VOID		Render_GameObject() = 0;
 
 protected:
 	vector<Component*>				ComponentList;

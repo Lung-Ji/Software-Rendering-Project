@@ -21,6 +21,7 @@
 #include "Engine_Define.h"
 #include "GraphicDevice.h"
 
+#include "EditorManager.h"
 #include "EditorWindow.h"
 #include "Inspector.h"
 

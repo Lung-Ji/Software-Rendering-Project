@@ -58,15 +58,6 @@
     <Filter Include="05. IMGUI\02. Code">
       <UniqueIdentifier>{a29a3732-ba29-492d-9c0e-2998c58a2503}</UniqueIdentifier>
     </Filter>
-    <Filter Include="06. IMGUIZMO">
-      <UniqueIdentifier>{6b0610bc-6e8d-40f3-9ccb-faf7d8450eb3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06. IMGUIZMO\01. Header">
-      <UniqueIdentifier>{57008a3b-ed7b-430e-bda9-382bf97f9dd9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="06. IMGUIZMO\02. Code">
-      <UniqueIdentifier>{ceb4bf64-6dc8-4087-bed3-9a77144cea73}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05. IMGUI\00. EditorManager">
       <UniqueIdentifier>{905c05ca-256f-4dfd-9a79-864c3bfc297c}</UniqueIdentifier>
     </Filter>
@@ -150,27 +141,6 @@
     <ClInclude Include="..\Header\imstb_truetype.h">
       <Filter>05. IMGUI\01. Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\ImCurveEdit.h">
-      <Filter>06. IMGUIZMO\01. Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\ImGradient.h">
-      <Filter>06. IMGUIZMO\01. Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\ImGuizmo.h">
-      <Filter>06. IMGUIZMO\01. Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\ImLightRig.h">
-      <Filter>06. IMGUIZMO\01. Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\ImSequencer.h">
-      <Filter>06. IMGUIZMO\01. Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\ImZoomSlider.h">
-      <Filter>06. IMGUIZMO\01. Header</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\EditorManager.h">
-      <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\GUIManager.h">
       <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>
     </ClInclude>
@@ -232,21 +202,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\imgui_widgets.cpp">
       <Filter>05. IMGUI\02. Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\ImCurveEdit.cpp">
-      <Filter>06. IMGUIZMO\02. Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\ImGradient.cpp">
-      <Filter>06. IMGUIZMO\02. Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\ImGuizmo.cpp">
-      <Filter>06. IMGUIZMO\02. Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\ImSequencer.cpp">
-      <Filter>06. IMGUIZMO\02. Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\EditorManager.cpp">
-      <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\GUIManager.cpp">
       <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>

@@ -16,7 +16,7 @@ public:
 	virtual	HRESULT		Ready_Layer();
 	virtual INT			Update_Layer(CONST FLOAT& _DT);
 	virtual VOID		LateUpdate_Layer(CONST FLOAT& _DT);
-	virtual VOID		Render_Layer();
+	//virtual VOID		Render_Layer();
 
 	GameObject*			Get_GameObject(GAMEOBJECT_TYPE _OID);
 	Component*			Get_Component(GAMEOBJECT_TYPE _OID, COMPONENT_TYPE _CID);

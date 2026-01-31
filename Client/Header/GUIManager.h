@@ -21,7 +21,7 @@ public:
 private:
 	LPDIRECT3DDEVICE9		GRPDEV;
 	float matrixTranslation[3], matrixRotation[3], matrixScale[3];
-	GameObject*				Camera;
-	BOOL					UseWindow;
+	CameraObject*				Camera;
+	BOOL						UseWindow;
 };
 

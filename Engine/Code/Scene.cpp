@@ -16,10 +16,6 @@ VOID Scene::LateUpdate_Scene(const FLOAT& _DT) {
     for (auto& LYR : LayerList)
         LYR->LateUpdate_Layer(_DT);
 }
-VOID Scene::Render_Scene() {
-    for (auto& LYR : LayerList)
-        LYR->Render_Layer();
-}
 Layer* Scene::Get_Layer(LAYER_TYPE _LID)    {
     return LayerList[(LONG)_LID];
 }

@@ -3,9 +3,7 @@
 IMPLEMENT_SINGLETON(SceneManager)
 
 SceneManager::SceneManager() : CurrentScene(nullptr)	{			}
-SceneManager::~SceneManager()							{	
-	Free();	
-}
+SceneManager::~SceneManager()							{	Free();	}
 
 HRESULT SceneManager::Ready_SceneManager() {
 	return S_OK;
@@ -18,7 +16,7 @@ VOID	SceneManager::LateUpdate_SceneManager(const FLOAT& _DT) {
 }
 VOID	SceneManager::Render_SceneManager(LPDIRECT3DDEVICE9 _GRPDEV) {
 	RenderManager::GetInstance()->Render_GameObject(_GRPDEV);
-	CurrentScene->Render_Scene();
+	//CurrentScene->Render_Scene();
 }
 VOID	SceneManager::Free() {
 	Safe_Release(CurrentScene);
