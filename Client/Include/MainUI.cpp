@@ -24,7 +24,7 @@ VOID	MainUI::Render_GameObject() {
 HRESULT MainUI::Component_Initialize() {
 	Component_Sprite = ADD_COMPONENT_SPRITE;
 
-	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Skill01.png", 50, 50, 10, 650);
+	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Skill01.png", 50, 50, 10, 650, 100);
 	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Skill02.png", 50, 50, 70, 650);
 	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Skill03.png", 50, 50, 130, 650);
 

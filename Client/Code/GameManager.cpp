@@ -12,6 +12,9 @@ HRESULT GameManager::Ready_GameManager() {
 VOID	GameManager::Update_GameManager(CONST FLOAT& _DT) {
 	SceneManager::GetInstance()->Update_SceneManager(_DT);
 	KeyManager	::GetInstance()->Update_KeyManager(_DT);
+	if (GetAsyncKeyState('K') & 0x8000) {
+		CHANGE_SCENE_VILLAGE
+	}
 }
 VOID	GameManager::LateUpdate_GameManager(CONST FLOAT& _DT) {
 	SceneManager::GetInstance()->LateUpdate_SceneManager(_DT);
@@ -45,7 +48,7 @@ HRESULT GameManager::Ready_DefaultSetting() {
 	GRPDEV->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 
 	SoundManager::GetInstance()->Ready_SoundManager();
-
+	
 	return S_OK;
 }
 HRESULT GameManager::Ready_SceneSetting() {

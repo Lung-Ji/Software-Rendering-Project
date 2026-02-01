@@ -8,11 +8,17 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////// KEYMANAGER /////////////////////////////////////
-#define KEY_DOWN(KEY_IDX)					KeyManager::GetInstance()->KEY_STATE_DOWN(KEY_IDX)	== TRUE							// 해당 키 최초 입력
-#define KEY_HOLD(KEY_IDX)					KeyManager::GetInstance()->KEY_STATE_HOLD(KEY_IDX)	== TRUE							// 해당 키 입력 유지
-#define KEY_UP(KEY_IDX)						KeyManager::GetInstance()->KEY_STATE_UP(KEY_IDX)	== TRUE							// 해당 키 입력 중지
+#define KEY_DOWN(KEY_IDX)					KeyManager::GetInstance()->KEY_STATE_DOWN(KEY_IDX)	== TRUE					// 해당 키 최초 입력
+#define KEY_HOLD(KEY_IDX)					KeyManager::GetInstance()->KEY_STATE_HOLD(KEY_IDX)	== TRUE					// 해당 키 입력 유지
+#define KEY_UP(KEY_IDX)						KeyManager::GetInstance()->KEY_STATE_UP(KEY_IDX)	== TRUE					// 해당 키 입력 중지
 
-#define MOUSE_MOVE(KEY_IDX)					KeyManager::GetInstance()->Get_MouseMove(KEY_IDX)									// 해당 키 입력 중지
+#define MOUSE_MOVE(KEY_IDX)					KeyManager::GetInstance()->Get_MouseMove(KEY_IDX)							// 마우스 움직임 감지
+////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////// SCENEMANAGER /////////////////////////////////////
+#define CHANGE_SCENE_START				SceneManager::GetInstance()->Scene_Transition(StartScene::Create(GRPDEV));		// 시작 씬으로 전환
+#define CHANGE_SCENE_VILLAGE			SceneManager::GetInstance()->Scene_Transition(VillageScene::Create(GRPDEV));	// 마을 씬으로 전환
+#define CHANGE_SCENE_DUNGEON			SceneManager::GetInstance()->Scene_Transition(DungeonScene::Create(GRPDEV));	// 던전 씬으로 전환
 ////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////// COMPONENT //////////////////////////////////////

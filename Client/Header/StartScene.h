@@ -1,8 +1,6 @@
 #pragma once
 #include "Scene.h"
 
-
-
 class StartScene : public Scene {
 protected:
 	explicit StartScene(LPDIRECT3DDEVICE9 _GRPDEV);

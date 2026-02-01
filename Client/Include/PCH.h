@@ -38,6 +38,8 @@
 //////////////////////////////////////////// Scene List
 
 #include "StartScene.h"
+#include "VillageScene.h"
+#include "DungeonScene.h"
 
 //////////////////////////////////////////// Manager
 #include "GUIManager.h"

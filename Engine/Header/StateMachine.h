@@ -5,9 +5,9 @@ BEGIN(Engine)
 
 class ENGINE_DLL State {
 public:
-	virtual VOID FSM_StateEnter() = 0;
-	virtual VOID FSM_StateUpdate() = 0;
-	virtual VOID FSM_StateExit() = 0;
+	virtual VOID FSM_StateEnter()	= 0;
+	virtual VOID FSM_StateUpdate()	= 0;
+	virtual VOID FSM_StateExit()	= 0;
 
 	virtual ~State() {};
 };
