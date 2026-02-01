@@ -4,6 +4,7 @@
 #include "Buffer.h"
 #include "Transform.h"
 #include "Texture.h"
+#include "Sprite.h"
 #include "StateMachine.h"
 
 BEGIN(Engine)

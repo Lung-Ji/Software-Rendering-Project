@@ -55,6 +55,9 @@
     <Filter Include="03. KeyManager">
       <UniqueIdentifier>{9fcbc2e2-c957-4a91-b71c-cc2d9405ac91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99. Component\04. Sprite">
+      <UniqueIdentifier>{e78a6a92-ba68-4941-a7bc-fd0f30163631}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GraphicDevice.h">
@@ -80,9 +83,6 @@
     </ClInclude>
     <ClInclude Include="..\Header\TimeManager.h">
       <Filter>02. TimeManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Buffer.h">
-      <Filter>99. Component\01. Buffer</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Component.h">
       <Filter>99. Hierarchy\04. Component</Filter>
@@ -120,6 +120,12 @@
     <ClInclude Include="..\Header\KeyManager.h">
       <Filter>03. KeyManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Buffer.h">
+      <Filter>99. Component\01. Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Sprite.h">
+      <Filter>99. Component\04. Sprite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GraphicDevice.cpp">
@@ -127,9 +133,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\TimeManager.cpp">
       <Filter>02. TimeManager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Buffer.cpp">
-      <Filter>99. Component\01. Buffer</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Component.cpp">
       <Filter>99. Hierarchy\04. Component</Filter>
@@ -166,6 +169,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\KeyManager.cpp">
       <Filter>03. KeyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Buffer.cpp">
+      <Filter>99. Component\01. Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sprite.cpp">
+      <Filter>99. Component\04. Sprite</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

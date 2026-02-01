@@ -21,10 +21,6 @@
 #include "Engine_Define.h"
 #include "GraphicDevice.h"
 
-#include "EditorManager.h"
-#include "EditorWindow.h"
-#include "Inspector.h"
-
 //////////////////////////////////////////// Client Function
 
 #include "ENUM.h"
@@ -34,6 +30,7 @@
 
 #include "Camera.h"
 #include "Terrain.h"
+#include "MainUI.h"
 #include "NPC.h"
 #include "Monster.h"
 #include "Player.h"

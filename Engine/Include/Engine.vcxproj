@@ -153,6 +153,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\Engine_Struct.h" />
     <ClInclude Include="..\Header\Engine_Typedef.h" />
     <ClInclude Include="..\Header\KeyManager.h" />
+    <ClInclude Include="..\Header\Sprite.h" />
     <ClInclude Include="..\Header\StateMachine.h" />
     <ClInclude Include="..\Header\GameObject.h" />
     <ClInclude Include="..\Header\GraphicDevice.h" />
@@ -170,6 +171,7 @@ call Copy.bat</Command>
     <ClCompile Include="..\Code\Buffer.cpp" />
     <ClCompile Include="..\Code\Component.cpp" />
     <ClCompile Include="..\Code\KeyManager.cpp" />
+    <ClCompile Include="..\Code\Sprite.cpp" />
     <ClCompile Include="..\Code\StateMachine.cpp" />
     <ClCompile Include="..\Code\GameObject.cpp" />
     <ClCompile Include="..\Code\GraphicDevice.cpp" />

@@ -35,6 +35,7 @@ HRESULT Monster::Component_Initialize() {
 	Component_Buffer	= ADD_COMPONENT_RECTTEX;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
 	Component_Texture	= ADD_COMPONENT_TEXTURE;
+
 	
 	return S_OK;
 }

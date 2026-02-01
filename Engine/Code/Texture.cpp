@@ -1,5 +1,4 @@
 #include "Texture.h"
-#include <io.h>
 
 Texture::Texture()													{}
 Texture::Texture(LPDIRECT3DDEVICE9 _GRPDEV) : Component(_GRPDEV)	{}
@@ -40,26 +39,24 @@ IDirect3DBaseTexture9* Texture::Find_Texture(const TCHAR* _FileName){
 }
 HRESULT Texture::Import_TextureFromFolder(wstring _FolderName)	{
 	 
-	__finddata64_t Data;
+	_wfinddata64_t Data;
 	
 	INT Result = 1;
 
 	wstring STRUNI = _FolderName + L"/*.*";
-	string STRMLT = {};
-	STRMLT += UniCodeToMultiByte(STRUNI);
 	
-	intptr_t Handle = _findfirst64(STRMLT.c_str(), &Data);
+	intptr_t Handle = _wfindfirst64(STRUNI.c_str(), &Data);
 	
 	IDirect3DBaseTexture9* TEX = nullptr;
 	
 	if (Handle == -1)	return E_FAIL;
 	while (Result != -1) {
-		wstring WideRootPath = _FolderName + L"/" + Texture::MultiByteToUniCode(Data.name);
-		wstring* KEY = new wstring(Texture::MultiByteToUniCode(Data.name));
+		wstring WideRootPath = _FolderName + L"/" + Data.name;
+		wstring* KEY = new wstring(Data.name);
 		KEY_Array.push_back(KEY);
 		D3DXCreateTextureFromFile(GRPDEV, WideRootPath.c_str(), (LPDIRECT3DTEXTURE9*)&TEX);
 		if(TEX !=nullptr)	TextureList.insert({ KEY_Array.back()->c_str(), TEX});
-		Result = _findnext64(Handle, &Data);
+		Result = _wfindnext64(Handle, &Data);
 	}
 	
 	_findclose(Handle);
@@ -86,19 +83,4 @@ VOID		Texture::Free() {
 	TextureList.clear();
 
 	Component::Free();
-}
-
-string	Texture::UniCodeToMultiByte(wstring _STR) {
-	int len = WideCharToMultiByte(CP_ACP, 0, &_STR[0], -1, NULL, 0, NULL, NULL);
-	string strMulti(len, 0);
-	WideCharToMultiByte(CP_ACP, 0, &_STR[0], -1, &strMulti[0], len, NULL, NULL);
-
-	return strMulti.c_str();
-}
-wstring Texture::MultiByteToUniCode(string _STR) {
-	int len = MultiByteToWideChar(CP_ACP, 0, &_STR[0], -1, NULL, 0);
-	wstring strMulti(len, 0);
-	MultiByteToWideChar(CP_ACP, 0, &_STR[0], -1, &strMulti[0], len);
-
-	return strMulti.c_str();
 }

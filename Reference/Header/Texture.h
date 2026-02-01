@@ -16,9 +16,6 @@ public:
 	IDirect3DBaseTexture9* Find_Texture(CONST TCHAR* _FileName);
 
 	HRESULT		Import_TextureFromFolder(wstring _FolderName);
-
-	string			UniCodeToMultiByte(wstring _STR);
-	wstring		MultiByteToUniCode(string _STR);
 private:
 	map<CONST TCHAR*, IDirect3DBaseTexture9*>	TextureList;
 	vector<wstring*> KEY_Array;

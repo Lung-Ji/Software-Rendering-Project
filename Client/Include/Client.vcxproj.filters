@@ -64,6 +64,9 @@
     <Filter Include="05. IMGUI\00. EditorManager\01. MainEditor">
       <UniqueIdentifier>{8cf53df0-31fa-4206-aadb-5844248c3097}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. UI\01. Sprite">
+      <UniqueIdentifier>{c5ddb37a-c839-4e15-9417-7076814467ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -144,6 +147,9 @@
     <ClInclude Include="..\Header\GUIManager.h">
       <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>
     </ClInclude>
+    <ClInclude Include="MainUI.h">
+      <Filter>04. UI\01. Sprite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -205,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GUIManager.cpp">
       <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="MainUI.cpp">
+      <Filter>04. UI\01. Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
