@@ -16,7 +16,7 @@ HRESULT	  StateMachine::Ready_Component() {
 	return S_OK;
 }
 INT			StateMachine::Update_Component(CONST FLOAT& _DT) {
-	CurrentState->FSM_StateUpdate();
+	//CurrentState->FSM_StateUpdate();
 	return 0;
 }
 StateMachine* StateMachine::Create(LPDIRECT3DDEVICE9 _GRPDEV) {

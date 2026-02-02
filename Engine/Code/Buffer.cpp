@@ -14,8 +14,8 @@ HRESULT Buffer::Ready_Buffer(BUFFER_TYPE _TYPE) {
 	else if (_TYPE == BUFFER_TYPE::TEXTURE	)		{ Ready_Texture_Buffer()  ;	}
 	else if (_TYPE == BUFFER_TYPE::TERRAIN	)		{ Ready_Terrain_Buffer()  ;	}
 
-	if (_TYPE == BUFFER_TYPE::TILE) { Ready_Tile_Buffer(); }
-	if (_TYPE == BUFFER_TYPE::CUBE) { Ready_Cube_Buffer(); }
+    else if (_TYPE == BUFFER_TYPE::TILE) { Ready_Tile_Buffer(); }
+    else if (_TYPE == BUFFER_TYPE::CUBE) { Ready_Cube_Buffer(); }
 	return S_OK;
 }
 VOID	Buffer::Render_Buffer() {
@@ -155,7 +155,7 @@ HRESULT Buffer::Ready_Terrain_Buffer() {
 
 	IndexSize = sizeof(INDEX32);
 	IndexFormat = D3DFMT_INDEX32;
-
+	pVBufferPos = new _vec3[VertexCount];
 	VTXTEX*		Vertex	= NULL;
 	INDEX32*	Index	= NULL;
 	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
@@ -169,6 +169,7 @@ HRESULT Buffer::Ready_Terrain_Buffer() {
 
 			Vertex[INDEX].vPosition = { (FLOAT)X, 0.f, (FLOAT)Z };
 			Vertex[INDEX].vTexUV	= { ((FLOAT)(X) / (VTXCNTX-1)) * 20.f, ((FLOAT)(Z) / (VTXCNTZ - 1)) * 20.f };
+			pVBufferPos[INDEX] = Vertex[INDEX].vPosition;
 		}
 	}
 
@@ -196,7 +197,6 @@ HRESULT Buffer::Ready_Terrain_Buffer() {
 	IndexBuffer->Unlock();
 	return S_OK;
 }
-
 HRESULT Buffer::Ready_Tile_Buffer()
 {
 	VertexSize = sizeof(VTXCOL);
@@ -242,7 +242,6 @@ HRESULT Buffer::Ready_Tile_Buffer()
 	IndexBuffer->Unlock();
 	return S_OK;
 }
-
 HRESULT Buffer::Ready_Cube_Buffer()
 {
 	VertexSize = sizeof(VTXCUBE);
@@ -370,6 +369,10 @@ Component*	Buffer::Clone() {
 	return new Buffer(*this);
 }
 VOID		Buffer::Free() {
+
+	if(false == CLONE)
+		Safe_Delete_Array(pVBufferPos);
+		
 	Safe_Release(VertexBuffer);
 	Safe_Release(IndexBuffer);
 

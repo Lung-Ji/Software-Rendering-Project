@@ -162,7 +162,9 @@
     <ClInclude Include="..\Header\GameManager.h" />
     <ClInclude Include="..\Header\GUIManager.h" />
     <ClInclude Include="..\Header\imconfig.h" />
-    <ClInclude Include="..\Header\imgui.h" />
+    <ClInclude Include="..\Header\imgui.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Header\imgui_impl_dx9.h" />
     <ClInclude Include="..\Header\imgui_impl_win32.h" />
     <ClInclude Include="..\Header\imgui_internal.h" />
@@ -208,7 +210,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameManager.cpp" />
     <ClCompile Include="..\Code\GUIManager.cpp" />
-    <ClCompile Include="..\Code\imgui.cpp" />
+    <ClCompile Include="..\Code\imgui.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Code\imgui_demo.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>

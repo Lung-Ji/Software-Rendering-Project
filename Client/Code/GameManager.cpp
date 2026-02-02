@@ -11,9 +11,10 @@ HRESULT GameManager::Ready_GameManager() {
 }
 VOID	GameManager::Update_GameManager(CONST FLOAT& _DT) {
 
-	TileManager::GetInstance()->Update_TileList(_DT);
 	SceneManager::GetInstance()->Update_SceneManager(_DT);
 	KeyManager	::GetInstance()->Update_KeyManager(_DT);
+
+	TileManager::GetInstance()->Update_TileList(_DT);
 }
 VOID	GameManager::LateUpdate_GameManager(CONST FLOAT& _DT) {
 	SceneManager::GetInstance()->LateUpdate_SceneManager(_DT);
@@ -80,7 +81,7 @@ VOID		 GameManager::Free() {
 	GraphicDevice::DestroyInstance();
 	KeyManager	 ::DestroyInstance();
 	TimeManager	 ::DestroyInstance();
-	TileManager ::DestroyInstance();
+	TileManager  ::DestroyInstance();
 	SceneManager ::DestroyInstance();
 	ProtoManager ::DestroyInstance();
 	SoundManager ::DestroyInstance();
