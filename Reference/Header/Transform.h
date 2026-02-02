@@ -28,8 +28,8 @@ public:
 		memcpy(pInfo, &WorldMatrix.m[eType][0], sizeof(_vec3));
 	}
 public:
-	VOID		Set_Position(_vec3 _Pos)								{ m_vInfo[INFO_POS] = _Pos;						}
-	VOID		Set_Position(FLOAT _PosX, FLOAT _PosY, FLOAT _PosZ)		{ m_vInfo[INFO_POS] = { _PosX, _PosY, _PosZ };	}
+	VOID		Set_Pos(_vec3 _Pos)										{ m_vInfo[INFO_POS] = _Pos;						}
+	VOID		Set_Pos(FLOAT _PosX, FLOAT _PosY, FLOAT _PosZ)			{ m_vInfo[INFO_POS] = { _PosX, _PosY, _PosZ };	}
 
 	VOID		Set_Rotation(_vec3 _Rot)								{ m_vAngle = _Rot;						}
 	VOID		Set_Rotation(FLOAT _RotX, FLOAT _RotY, FLOAT _RotZ)		{ m_vAngle = { _RotX, _RotY, _RotZ };	}

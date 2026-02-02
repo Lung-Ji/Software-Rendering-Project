@@ -53,15 +53,15 @@ _bool Tile::Check_Bottom(_matrix* matWorld, _vec3* vPos, _vec3* vOrigin, _vec3* 
 	for (auto& iter : TileManager::GetInstance()->Get_TileList())
 	{
 		_int iDst = dynamic_cast<CubeTile*>(iter)->Get_TileNumber(); //안겹치게 예외처리요 ㅅㅂ
-		_int iMiddle	  =  vOrigin->z  * VTXCNTX + vOrigin->x;
-		_int iCheckR	  =  vOrigin->z  * VTXCNTX + vOrigin->x - 1;
-		_int iCheckL	  =  vOrigin->z  * VTXCNTX + vOrigin->x + 1;
-		_int iCheckT      = ((vOrigin->z + 1) * VTXCNTX + vOrigin->x);
-		_int iCheckB      = ((vOrigin->z - 1) * VTXCNTX + vOrigin->x);
-		_int iCheckLT	  = ((vOrigin->z + 1) * VTXCNTX + vOrigin->x - 1);
-		_int iCheckRT	  = ((vOrigin->z + 1) * VTXCNTX + vOrigin->x + 1);
-		_int iCheckLB	  = ((vOrigin->z - 1) * VTXCNTX + vOrigin->x - 1);
-		_int iCheckRB	  = ((vOrigin->z - 1) * VTXCNTX + vOrigin->x + 1);
+		_int iMiddle	  = (_int) (vOrigin->z  * VTXCNTX + vOrigin->x	  );
+		_int iCheckR	  = (_int) (vOrigin->z  * VTXCNTX + vOrigin->x - 1);
+		_int iCheckL	  = (_int) (vOrigin->z  * VTXCNTX + vOrigin->x + 1);
+		_int iCheckT      = (_int)((vOrigin->z + 1) * VTXCNTX + vOrigin->x);
+		_int iCheckB      = (_int)((vOrigin->z - 1) * VTXCNTX + vOrigin->x);
+		_int iCheckLT	  = (_int)((vOrigin->z + 1) * VTXCNTX + vOrigin->x - 1);
+		_int iCheckRT	  = (_int)((vOrigin->z + 1) * VTXCNTX + vOrigin->x + 1);
+		_int iCheckLB	  = (_int)((vOrigin->z - 1) * VTXCNTX + vOrigin->x - 1);
+		_int iCheckRB	  = (_int)((vOrigin->z - 1) * VTXCNTX + vOrigin->x + 1);
 
 		if (iDst == iCheckLT || iDst == iCheckRT || iDst == iCheckLB || iDst == iCheckRB || iDst == iCheckR || iDst == iCheckL || iDst == iCheckT || iDst == iCheckB)
 		{
@@ -204,7 +204,7 @@ void Tile::Check_TilePoint()
 				{
 					vMouseCheck.y = m_TileHeight;
 					GRPDEV->AddRef();
-					dynamic_cast<CubeTile*>(pCube)->Set_TileNumber(vMouseCheck.z * VTXCNTX + vMouseCheck.x);
+					dynamic_cast<CubeTile*>(pCube)->Set_TileNumber((_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x);
 					TileManager::GetInstance()->Add_Tile(pCube, vMouseCheck); 
 				}
 				else

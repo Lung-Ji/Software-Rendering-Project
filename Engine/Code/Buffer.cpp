@@ -13,8 +13,8 @@ HRESULT Buffer::Ready_Buffer(BUFFER_TYPE _TYPE) {
 	else if (_TYPE == BUFFER_TYPE::RECTANGLE)		{ Ready_Rectangle_Buffer(); }
 	else if (_TYPE == BUFFER_TYPE::TEXTURE	)		{ Ready_Texture_Buffer()  ;	}
 	else if (_TYPE == BUFFER_TYPE::TERRAIN	)		{ Ready_Terrain_Buffer()  ;	}
-    else if (_TYPE == BUFFER_TYPE::TILE)			{ Ready_Tile_Buffer(); }
-    else if (_TYPE == BUFFER_TYPE::CUBE)			{ Ready_Cube_Buffer(); }
+    else if (_TYPE == BUFFER_TYPE::TILE)			{ Ready_Tile_Buffer()	  ; }
+    else if (_TYPE == BUFFER_TYPE::CUBE)			{ Ready_Cube_Buffer()	  ; }
 	return S_OK;
 }
 VOID	Buffer::Render_Buffer() {

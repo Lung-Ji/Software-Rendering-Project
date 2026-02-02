@@ -28,6 +28,7 @@ public:
 
 public:
 	VOID		FSM_StateChange(State* _State);
+	VOID		FSM_StateInit(State* _State) { CurrentState = _State; }
 	State*		FSM_GetCurrentState() { return CurrentState; }
 
 public:

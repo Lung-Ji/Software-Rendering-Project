@@ -33,7 +33,7 @@ HRESULT Monster::Component_Initialize() {
 	Component_Buffer	= ADD_COMPONENT_RECTTEX;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
 
-	Component_Transform->Set_Position(0.f, 0.f, 1.f);
+	Component_Transform->Set_Pos(0.f, 0.f, 1.f);
 	Component_Transform->Set_Rotation(20.f, 20.f, 20.f);
 	Component_Transform->Set_Scale(2.f, 2.f, 2.f);
 
@@ -41,7 +41,7 @@ HRESULT Monster::Component_Initialize() {
 	Component_FSM		= ADD_COMPONENT_FSM;
 
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Monster");
-	Component_FSM->FSM_StateChange(MONSTER_IDLE::GetInstance()->Instance());
+	Component_FSM->FSM_StateInit(MONSTER_IDLE::GetInstance()->Instance());
 	
 	return S_OK;
 }
