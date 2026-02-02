@@ -1,6 +1,10 @@
 #pragma once
 #include "GameObject.h"
 
+namespace Engine
+{
+    TILE_SIDE;
+}
 class Tile :
     public GameObject
 {
@@ -21,13 +25,19 @@ private:
     HRESULT			Component_Initialize();
     _bool           Check_Bottom(_vec3* vOrigin);
     void            Check_TilePoint();
+
+    //타일 체크용 버퍼
     Buffer*         m_pBuffer;
-    Buffer*         m_pBufferTileSide;
-    
+    Buffer*         m_pBufferTileFRONT;
+    Buffer*         m_pBufferTileRIGHT;
+    Buffer*         m_pBufferTileLEFT;
+    Buffer*         m_pBufferTileBACK;
+
     Transform*      m_pTransform;
 
     _bool           m_bTileCheck;
-    _bool           m_bShowTile;
+
+    TILE_SIDE       m_eTile;
     _float          m_TileHeight;
 public:
     static      Tile* Create(LPDIRECT3DDEVICE9 pGraphicDev);

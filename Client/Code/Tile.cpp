@@ -1,6 +1,7 @@
 #include "Tile.h"
 #include "../Include/PCH.h"
-Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_TileHeight(0.f), m_bTileCheck(true), m_bShowTile(false), m_pBufferTileSide(nullptr){}
+Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_TileHeight(0.f), m_bTileCheck(true), m_eTile(Engine::TILE_SIDE::TILE_END), m_pBufferTileFRONT(nullptr),
+m_pBufferTileRIGHT(nullptr), m_pBufferTileLEFT(nullptr), m_pBufferTileBACK(nullptr) {}
 Tile::Tile(const GameObject& _RHS) : GameObject(_RHS) {}
 Tile::~Tile() {}
 
@@ -27,19 +28,38 @@ VOID Tile::Render_GameObject()
 	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
-	if (m_bShowTile)
-		m_pBufferTileSide->Render_Buffer();
-	else m_pBuffer->Render_Buffer();
-
+	
+	switch (m_eTile)
+	{
+	case TILE_SIDE::TILE_FRONT:
+		m_pBufferTileFRONT->Render_Buffer();
+		break;
+	case TILE_SIDE::TILE_RIGHT:
+		m_pBufferTileRIGHT->Render_Buffer();
+		break;
+	case TILE_SIDE::TILE_LEFT:
+		m_pBufferTileLEFT->Render_Buffer();
+		break;
+	case TILE_SIDE::TILE_BACK:
+		m_pBufferTileBACK->Render_Buffer();
+		break;
+	case TILE_SIDE::TILE_OTHER:
+		m_pBuffer->Render_Buffer();
+		break;
+	}
+	
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
 HRESULT Tile::Component_Initialize() {
 
-	m_pBuffer    = ADD_COMPONENT_TILE; 
-	m_pTransform = ADD_COMPONENT_TRANSFORM;
-	m_pBufferTileSide = ADD_COMPONENT_TILESIDE;
+	m_pBuffer		   = ADD_COMPONENT_TILE; 
+	m_pTransform	   = ADD_COMPONENT_TRANSFORM;
+	m_pBufferTileFRONT = ADD_COMPONENT_TILEFRONT;
+	m_pBufferTileRIGHT = ADD_COMPONENT_TILERIGHT;
+	m_pBufferTileLEFT  = ADD_COMPONENT_TILELEFT;
+	m_pBufferTileBACK  = ADD_COMPONENT_TILEBACK;
 	return S_OK;
 }
 _bool Tile::Check_Bottom(_vec3* vOrigin)
@@ -50,8 +70,7 @@ _bool Tile::Check_Bottom(_vec3* vOrigin)
 	Buffer* pBuffer = dynamic_cast<Buffer*>(pTransform);
 	
 	for (auto& iter : TileManager::GetInstance()->Get_TileList())
-	{
-		
+	{	
 		_int iDst = dynamic_cast<CubeTile*>(iter)->Get_TileNumber(); //안겹치게 예외처리요 근데 정육면체 기준
 		_int iMiddle	  = (_int) (vOrigin->z  * VTXCNTX + vOrigin->x	  );
 		_int iCheckR	  = (_int) (vOrigin->z  * VTXCNTX + vOrigin->x - 1);
@@ -84,7 +103,7 @@ void Tile::Check_TilePoint()
 	//응애
 	_matrix proj, vWorldInvese, matView, InversView;
 	D3DVIEWPORT9 vp;
-	_vec3 vPlayerPos, vRight, vLook, vOrigin, vDirection;
+	_vec3 vPlayerPos, vRight, vLook, vOrigin, vDirection, vMousePos;
 	POINT pt;
 	GRPDEV->GetViewport(&vp);
 	GRPDEV->GetTransform(D3DTS_PROJECTION, &proj);
@@ -101,13 +120,14 @@ void Tile::Check_TilePoint()
 	Component* pTransform = SceneManager::GetInstance()->Get_GameObject(L"Terrain")->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TERRAIN);
 	Buffer* pBuffer = dynamic_cast<Buffer*>(pTransform);
 
-	vDirection.x = (((2.0f  * pt.x) / vp.Width)  - 1.0f) / proj(0, 0);
-	vDirection.y = (((-2.0f * pt.y) / vp.Height) + 1.0f) / proj(1, 1);
-	vDirection.z = 1.f;
+	vMousePos.x = (((2.0f  * pt.x) / vp.Width)  - 1.0f) / proj(0, 0);
+	vMousePos.y = (((-2.0f * pt.y) / vp.Height) + 1.0f) / proj(1, 1);
+	vMousePos.z = 1.f;
 	vOrigin = { 0.f, 0.f ,0.f };
-
+	vDirection = vMousePos - vOrigin;
 	D3DXVec3TransformCoord(&vOrigin, &vOrigin, &InversView);
 	D3DXVec3TransformNormal(&vDirection, &vDirection, &InversView);
+	
 	D3DXVec3Normalize(&vDirection, &vDirection);
 
 
@@ -132,9 +152,10 @@ void Tile::Check_TilePoint()
 	vMouseCheck.x = floor(vMouseCheck.x);
 	vMouseCheck.y = floor(vMouseCheck.y);
 	vMouseCheck.z = floor(vMouseCheck.z);
-	_vec3 vPos, vTileLocalPos[4];
+	_vec3 vPos, vTileLocalPos[8];
 	_matrix InverseWorld, CheckWorld;
 	_float	ftCheck(128), ftDst(0);
+	_int    iCheckZero(0);
 	//설치 되어있는 블럭 충돌 비교
 		{
 			for (auto iter : TileManager::GetInstance()->Get_TileList())
@@ -144,30 +165,69 @@ void Tile::Check_TilePoint()
 				memcpy(&InverseWorld, dynamic_cast<Transform*>(iter->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_World(), sizeof(_matrix));				
 			
 				//로컬 좌표 들고와서 월드좌표 변환후 광선으로 윗면 비교???
-				vTileLocalPos[0] = { -1.f, 1.f, -1.f }; //좌하단
-				vTileLocalPos[1] = {  1.f, 1.f, -1.f }; //우하단
-				vTileLocalPos[2] = { -1.f, 1.f,  1.f }; //좌상단
-				vTileLocalPos[3] = {  1.f, 1.f,  1.f }; //우상단
+				vTileLocalPos[0] = { -1.f, 1.f, -1.f }; //좌하단 y+ 기준
+				vTileLocalPos[1] = {  1.f, 1.f, -1.f }; //우하단 y+ 기준
+				vTileLocalPos[2] = { -1.f, 1.f,  1.f }; //좌상단 y+ 기준
+				vTileLocalPos[3] = {  1.f, 1.f,  1.f }; //우상단 y+ 기준
 				
-				for (int i = 0; i < 4; ++i)
+				vTileLocalPos[4] = { -1.f, -1.f, -1.f }; //좌하단 y- 기준
+				vTileLocalPos[5] = {  1.f, -1.f, -1.f }; //우하단 y- 기준
+				vTileLocalPos[6] = { -1.f, -1.f,  1.f }; //좌상단 y- 기준
+				vTileLocalPos[7] = {  1.f, -1.f,  1.f }; //우상단 y- 기준 
+
+				for (int i = 0; i < 8; ++i)
 					D3DXVec3TransformCoord(&vTileLocalPos[i], &vTileLocalPos[i], &InverseWorld);
+
+				//// 정면
+				//if (D3DXIntersectTri(&vTileLocalPos[4], &vTileLocalPos[0], &vTileLocalPos[5], &vOrigin, &vDirection, &fu, &fv, &ft) ||
+				//	D3DXIntersectTri(&vTileLocalPos[1], &vTileLocalPos[0], &vTileLocalPos[5], &vOrigin, &vDirection, &fu, &fv, &ft))
+				//{
+				//	
+				//	vMouseCheck = vOrigin + vDirection * ft;
+				//	ftDst = ft;
+				//}
+				// //우측
+				//if (D3DXIntersectTri(&vTileLocalPos[5], &vTileLocalPos[1], &vTileLocalPos[7], &vOrigin, &vDirection, &fu, &fv, &ft) ||
+				//	D3DXIntersectTri(&vTileLocalPos[3], &vTileLocalPos[1], &vTileLocalPos[7], &vOrigin, &vDirection, &fu, &fv, &ft))
+				//{
+				//	vMouseCheck = vOrigin + vDirection * ft;
+				//	ftDst = ft;
+				//}
+				////뒷면
+				//if (D3DXIntersectTri(&vTileLocalPos[2], &vTileLocalPos[3], &vTileLocalPos[6], &vOrigin, &vDirection, &fu, &fv, &ft) ||
+				//	D3DXIntersectTri(&vTileLocalPos[3], &vTileLocalPos[6], &vTileLocalPos[7], &vOrigin, &vDirection, &fu, &fv, &ft))
+				//{
+				//	vMouseCheck = vOrigin + vDirection * ft;
+				//	ftDst = ft;
+				//}
+				////좌측
+				//if (D3DXIntersectTri(&vTileLocalPos[0], &vTileLocalPos[2], &vTileLocalPos[4], &vOrigin, &vDirection, &fu, &fv, &ft) ||
+				//	D3DXIntersectTri(&vTileLocalPos[6], &vTileLocalPos[2], &vTileLocalPos[4], &vOrigin, &vDirection, &fu, &fv, &ft))
+				//{
+				//	vMouseCheck = vOrigin + vDirection * ft;
+				//	ftDst = ft;
+				//}
 
 				if (D3DXIntersectTri(&vTileLocalPos[0], &vTileLocalPos[1], &vTileLocalPos[2], &vOrigin, &vDirection, &fu, &fv, &ft) ||
 					D3DXIntersectTri(&vTileLocalPos[3], &vTileLocalPos[2], &vTileLocalPos[1], &vOrigin, &vDirection, &fu, &fv, &ft))
 				{
 					vMouseCheck = vOrigin + vDirection * ft;
 					ftDst = ft;
+
+					m_eTile = TILE_SIDE::TILE_OTHER;
 				}
-					//현재 설치된 블록중에서 마우스 z 거리랑 제일 가까운걸로 비교
+				 //현재 설치된 블록중에서 마우스 z 거리랑 제일 가까운걸로 비교
 					if (ftCheck > ft)
 					{
 						vMouseBlockCheck = vMouseCheck;
 						ftCheck = ft;
-					}
-
-					//블럭 이미 설치 되어있는곳에 하려고 하면 안되게 해야되는데
-					
+					}		
 			}
+		}
+		if (ftCheck == 0)
+		{
+			m_eTile = TILE_SIDE::TILE_OTHER;
+			return;
 		}
 		// 보정
 		vMouseCheck = vMouseBlockCheck;
@@ -185,6 +245,7 @@ void Tile::Check_TilePoint()
 		if (vMouseCheck.z < 1)
 			vMouseCheck.z = 1;
 		//한칸 높이 올리기
+
 		m_TileHeight = vMouseCheck.y + 1;
 		if (Check_Bottom(&vMouseCheck))
 		{

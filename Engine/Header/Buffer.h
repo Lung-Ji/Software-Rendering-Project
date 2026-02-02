@@ -20,7 +20,10 @@ public:
 	HRESULT		Ready_Rectangle_Buffer();
 	HRESULT		Ready_Texture_Buffer();
 	HRESULT		Ready_Terrain_Buffer();
-	HRESULT		Ready_TileSide_Buffer(); // 타일 옆면 비교용
+	HRESULT		Ready_TileLEFT_Buffer(); // 타일 옆면 비교용
+	HRESULT		Ready_TileRIGHT_Buffer();//타일 옆면 비교용
+	HRESULT		Ready_TileFRONT_Buffer();//타일 옆면 비교용
+	HRESULT		Ready_TileBACK_Buffer(); //타일 옆면 비교용
 	HRESULT		Ready_Tile_Buffer(); // 타일 추가 윗면 비교용
 	HRESULT		Ready_Cube_Buffer(); // 큐브타일 추가
 protected:
