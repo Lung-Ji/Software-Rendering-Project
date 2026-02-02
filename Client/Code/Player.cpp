@@ -27,8 +27,6 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	Gravity(_DT);
 	Key_Input(_DT);
 
-	GameObject::Update_GameObject(_DT);
-
 	return 0;
 }
 VOID Player::LateUpdate_GameObject(const _float& _DT) {
