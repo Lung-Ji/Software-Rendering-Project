@@ -153,6 +153,8 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\Engine_Struct.h" />
     <ClInclude Include="..\Header\Engine_Typedef.h" />
     <ClInclude Include="..\Header\KeyManager.h" />
+    <ClInclude Include="..\Header\Light.h" />
+    <ClInclude Include="..\Header\LightManager.h" />
     <ClInclude Include="..\Header\Sprite.h" />
     <ClInclude Include="..\Header\StateMachine.h" />
     <ClInclude Include="..\Header\GameObject.h" />
@@ -164,6 +166,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\SceneManager.h" />
     <ClInclude Include="..\Header\SoundManager.h" />
     <ClInclude Include="..\Header\Texture.h" />
+    <ClInclude Include="..\Header\TileManager.h" />
     <ClInclude Include="..\Header\TimeManager.h" />
     <ClInclude Include="..\Header\Transform.h" />
   </ItemGroup>
@@ -171,6 +174,8 @@ call Copy.bat</Command>
     <ClCompile Include="..\Code\Buffer.cpp" />
     <ClCompile Include="..\Code\Component.cpp" />
     <ClCompile Include="..\Code\KeyManager.cpp" />
+    <ClCompile Include="..\Code\Light.cpp" />
+    <ClCompile Include="..\Code\LightManager.cpp" />
     <ClCompile Include="..\Code\Sprite.cpp" />
     <ClCompile Include="..\Code\StateMachine.cpp" />
     <ClCompile Include="..\Code\GameObject.cpp" />
@@ -182,6 +187,7 @@ call Copy.bat</Command>
     <ClCompile Include="..\Code\SceneManager.cpp" />
     <ClCompile Include="..\Code\SoundManager.cpp" />
     <ClCompile Include="..\Code\Texture.cpp" />
+    <ClCompile Include="..\Code\TileManager.cpp" />
     <ClCompile Include="..\Code\TimeManager.cpp" />
     <ClCompile Include="..\Code\Transform.cpp" />
   </ItemGroup>

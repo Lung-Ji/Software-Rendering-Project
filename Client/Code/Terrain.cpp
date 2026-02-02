@@ -18,11 +18,16 @@ VOID Terrain::LateUpdate_GameObject(const _float& _DT) {
 	//GameObject::LateUpdate_GameObject(_DT);
 }
 VOID Terrain::Render_GameObject() {
+
+	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
 	GRPDEV->SetTexture(0, StaticTexture);
 
 	Component_Buffer->Render_Buffer();
+
+	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 HRESULT Terrain::Component_Initialize() {
 

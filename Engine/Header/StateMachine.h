@@ -27,7 +27,8 @@ public:
 	virtual VOID		Render_Component() {};
 
 public:
-	VOID		FSM_StateChange(const State* _State);
+	VOID		FSM_StateChange(State* _State);
+	VOID		FSM_StateInit(State* _State) { CurrentState = _State; }
 	State*		FSM_GetCurrentState() { return CurrentState; }
 
 public:

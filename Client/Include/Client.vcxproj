@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\Camera.h" />
+    <ClInclude Include="..\Header\CubeTile.h" />
     <ClInclude Include="..\Header\DungeonScene.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
@@ -161,7 +162,9 @@
     <ClInclude Include="..\Header\GameManager.h" />
     <ClInclude Include="..\Header\GUIManager.h" />
     <ClInclude Include="..\Header\imconfig.h" />
-    <ClInclude Include="..\Header\imgui.h" />
+    <ClInclude Include="..\Header\imgui.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Header\imgui_impl_dx9.h" />
     <ClInclude Include="..\Header\imgui_impl_win32.h" />
     <ClInclude Include="..\Header\imgui_internal.h" />
@@ -178,12 +181,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\Monster.h" />
+    <ClInclude Include="..\Header\Monster_State.h" />
     <ClInclude Include="..\Header\NPC.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\StartScene.h" />
     <ClInclude Include="..\Header\Terrain.h" />
+    <ClInclude Include="..\Header\Tile.h" />
     <ClInclude Include="..\Header\VillageScene.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
@@ -199,13 +204,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Camera.cpp" />
+    <ClCompile Include="..\Code\CubeTile.cpp" />
     <ClCompile Include="..\Code\DungeonScene.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\GameManager.cpp" />
     <ClCompile Include="..\Code\GUIManager.cpp" />
-    <ClCompile Include="..\Code\imgui.cpp" />
+    <ClCompile Include="..\Code\imgui.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Code\imgui_demo.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -233,12 +241,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\Monster.cpp" />
+    <ClCompile Include="..\Code\Monster_State.cpp" />
     <ClCompile Include="..\Code\NPC.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\StartScene.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
+    <ClCompile Include="..\Code\Tile.cpp" />
     <ClCompile Include="..\Code\VillageScene.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>

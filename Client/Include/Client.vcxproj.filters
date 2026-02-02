@@ -67,6 +67,9 @@
     <Filter Include="04. UI\01. Sprite">
       <UniqueIdentifier>{c5ddb37a-c839-4e15-9417-7076814467ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GameObject\05.Tile">
+      <UniqueIdentifier>{3f5d8e79-69ba-4afe-ab89-37fd086d4597}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -150,6 +153,12 @@
     <ClInclude Include="MainUI.h">
       <Filter>04. UI\01. Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\CubeTile.h">
+      <Filter>03. GameObject\05.Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Tile.h">
+      <Filter>03. GameObject\05.Tile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -214,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="MainUI.cpp">
       <Filter>04. UI\01. Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CubeTile.cpp">
+      <Filter>03. GameObject\05.Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Tile.cpp">
+      <Filter>03. GameObject\05.Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

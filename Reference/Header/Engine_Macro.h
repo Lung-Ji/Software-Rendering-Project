@@ -79,7 +79,17 @@ namespace Engine
 					m_pInstance = NULL;						\
 				}											\
 			}
-
+	#define DECLARE_FSM_SINGLETON(CLASSNAME)				\
+			NO_COPY(CLASSNAME)								\
+			private:										\
+			static CLASSNAME*	m_pInstance;				\
+			public:											\
+			static CLASSNAME*	GetInstance( void );		\
+			static void DestroyInstance( void );			\
+			CLASSNAME* Instance() { return m_pInstance; }	\
+			private:										\
+				CLASSNAME() {}								\
+				virtual ~CLASSNAME() {}						
 }
 
 #endif // Engine_Macro_h__

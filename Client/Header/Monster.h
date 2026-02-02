@@ -20,6 +20,7 @@ private:
 	Buffer*			Component_Buffer;
 	Transform*		Component_Transform;
 	Texture*		Component_Texture;
+	StateMachine*	Component_FSM;
 
 	GameObject*		Player;
 

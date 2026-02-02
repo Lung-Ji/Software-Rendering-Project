@@ -1,6 +1,6 @@
 #include "../Include/PCH.h"
 #include "Player.h"
- 
+
 Player::Player(LPDIRECT3DDEVICE9 _GRPDEV)	: GameObject(_GRPDEV)	{}
 Player::Player(const GameObject& _RHS)		: GameObject(_RHS)		{}
 Player::~Player()													{}
@@ -47,8 +47,10 @@ HRESULT Player::Component_Initialize() {
 	Component_Buffer	= ADD_COMPONENT_RECTTEX;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
 	Component_Texture	= ADD_COMPONENT_TEXTURE;
+	//Component_FSM		= ADD_COMPONENT_FSM;
 
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Extra/Example");
+
 	return S_OK;
 }
 void Player::Key_Input(const _float& _DT)
