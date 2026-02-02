@@ -27,4 +27,8 @@ public:
 	static Player* Create(LPDIRECT3DDEVICE9 _GRPDEV);
 private:
 	virtual VOID Free();
+
+private:
+	float _defaultSpeed;
+	float _speed;
 };
