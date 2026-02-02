@@ -8,8 +8,11 @@ Player::~Player()													{}
 HRESULT Player::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
-	_defaultSpeed = 10.f;
+	_defaultSpeed = 500.f;
 	_speed = _defaultSpeed;
+
+	_defultJumpSpeed = 10.f;
+	_jumpSpeed = _defultJumpSpeed;
 
 	return S_OK;
 }
@@ -53,11 +56,11 @@ void Player::Key_Input(const _float& _DT)
 	if((KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D)) ||
 		(KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D)))
 	{
-		_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+		_speed = _defaultSpeed * cos(D3DX_PI * 0.25f) * _DT;
 	}
 	else
 	{
-		_speed = _defaultSpeed;
+		_speed = _defaultSpeed * _DT;
 	}
 
 	if (KEY_HOLD(DIK_W))

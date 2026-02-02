@@ -31,4 +31,7 @@ private:
 private:
 	float _defaultSpeed;
 	float _speed;
+
+	float _defultJumpSpeed;
+	float _jumpSpeed;
 };
