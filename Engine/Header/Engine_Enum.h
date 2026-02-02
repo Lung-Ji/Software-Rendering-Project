@@ -18,7 +18,7 @@ namespace Engine
 
 	enum class LAYER_TYPE		{ LAYER_DYNAMIC_OBJECT, LAYER_STATIC_OBJECT, LAYER_USER_INTERFACE, LAYER_END };
 
-	enum class BUFFER_TYPE		{ TRIANGLE, RECTANGLE, TEXTURE, TERRAIN,TILE,CUBE, END };
+	enum class BUFFER_TYPE		{ TRIANGLE, RECTANGLE, TEXTURE, TERRAIN,TILE, CUBE, END };
 
 	/////////////////////////////////// KEYMANAGER ///////////////////////////////////
 	enum class KEY {

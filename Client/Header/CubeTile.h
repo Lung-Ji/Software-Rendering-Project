@@ -17,11 +17,15 @@ public:
     virtual			VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
     virtual			VOID		Render_GameObject();
 
+    //이건.. 지형이 가지고 있는 타일의 인덱스 정보를 담기위함 해당 인덱스가 가진 위치위에 이 타일이 놓여있다는걸 확인하기 위해서
+    int             Get_TileNumber() { return m_iTileNumber; }
+    void            Set_TileNumber(int iTileNumber) { m_iTileNumber = iTileNumber; }
 private:
     HRESULT			Component_Initialize();
 
     Buffer*         m_pBuffer;
     Transform*      m_pTransform;
+    int             m_iTileNumber;
 public:
     static         CubeTile* Create(LPDIRECT3DDEVICE9 pGraphicDev);
 

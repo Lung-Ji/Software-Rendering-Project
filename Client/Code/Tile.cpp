@@ -13,7 +13,7 @@ HRESULT Tile::Ready_GameObject() {
 INT	Tile::Update_GameObject(const _float& _DT) {
 
 
-	
+	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 	return GameObject::Update_GameObject(_DT);
 
 }
@@ -36,38 +36,48 @@ VOID Tile::Render_GameObject()
 
 HRESULT Tile::Component_Initialize() {
 
-	m_pBuffer    = ADD_COMPONENT_TILE;
+	m_pBuffer    = ADD_COMPONENT_TILE; 
 	m_pTransform = ADD_COMPONENT_TRANSFORM;
 
 	return S_OK;
 }
 _bool Tile::Check_Bottom(_matrix* matWorld, _vec3* vPos, _vec3* vOrigin, _vec3* vDirection)
 {
-	_vec3 vTileLocalPos[4], vOriginTIlePos[4];
+	_vec3 vCheckVertex;
 	_matrix matwW;
-	_float fu, fv, ft;
-	vTileLocalPos[0] = { -1.f, -1.f, -1.f }; // 좌하하하
-	vTileLocalPos[1] = {  1.f, -1.f, -1.f }; // 우 하하하
-	vTileLocalPos[2] = { -1.f, -1.f,  1.f }; //좌상
-	vTileLocalPos[3] = {  1.f, -1.f,  1.f }; //우상단
+	_float fx,fz;
+	
+	Component* pTransform = SceneManager::GetInstance()->Get_GameObject(L"Terrain")->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TERRAIN);
+	Buffer* pBuffer = dynamic_cast<Buffer*>(pTransform);
+	
+	for (auto& iter : TileManager::GetInstance()->Get_TileList())
+	{
+		_int iDst = dynamic_cast<CubeTile*>(iter)->Get_TileNumber(); //안겹치게 예외처리요 ㅅㅂ
+		_int iMiddle	  =  vOrigin->z  * VTXCNTX + vOrigin->x;
+		_int iCheckR	  =  vOrigin->z  * VTXCNTX + vOrigin->x - 1;
+		_int iCheckL	  =  vOrigin->z  * VTXCNTX + vOrigin->x + 1;
+		_int iCheckT      = ((vOrigin->z + 1) * VTXCNTX + vOrigin->x);
+		_int iCheckB      = ((vOrigin->z - 1) * VTXCNTX + vOrigin->x);
+		_int iCheckLT	  = ((vOrigin->z + 1) * VTXCNTX + vOrigin->x - 1);
+		_int iCheckRT	  = ((vOrigin->z + 1) * VTXCNTX + vOrigin->x + 1);
+		_int iCheckLB	  = ((vOrigin->z - 1) * VTXCNTX + vOrigin->x - 1);
+		_int iCheckRB	  = ((vOrigin->z - 1) * VTXCNTX + vOrigin->x + 1);
 
-	vOriginTIlePos[0] = { -1.f,  -1.f, -1.f };
-	vOriginTIlePos[1] = {  1.f,  -1.f, -1.f };  
-	vOriginTIlePos[2] = { -1.f,  -1.f,  1.f }; 
-	vOriginTIlePos[3] = {  1.f,  -1.f,  1.f }; 
-
-		for (int i = 0; i < 4; ++i)
+		if (iDst == iCheckLT || iDst == iCheckRT || iDst == iCheckLB || iDst == iCheckRB || iDst == iCheckR || iDst == iCheckL || iDst == iCheckT || iDst == iCheckB)
 		{
-			D3DXVec3TransformCoord(&vTileLocalPos[i],	   &vTileLocalPos[i],      matWorld);
-			D3DXVec3TransformCoord(&vOriginTIlePos[i],	   &vOriginTIlePos[i],	   &matwW);
+			vCheckVertex = *(pBuffer->Get_BufferPos(dynamic_cast<CubeTile*>(iter)->Get_TileNumber()));
+
+			fx = fabsf(vCheckVertex.x - floor(vOrigin->x));
+			fz = fabsf(vCheckVertex.z - floor(vOrigin->z));
+			
+			if (iMiddle == iDst)
+				return 0;
+
+			if (fx <= 1 || fz<=1)
+				return 1;
 		}
-		_float fx;
-		fx = fabsf(matWorld->_41 - floor(vOrigin->x));
-
-		if (fx <= 1 && (matWorld->_41 && floor(vOrigin->y)))
-			return 1;
-		
-
+	}
+			
 		return 0;
 }
 void Tile::Check_TilePoint()
@@ -176,11 +186,10 @@ void Tile::Check_TilePoint()
 			vMouseCheck.z = 1;
 		//한칸 높이 올리기
 		m_TileHeight = vMouseCheck.y + 1;
-		//if (Check_Bottom(&CheckWorld, &vPos, &vMouseCheck, &vDirection))
-		//{
-		//	m_bTileCheck = false;
-		//
-		//}
+		if (Check_Bottom(&CheckWorld, &vPos, &vMouseCheck, &vDirection))
+		{
+			m_bTileCheck = false;
+		}
 		m_pTransform->Set_Pos(vMouseCheck.x, vMouseCheck.y, vMouseCheck.z);
 	   //좌클릭시 블럭 설치
 
@@ -189,12 +198,14 @@ void Tile::Check_TilePoint()
 
 			if (KeyManager::GetInstance()->Get_MouseState(DIM_LB) & 0x80)
 			{
+				////정육면체말고 다른 타일 깔고싶으면 클래스 만들어서 바꾸면됨
 				GameObject* pCube = CubeTile::Create(GRPDEV);
 				if (pCube != nullptr)
 				{
 					vMouseCheck.y = m_TileHeight;
 					GRPDEV->AddRef();
-					TileManager::GetInstance()->Add_Tile(pCube, vMouseCheck);
+					dynamic_cast<CubeTile*>(pCube)->Set_TileNumber(vMouseCheck.z * VTXCNTX + vMouseCheck.x);
+					TileManager::GetInstance()->Add_Tile(pCube, vMouseCheck); 
 				}
 				else
 					Safe_Release(pCube);
