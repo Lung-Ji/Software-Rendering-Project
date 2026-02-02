@@ -14,6 +14,8 @@ INT	Player::Update_GameObject(const _float& _DT) {
 
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
+	// Ä¿¹Ô¿ë
+
 	return 0;
 }
 VOID Player::LateUpdate_GameObject(const _float& _DT) {
