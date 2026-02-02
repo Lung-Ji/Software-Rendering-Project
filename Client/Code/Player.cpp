@@ -11,13 +11,16 @@ HRESULT Player::Ready_GameObject() {
 	_defaultSpeed = 500.f;
 	_speed = _defaultSpeed;
 
-	_defultJumpSpeed = 10.f;
-	_jumpSpeed = _defultJumpSpeed;
+	_isJump = false;
+	_defultJumpSpeed = 500.f;
+	_jumpSpeed = 0.f;
+	_g = 10.f;
 
 	return S_OK;
 }
 INT	Player::Update_GameObject(const _float& _DT) {
 
+	Gravity(_DT);
 	Key_Input(_DT);
 
 	GameObject::Update_GameObject(_DT);
@@ -84,6 +87,42 @@ void Player::Key_Input(const _float& _DT)
 	{
 		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _speed, _DT);
 	}
+
+	Component_Transform->Get_Info(INFO_UP, &vDir);
+
+	if (KEY_DOWN(DIK_SPACE))
+	{
+		_isJump = true;
+		_jumpSpeed = _defaultSpeed;
+	}
+}
+void Player::Gravity(const _float& _DT)
+{
+	_vec3 pos;
+	Component_Transform->Get_Info(INFO_POS, &pos);
+
+	if (pos.y > 1 || _isJump)
+	{
+		_jumpSpeed -= _g;
+
+		_vec3		vDir;
+		Component_Transform->Get_Info(INFO_UP, &vDir);
+
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _jumpSpeed * _DT, _DT);
+	}
+	
+	if(pos.y < 1)
+	{
+		_isJump = false;
+		_jumpSpeed = 0.f;
+
+		_matrix* wolrdmat;
+		ZeroMemory(&wolrdmat, sizeof(wolrdmat));
+
+		wolrdmat = Component_Transform->Get_World();
+		wolrdmat[3][1] = 2;
+	}
+
 }
 Player* Player::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	Player* PLAYER = new Player(_GRPDEV);

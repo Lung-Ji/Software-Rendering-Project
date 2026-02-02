@@ -10,12 +10,12 @@ HRESULT GameManager::Ready_GameManager() {
 	return S_OK;
 }
 VOID	GameManager::Update_GameManager(CONST FLOAT& _DT) {
+	KeyManager::GetInstance()->Update_KeyManager(_DT);
 	SceneManager::GetInstance()->Update_SceneManager(_DT);
-	KeyManager	::GetInstance()->Update_KeyManager(_DT);
 }
 VOID	GameManager::LateUpdate_GameManager(CONST FLOAT& _DT) {
+	KeyManager::GetInstance()->LateUpdate_KeyManager(_DT);
 	SceneManager::GetInstance()->LateUpdate_SceneManager(_DT);
-	KeyManager	::GetInstance()->LateUpdate_KeyManager(_DT);
 }
 VOID	GameManager::Render_GameManager() {
 	DEVCLASS->Render_Begin(D3DXCOLOR(0.f, 0.f, 1.f, 1.f));
