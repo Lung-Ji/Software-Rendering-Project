@@ -13,7 +13,7 @@ HRESULT Tile::Ready_GameObject() {
 INT	Tile::Update_GameObject(const _float& _DT) {
 
 
-	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
+	RenderManager::GetInstance()->Add_RenderGroup(RENDER_NONALPHA, this);
 	return GameObject::Update_GameObject(_DT);
 
 }
@@ -24,7 +24,7 @@ VOID Tile::LateUpdate_GameObject(const _float& _DT) {
 
 VOID Tile::Render_GameObject()
 {
-	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
 	
@@ -147,10 +147,8 @@ void Tile::Check_TilePoint()
 				vTileLocalPos[2] = { -1.f, 1.f,  1.f }; //좌상단
 				vTileLocalPos[3] = {  1.f, 1.f,  1.f }; //우상단
 				
-
 				for (int i = 0; i < 4; ++i)
 					D3DXVec3TransformCoord(&vTileLocalPos[i], &vTileLocalPos[i], &InverseWorld);
-
 
 					if (D3DXIntersectTri(&vTileLocalPos[0], &vTileLocalPos[1], &vTileLocalPos[2], &vOrigin, &vDirection, &fu, &fv, &ft) ||
 						D3DXIntersectTri(&vTileLocalPos[3], &vTileLocalPos[2], &vTileLocalPos[1], &vOrigin, &vDirection, &fu, &fv, &ft))
