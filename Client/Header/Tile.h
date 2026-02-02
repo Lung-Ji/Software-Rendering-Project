@@ -27,6 +27,7 @@ private:
     Transform*      m_pTransform;
 
     _bool           m_bTileCheck;
+    _bool           m_bShowTile;
     _float          m_TileHeight;
 public:
     static      Tile* Create(LPDIRECT3DDEVICE9 pGraphicDev);

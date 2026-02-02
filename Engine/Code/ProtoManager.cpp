@@ -13,10 +13,11 @@ HRESULT		ProtoManager::Ready_Prototype(LPDIRECT3DDEVICE9 _GRPDEV) {
 	ComponentList.push_back(Buffer		::Create(_GRPDEV, BUFFER_TYPE::TERRAIN));		//COMPONENT_TYPE::COMPONENT_TERRAIN		= 3
 	ComponentList.push_back(Buffer		::Create(_GRPDEV, BUFFER_TYPE::TILE));			//COMPONENT_TYPE::COMPONENT_TILE		= 4
 	ComponentList.push_back(Buffer		::Create(_GRPDEV, BUFFER_TYPE::CUBE));			//COMPONENT_TYPE::COMPONENT_CUBE		= 5
-	ComponentList.push_back(Transform	::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_TRANSFORM	= 6
-	ComponentList.push_back(Texture		::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_TEXTURE		= 7
-	ComponentList.push_back(SpriteObject::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_SPRITE		= 8
-	ComponentList.push_back(StateMachine::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_FSM			= 9
+	ComponentList.push_back(Buffer		::Create(_GRPDEV, BUFFER_TYPE::TILESIDE));		//COMPONENT_TYPE::COMPONENT_CUBE		= 6
+	ComponentList.push_back(Transform	::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_TRANSFORM	= 7
+	ComponentList.push_back(Texture		::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_TEXTURE		= 8
+	ComponentList.push_back(SpriteObject::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_SPRITE		= 9
+	ComponentList.push_back(StateMachine::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_FSM			= 10
 	
 	return S_OK;
 }

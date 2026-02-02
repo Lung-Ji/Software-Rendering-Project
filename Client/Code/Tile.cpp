@@ -1,6 +1,6 @@
 #include "Tile.h"
 #include "../Include/PCH.h"
-Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_TileHeight(0.f), m_bTileCheck(true), m_pBufferTileSide(nullptr){}
+Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_TileHeight(0.f), m_bTileCheck(true), m_bShowTile(false), m_pBufferTileSide(nullptr){}
 Tile::Tile(const GameObject& _RHS) : GameObject(_RHS) {}
 Tile::~Tile() {}
 
@@ -27,8 +27,9 @@ VOID Tile::Render_GameObject()
 	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
-	
-	m_pBuffer->Render_Buffer();
+	if (m_bShowTile)
+		m_pBufferTileSide->Render_Buffer();
+	else m_pBuffer->Render_Buffer();
 
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
@@ -133,6 +134,7 @@ void Tile::Check_TilePoint()
 	vMouseCheck.z = floor(vMouseCheck.z);
 	_vec3 vPos, vTileLocalPos[4];
 	_matrix InverseWorld, CheckWorld;
+	_float	ftCheck(128), ftDst(0);
 	//설치 되어있는 블럭 충돌 비교
 		{
 			for (auto iter : TileManager::GetInstance()->Get_TileList())
@@ -150,14 +152,17 @@ void Tile::Check_TilePoint()
 				for (int i = 0; i < 4; ++i)
 					D3DXVec3TransformCoord(&vTileLocalPos[i], &vTileLocalPos[i], &InverseWorld);
 
-					if (D3DXIntersectTri(&vTileLocalPos[0], &vTileLocalPos[1], &vTileLocalPos[2], &vOrigin, &vDirection, &fu, &fv, &ft) ||
-						D3DXIntersectTri(&vTileLocalPos[3], &vTileLocalPos[2], &vTileLocalPos[1], &vOrigin, &vDirection, &fu, &fv, &ft))
-						vMouseCheck = vOrigin + vDirection * ft;
-				
-					//현재 설치된 블록중에서 y축 제일큰놈으로 
-					if (vMouseBlockCheck.y < vMouseCheck.y)
+				if (D3DXIntersectTri(&vTileLocalPos[0], &vTileLocalPos[1], &vTileLocalPos[2], &vOrigin, &vDirection, &fu, &fv, &ft) ||
+					D3DXIntersectTri(&vTileLocalPos[3], &vTileLocalPos[2], &vTileLocalPos[1], &vOrigin, &vDirection, &fu, &fv, &ft))
+				{
+					vMouseCheck = vOrigin + vDirection * ft;
+					ftDst = ft;
+				}
+					//현재 설치된 블록중에서 마우스 z 거리랑 제일 가까운걸로 비교
+					if (ftCheck > ft)
 					{
 						vMouseBlockCheck = vMouseCheck;
+						ftCheck = ft;
 					}
 
 					//블럭 이미 설치 되어있는곳에 하려고 하면 안되게 해야되는데
