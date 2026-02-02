@@ -1,6 +1,6 @@
 #include "Tile.h"
 #include "../Include/PCH.h"
-Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_TileHeight(0.f), m_bTileCheck(true){}
+Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_TileHeight(0.f), m_bTileCheck(true), m_pBufferTileSide(nullptr){}
 Tile::Tile(const GameObject& _RHS) : GameObject(_RHS) {}
 Tile::~Tile() {}
 
@@ -38,7 +38,7 @@ HRESULT Tile::Component_Initialize() {
 
 	m_pBuffer    = ADD_COMPONENT_TILE; 
 	m_pTransform = ADD_COMPONENT_TRANSFORM;
-
+	m_pBufferTileSide = ADD_COMPONENT_TILESIDE;
 	return S_OK;
 }
 _bool Tile::Check_Bottom(_vec3* vOrigin)

@@ -22,6 +22,8 @@ private:
     _bool           Check_Bottom(_vec3* vOrigin);
     void            Check_TilePoint();
     Buffer*         m_pBuffer;
+    Buffer*         m_pBufferTileSide;
+    
     Transform*      m_pTransform;
 
     _bool           m_bTileCheck;
