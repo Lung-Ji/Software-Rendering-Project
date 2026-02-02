@@ -13,7 +13,7 @@ HRESULT Tile::Ready_GameObject() {
 INT	Tile::Update_GameObject(const _float& _DT) {
 
 
-	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
+	RenderManager::GetInstance()->Add_RenderGroup(RENDER_NONALPHA, this);
 	return GameObject::Update_GameObject(_DT);
 
 }
@@ -24,7 +24,7 @@ VOID Tile::LateUpdate_GameObject(const _float& _DT) {
 
 VOID Tile::Render_GameObject()
 {
-	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
 	
@@ -41,18 +41,17 @@ HRESULT Tile::Component_Initialize() {
 
 	return S_OK;
 }
-_bool Tile::Check_Bottom(_matrix* matWorld, _vec3* vPos, _vec3* vOrigin, _vec3* vDirection)
+_bool Tile::Check_Bottom(_vec3* vOrigin)
 {
 	_vec3 vCheckVertex;
-	_matrix matwW;
 	_float fx,fz;
-	
 	Component* pTransform = SceneManager::GetInstance()->Get_GameObject(L"Terrain")->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TERRAIN);
 	Buffer* pBuffer = dynamic_cast<Buffer*>(pTransform);
 	
 	for (auto& iter : TileManager::GetInstance()->Get_TileList())
 	{
-		_int iDst = dynamic_cast<CubeTile*>(iter)->Get_TileNumber(); //안겹치게 예외처리요 ㅅㅂ
+		
+		_int iDst = dynamic_cast<CubeTile*>(iter)->Get_TileNumber(); //안겹치게 예외처리요 근데 정육면체 기준
 		_int iMiddle	  = (_int) (vOrigin->z  * VTXCNTX + vOrigin->x	  );
 		_int iCheckR	  = (_int) (vOrigin->z  * VTXCNTX + vOrigin->x - 1);
 		_int iCheckL	  = (_int) (vOrigin->z  * VTXCNTX + vOrigin->x + 1);
@@ -76,8 +75,7 @@ _bool Tile::Check_Bottom(_matrix* matWorld, _vec3* vPos, _vec3* vOrigin, _vec3* 
 			if (fx <= 1 || fz<=1)
 				return 1;
 		}
-	}
-			
+	}	
 		return 0;
 }
 void Tile::Check_TilePoint()
@@ -149,10 +147,8 @@ void Tile::Check_TilePoint()
 				vTileLocalPos[2] = { -1.f, 1.f,  1.f }; //좌상단
 				vTileLocalPos[3] = {  1.f, 1.f,  1.f }; //우상단
 				
-
 				for (int i = 0; i < 4; ++i)
 					D3DXVec3TransformCoord(&vTileLocalPos[i], &vTileLocalPos[i], &InverseWorld);
-
 
 					if (D3DXIntersectTri(&vTileLocalPos[0], &vTileLocalPos[1], &vTileLocalPos[2], &vOrigin, &vDirection, &fu, &fv, &ft) ||
 						D3DXIntersectTri(&vTileLocalPos[3], &vTileLocalPos[2], &vTileLocalPos[1], &vOrigin, &vDirection, &fu, &fv, &ft))
@@ -162,7 +158,6 @@ void Tile::Check_TilePoint()
 					if (vMouseBlockCheck.y < vMouseCheck.y)
 					{
 						vMouseBlockCheck = vMouseCheck;
-						CheckWorld = InverseWorld;
 					}
 
 					//블럭 이미 설치 되어있는곳에 하려고 하면 안되게 해야되는데
@@ -186,7 +181,7 @@ void Tile::Check_TilePoint()
 			vMouseCheck.z = 1;
 		//한칸 높이 올리기
 		m_TileHeight = vMouseCheck.y + 1;
-		if (Check_Bottom(&CheckWorld, &vPos, &vMouseCheck, &vDirection))
+		if (Check_Bottom(&vMouseCheck))
 		{
 			m_bTileCheck = false;
 		}

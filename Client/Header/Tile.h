@@ -19,7 +19,7 @@ public:
 
 private:
     HRESULT			Component_Initialize();
-    _bool           Check_Bottom(_matrix* matWorld, _vec3* vPos, _vec3* vOrigin, _vec3* vDirection);
+    _bool           Check_Bottom(_vec3* vOrigin);
     void            Check_TilePoint();
     Buffer*         m_pBuffer;
     Transform*      m_pTransform;
