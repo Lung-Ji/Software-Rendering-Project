@@ -16,13 +16,8 @@ HRESULT	  StateMachine::Ready_Component() {
 	return S_OK;
 }
 INT			StateMachine::Update_Component(CONST FLOAT& _DT) {
+	CurrentState->FSM_StateUpdate();
 	return 0;
-}
-VOID		StateMachine::LateUpdate_Component(CONST FLOAT& _DT) {
-
-}
-VOID		StateMachine::Render_Component() {
-
 }
 StateMachine* StateMachine::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	StateMachine* FSM = new StateMachine(_GRPDEV);
@@ -39,15 +34,13 @@ Component* StateMachine::Clone() {
 VOID	StateMachine::Free() {
 	Component::Free();
 }
-VOID StateMachine::FSM_StateEnter() {
-	return VOID();
-}
-VOID StateMachine::FSM_StateUpdate(){
-	return VOID();
-}
-VOID StateMachine::FSM_StateExit() {
-	return VOID();
-}
-VOID StateMachine::FSM_StateChange(State* _State) {
-	return VOID();
+VOID StateMachine::FSM_StateChange(const State* _State) {
+	if (CurrentState != nullptr) {
+		CurrentState->FSM_StateExit();
+		PreviousState = CurrentState;
+	}
+	
+	//CurrentState = _State;
+
+	CurrentState->FSM_StateEnter();
 }

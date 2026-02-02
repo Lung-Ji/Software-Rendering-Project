@@ -25,12 +25,6 @@ VOID		GameObject::LateUpdate_GameObject(const FLOAT& _DT) {
 		COM->LateUpdate_Component(_DT);
 	}
 }
-//VOID		GameObject::Render_GameObject() {
-//	for (auto& COM : ComponentList) {
-//		if (COM == nullptr)	  continue;
-//		COM->Render_Component();
-//	}
-//}
 Component*	GameObject::Get_Component(COMPONENT_TYPE _CID) {
 	return ComponentList[(LONG)_CID] != nullptr ? ComponentList[(LONG)_CID] : nullptr;
 }

@@ -12,9 +12,6 @@ HRESULT GameManager::Ready_GameManager() {
 VOID	GameManager::Update_GameManager(CONST FLOAT& _DT) {
 	SceneManager::GetInstance()->Update_SceneManager(_DT);
 	KeyManager	::GetInstance()->Update_KeyManager(_DT);
-	if (GetAsyncKeyState('K') & 0x8000) {
-		CHANGE_SCENE_VILLAGE
-	}
 }
 VOID	GameManager::LateUpdate_GameManager(CONST FLOAT& _DT) {
 	SceneManager::GetInstance()->LateUpdate_SceneManager(_DT);

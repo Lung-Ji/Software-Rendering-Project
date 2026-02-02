@@ -23,15 +23,11 @@ protected:
 public:
 	virtual HRESULT		Ready_Component();
 	virtual INT			Update_Component(CONST FLOAT& _DT);
-	virtual VOID		LateUpdate_Component(CONST FLOAT& _DT);
-	virtual VOID		Render_Component();
+	virtual VOID		LateUpdate_Component(CONST FLOAT& _DT) {};
+	virtual VOID		Render_Component() {};
 
 public:
-	VOID		FSM_StateEnter();
-	VOID		FSM_StateUpdate();
-	VOID		FSM_StateExit();
-
-	VOID		FSM_StateChange(State* _State);
+	VOID		FSM_StateChange(const State* _State);
 	State*		FSM_GetCurrentState() { return CurrentState; }
 
 public:
