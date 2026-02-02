@@ -72,7 +72,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>../Execute\</OutDir>
+    <OutDir>../Bin\</OutDir>
     <IncludePath>$(DXSDK_DIR)Include;../../Sound/FMOD/Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)lib\x64;../../Sound/FMOD/Library;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
