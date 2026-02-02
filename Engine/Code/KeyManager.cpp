@@ -2,7 +2,7 @@
 IMPLEMENT_SINGLETON(KeyManager)
 
 KeyManager::KeyManager(void) {
-	ZeroMemory(KEY_STATE, sizeof(KEY_STATE));
+	ZeroMemory(KEY_STATE, sizeof(KEY_STATE));;
 }
 KeyManager::~KeyManager(void) { Free(); }
 int KeyMapping[(int)KEY::LAST] = {
@@ -29,6 +29,7 @@ HRESULT KeyManager::Ready_KeyManager(HINSTANCE hInst, HWND hWnd) {
 	Mouse->SetDataFormat(&c_dfDIMouse);
 	Mouse->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
 	Mouse->Acquire();
+
 	return S_OK;
 }
 VOID KeyManager::Update_KeyManager(CONST FLOAT& _DT) {

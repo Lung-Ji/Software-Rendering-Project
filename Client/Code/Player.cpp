@@ -7,9 +7,22 @@ Player::~Player()													{}
 
 HRESULT Player::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
+
+	_defaultSpeed = 500.f;
+	_speed = _defaultSpeed;
+
+	_isJump = false;
+	_defultJumpSpeed = 500.f;
+	_jumpSpeed = 0.f;
+	_g = 10.f;
+
 	return S_OK;
 }
 INT	Player::Update_GameObject(const _float& _DT) {
+
+	Gravity(_DT);
+	Key_Input(_DT);
+
 	GameObject::Update_GameObject(_DT);
 
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
@@ -39,6 +52,79 @@ HRESULT Player::Component_Initialize() {
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Extra/Example");
 
 	return S_OK;
+}
+void Player::Key_Input(const _float& _DT)
+{
+	_vec3		vDir;
+	Component_Transform->Get_Info(INFO_LOOK, &vDir);
+
+	if((KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D)) ||
+		(KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D)))
+	{
+		_speed = _defaultSpeed * cos(D3DX_PI * 0.25f) * _DT;
+	}
+	else
+	{
+		_speed = _defaultSpeed * _DT;
+	}
+
+	if (KEY_HOLD(DIK_W))
+	{
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _speed, _DT);
+	}
+
+	if (KEY_HOLD(DIK_S))
+	{
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), -_speed, _DT);
+	}
+
+	Component_Transform->Get_Info(INFO_RIGHT, &vDir);
+
+	if (KEY_HOLD(DIK_A))
+	{
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), -_speed, _DT);
+	}
+
+	if (KEY_HOLD(DIK_D))
+	{
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _speed, _DT);
+	}
+
+	Component_Transform->Get_Info(INFO_UP, &vDir);
+
+	if (KEY_DOWN(DIK_SPACE))
+	{
+		_isJump = true;
+		_jumpSpeed = _defaultSpeed;
+	}
+}
+void Player::Gravity(const _float& _DT)
+{
+	_vec3 pos;
+	Component_Transform->Get_Info(INFO_POS, &pos);
+
+	if (pos.y > 1 || _isJump)
+	{
+		_jumpSpeed -= _g;
+
+		_vec3		vDir;
+		Component_Transform->Get_Info(INFO_UP, &vDir);
+
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _jumpSpeed * _DT, _DT);
+	}
+	
+	if(pos.y < 1)
+	{
+		_isJump = false;
+		_jumpSpeed = 0.f;
+
+		_matrix* wolrdmat;
+		ZeroMemory(&wolrdmat, sizeof(wolrdmat));
+
+		wolrdmat = Component_Transform->Get_World();
+		wolrdmat[3][1] = 2;
+	}
+
 }
 Player* Player::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	Player* PLAYER = new Player(_GRPDEV);

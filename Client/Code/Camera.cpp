@@ -73,12 +73,12 @@ VOID CameraObject::Camera_Transform_Control(CONST FLOAT& _DT) {
 		_vec3 Length = *D3DXVec3Normalize(&SideVector, &SideVector) * _DT * CameraSpeed;
 		EyeVec -= Length; AtVec -= Length;
 	}
-	if (KEY_HOLD(DIK_SPACE))	{ 
-		memcpy(&UpVector, &CameraMatrix.m[1][0], sizeof(_vec3));
+	//if (KEY_HOLD(DIK_SPACE))	{ 
+	//	memcpy(&UpVector, &CameraMatrix.m[1][0], sizeof(_vec3));
 
-		_vec3 Length = *D3DXVec3Normalize(&UpVector, &UpVector) * _DT * CameraSpeed;
-		EyeVec += Length; AtVec += Length;
-	}
+	//	_vec3 Length = *D3DXVec3Normalize(&UpVector, &UpVector) * _DT * CameraSpeed;
+	//	EyeVec += Length; AtVec += Length;
+	//}
 	if (KEY_HOLD(DIK_LCONTROL))	{ 
 		memcpy(&UpVector, &CameraMatrix.m[1][0], sizeof(_vec3));
 

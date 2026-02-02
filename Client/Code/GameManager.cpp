@@ -21,7 +21,7 @@ VOID	GameManager::Render_GameManager() {
 	DEVCLASS->Render_Begin(D3DXCOLOR(0.f, 0.f, 1.f, 1.f));
 	SceneManager::GetInstance()->Render_SceneManager(GRPDEV);
 #ifdef _DEBUG
-	//cout << "File I/O Ãâ·Â" << endl;
+	//cout << "File I/O ÃƒÃ¢Â·Ã‚" << endl;
 #endif // _DEBUG
 
 	//DEVCLASS->Render_End();
