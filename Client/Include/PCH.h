@@ -35,7 +35,8 @@
 #include "Monster_State.h"
 #include "Monster.h"
 #include "Player.h"
-
+#include "Tile.h"
+#include "CubeTile.h"
 //////////////////////////////////////////// Scene List
 
 #include "StartScene.h"
@@ -51,7 +52,7 @@
 #include "SceneManager.h"
 #include "TimeManager.h"
 #include "GameManager.h"
-
+#include "TileManager.h"
 //////////////////////////////////////////// Global Variable
 
 extern HWND			hWnd;

@@ -58,11 +58,8 @@
     <Filter Include="99. Component\04. Sprite">
       <UniqueIdentifier>{e78a6a92-ba68-4941-a7bc-fd0f30163631}</UniqueIdentifier>
     </Filter>
-    <Filter Include="08. LightManager">
-      <UniqueIdentifier>{0f05d4b5-1011-466b-8974-31e9737b1850}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="08. LightManager\01. Light">
-      <UniqueIdentifier>{e331f422-fd0f-447a-aed4-acd042ceb190}</UniqueIdentifier>
+    <Filter Include="08.TileManager">
+      <UniqueIdentifier>{fb375aba-e013-4696-be93-303247a99c6c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -132,11 +129,8 @@
     <ClInclude Include="..\Header\Sprite.h">
       <Filter>99. Component\04. Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\LightManager.h">
-      <Filter>08. LightManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Light.h">
-      <Filter>08. LightManager\01. Light</Filter>
+    <ClInclude Include="..\Header\TileManager.h">
+      <Filter>08.TileManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -188,11 +182,8 @@
     <ClCompile Include="..\Code\Sprite.cpp">
       <Filter>99. Component\04. Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\LightManager.cpp">
-      <Filter>08. LightManager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Light.cpp">
-      <Filter>08. LightManager\01. Light</Filter>
+    <ClCompile Include="..\Code\TileManager.cpp">
+      <Filter>08.TileManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

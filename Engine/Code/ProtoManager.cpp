@@ -15,7 +15,8 @@ HRESULT		ProtoManager::Ready_Prototype(LPDIRECT3DDEVICE9 _GRPDEV) {
 	ComponentList.push_back(Texture		::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_TEXTURE		= 5
 	ComponentList.push_back(SpriteObject::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_SPRITE		= 6
 	ComponentList.push_back(StateMachine::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_FSM			= 7
-
+	ComponentList.push_back(Buffer		::Create(_GRPDEV, BUFFER_TYPE::TILE));
+	ComponentList.push_back(Buffer		::Create(_GRPDEV, BUFFER_TYPE::CUBE));
 
 	return S_OK;
 }

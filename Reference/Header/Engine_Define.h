@@ -31,10 +31,10 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-#ifndef DBG_NEW 
+#ifndef DBG_NEWW 
 
-#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ ) 
-#define new DBG_NEW 
+#define DBG_NEWW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ ) 
+#define newW DBG_NEWW 
 
 #endif
 #endif

@@ -57,6 +57,12 @@ HRESULT StartScene::Ready_Enviroment_Layer(CONST TCHAR* _LTAG) {
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 
+	GOBJ = Tile::Create(GRPDEV);
+	GOBJ->Set_ObjectTag(L"Tile");
+
+	if (nullptr == GOBJ)					return E_FAIL;
+	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
+
 	LayerList.push_back(LYR);
 	
 	return S_OK;
