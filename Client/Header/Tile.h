@@ -5,6 +5,7 @@
 namespace Engine
 {
     TILE_SIDE;
+    TILEMODE_CHANGE;
 }
 class Tile :
     public GameObject
@@ -14,8 +15,7 @@ private:
     explicit Tile(LPDIRECT3DDEVICE9 _GRPDEV);
     explicit Tile(const GameObject& ths);
     virtual ~Tile();
-private:
-    enum MODE_CHANGE { MODE_TILE, MODE_CUBE, MODE_END };
+
 public:
 
     virtual			HRESULT		Ready_GameObject();
@@ -25,11 +25,13 @@ public:
 public:
     void                        Mode_Change();
     void                        Tile_Offset(_vec3 vMouse);
+    void                        TIleXY_Intersect();
+    void                        Cube_Intersect();
 private:
-    HRESULT			Component_Initialize();
-    _bool           Check_Bottom(_vec3* vOrigin);
-    void            Check_TilePoint();
-
+    HRESULT			            Component_Initialize();
+    _bool                       Check_Bottom(_vec3* vOrigin);
+    void                        Check_TilePoint();
+    void                        Check_Distance(_vec3 vMouse);
     //타일 체크용 버퍼
     Buffer*         m_pBuffer;
     Buffer*         m_pBufferTileFRONT;
@@ -37,15 +39,15 @@ private:
     Buffer*         m_pBufferTileLEFT;
     Buffer*         m_pBufferTileBACK;
 
+
     Transform*      m_pTransform;
 
     _bool           m_bTileCheck;
 
     TILE_SIDE       m_eTile;
-    _float          m_TileHeight;
 
 private:
-    MODE_CHANGE     m_eMode;
+    TILEMODE_CHANGE     m_eMode;
 public:
     static      Tile* Create(LPDIRECT3DDEVICE9 pGraphicDev);
    

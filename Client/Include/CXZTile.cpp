@@ -34,26 +34,26 @@ VOID CXZTile::Render_GameObject()
 HRESULT CXZTile::Component_Initialize() {
 
 	m_pTransform = ADD_COMPONENT_TRANSFORM;
-	switch (m_eTileSide)
-	{
-	case TILE_SIDE::TILE_FRONT:
-		m_pBuffer = ADD_COMPONENT_TILEFRONT;
-		break;
-	case TILE_SIDE::TILE_RIGHT:
-		m_pBuffer = ADD_COMPONENT_TILERIGHT;
-		break;
-	case TILE_SIDE::TILE_LEFT:
-		m_pBuffer = ADD_COMPONENT_TILELEFT;
-		break;
-	case TILE_SIDE::TILE_BACK:
-		m_pBuffer = ADD_COMPONENT_TILEBACK;
-		break;
-	case TILE_SIDE::TILE_OTHER:
-		m_pBuffer = ADD_COMPONENT_TILE;
-		break;
-	}
+	//switch (m_eTileSide)
+	//{
+	//case TILE_SIDE::TILE_FRONT:
+	//	m_pBuffer = ADD_COMPONENT_TILEFRONT;
+	//	break;
+	//case TILE_SIDE::TILE_RIGHT:
+	//	m_pBuffer = ADD_COMPONENT_TILERIGHT;
+	//	break;
+	//case TILE_SIDE::TILE_LEFT:
+	//	m_pBuffer = ADD_COMPONENT_TILELEFT;
+	//	break;
+	//case TILE_SIDE::TILE_BACK:
+	//	m_pBuffer = ADD_COMPONENT_TILEBACK;
+	//	break;
+	//case TILE_SIDE::TILE_OTHER:
+	//	m_pBuffer = ADD_COMPONENT_TILE;
+	//	break;
+	//}
 		
-
+	m_pBuffer = ADD_COMPONENT_TILE;
 
 	return S_OK;
 }
