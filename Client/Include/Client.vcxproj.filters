@@ -70,6 +70,15 @@
     <Filter Include="03. GameObject\05.Tile">
       <UniqueIdentifier>{3f5d8e79-69ba-4afe-ab89-37fd086d4597}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GameObject\02. Monster\00. BaseMonster">
+      <UniqueIdentifier>{d89099c6-b41c-429d-9f19-ec84a84cb870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\02. Monster\01. Boss">
+      <UniqueIdentifier>{9a7b2918-49d6-4c1f-a5b1-a218d111c477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\02. Monster\02. Monster1">
+      <UniqueIdentifier>{6d746460-77e9-4f41-ba5d-78fa66467052}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -104,9 +113,6 @@
     </ClInclude>
     <ClInclude Include="..\Header\Player.h">
       <Filter>03. GameObject\01. Player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Monster.h">
-      <Filter>03. GameObject\02. Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\NPC.h">
       <Filter>03. GameObject\03. NPC</Filter>
@@ -159,6 +165,18 @@
     <ClInclude Include="..\Header\Tile.h">
       <Filter>03. GameObject\05.Tile</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Monster.h">
+      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMonster.h">
+      <Filter>03. GameObject\02. Monster\01. Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster_State.h">
+      <Filter>03. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster1.h">
+      <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -178,9 +196,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\Player.cpp">
       <Filter>03. GameObject\01. Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Monster.cpp">
-      <Filter>03. GameObject\02. Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\NPC.cpp">
       <Filter>03. GameObject\03. NPC</Filter>
@@ -229,6 +244,18 @@
     </ClCompile>
     <ClCompile Include="..\Code\Tile.cpp">
       <Filter>03. GameObject\05.Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster.cpp">
+      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMonster.cpp">
+      <Filter>03. GameObject\02. Monster\01. Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster_State.cpp">
+      <Filter>03. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster1.cpp">
+      <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
