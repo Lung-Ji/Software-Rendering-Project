@@ -29,6 +29,8 @@ private:
 	void			Key_Input(const _float& _DT);
 	void			Gravity(const _float& _DT);
 private:
+	bool	Debug;
+
 	float _defaultSpeed;
 	float _speed;
 

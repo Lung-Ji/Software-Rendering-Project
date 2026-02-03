@@ -33,12 +33,6 @@ HRESULT StartScene::Ready_Enviroment_Layer(CONST TCHAR* _LTAG) {
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 
-	GOBJ = Player::Create(GRPDEV);
-	GOBJ->Set_ObjectTag(L"Player");
-	
-	if (nullptr == GOBJ)					return E_FAIL;
-	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
-
 	GOBJ = Monster::Create(GRPDEV);
 	GOBJ->Set_ObjectTag(L"Monster");
 
@@ -68,6 +62,19 @@ HRESULT StartScene::Ready_Enviroment_Layer(CONST TCHAR* _LTAG) {
 	return S_OK;
 }
 HRESULT StartScene::Ready_GameLogic_Layer(CONST TCHAR* _LTAG) {
+	Layer* LYR = Layer::Create();
+	if (nullptr == LYR) return E_FAIL;
+
+	GameObject* GOBJ = nullptr;
+
+	GOBJ = Player::Create(GRPDEV);
+	GOBJ->Set_ObjectTag(L"Player");
+
+	if (nullptr == GOBJ)					return E_FAIL;
+	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
+
+	LayerList.push_back(LYR);
+
 	return S_OK;
 }
 HRESULT StartScene::Ready_UserInterface_Layer(CONST TCHAR* _LTAG) {
@@ -75,6 +82,9 @@ HRESULT StartScene::Ready_UserInterface_Layer(CONST TCHAR* _LTAG) {
 }
 StartScene* StartScene::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	StartScene* LS = new StartScene(_GRPDEV);
+
+	SceneManager::GetInstance()->Set_CurrentScene(LS);
+
 	if (FAILED(LS->Ready_Scene())) {
 		MSG_BOX("Cannot Create StartScene.");
 		Safe_Release(LS);

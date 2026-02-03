@@ -16,7 +16,21 @@ HRESULT Player::Ready_GameObject() {
 	_jumpSpeed = 0.f;
 	_g = 0.5f;
 
-	Component_Transform->Set_Pos({ 5.f, 1.f, 0.f });
+	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
+		Get_GameObject(L"Camera"));
+
+	_vec3 cameraDir = *(Camera->Get_EyeVec()) - *(Camera->Get_AtVec());
+	_vec3 planeDir = { 0.f, 1.f, 0.f };
+	
+	_float angle = acosf(D3DXVec3Dot(D3DXVec3Normalize(&cameraDir, &cameraDir), D3DXVec3Normalize(&planeDir, &planeDir)));
+	angle = angle / D3DX_PI * 180.f;
+
+	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
+	Component_Transform->Rotation(ROT_Y, 45.f);
+	Component_Transform->Rotation(ROT_X, angle);
+	Component_Transform->Set_Pos({ 5.f, 1.f, 5.f });
+
+	Debug = false;
 
 	return S_OK;
 }
@@ -55,48 +69,59 @@ HRESULT Player::Component_Initialize() {
 }
 void Player::Key_Input(const _float& _DT)
 {
-	_vec3		vDir;
-	Component_Transform->Get_Info(INFO_LOOK, &vDir);
 
-	if((KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D)) ||
-		(KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D)))
+	if (!Debug)
 	{
-		_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+		_vec3		upDir, rightDir;
+		upDir = { 1.f, 0.f, 1.f };
+		rightDir = { 1.f, 0.f, -1.f };
+		D3DXVec3Normalize(&upDir, &upDir);
+		D3DXVec3Normalize(&rightDir, &rightDir);
+
+		//Component_Transform->Get_Info(INFO_LOOK, &vDir);
+
+		if ((KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D)) ||
+			(KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D)))
+		{
+			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+		}
+		else
+		{
+			_speed = _defaultSpeed;
+		}
+
+		if (KEY_HOLD(DIK_W))
+		{
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+		}
+
+		if (KEY_HOLD(DIK_S))
+		{
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
+		}
+
+		if (KEY_HOLD(DIK_A))
+		{
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+		}
+
+		if (KEY_HOLD(DIK_D))
+		{
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+		}
+		//if (KEY_DOWN(DIK_C) && !_isJump)
+		//{
+		//	_isJump = true;
+		//	_jumpSpeed = _defaultSpeed;
+		//}
 	}
-	else
-	{
-		_speed = _defaultSpeed;
+	
+
+
+	if (KEY_DOWN(DIK_TAB)) {	//	마우스 커서 고정 여부 TRUE = 고정, FALSE = 고정 해제
+		Debug ? Debug = FALSE : Debug = TRUE;
 	}
 
-	if (KEY_HOLD(DIK_W))
-	{
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _speed, _DT);
-	}
-
-	if (KEY_HOLD(DIK_S))
-	{
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), -_speed, _DT);
-	}
-
-	Component_Transform->Get_Info(INFO_RIGHT, &vDir);
-
-	if (KEY_HOLD(DIK_A))
-	{
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), -_speed, _DT);
-	}
-
-	if (KEY_HOLD(DIK_D))
-	{
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _speed, _DT);
-	}
-
-	Component_Transform->Get_Info(INFO_UP, &vDir);
-
-	if (KEY_DOWN(DIK_C) && !_isJump)
-	{
-		_isJump = true;
-		_jumpSpeed = _defaultSpeed;
-	}
 }
 
 void Player::Gravity(const _float& _DT)
