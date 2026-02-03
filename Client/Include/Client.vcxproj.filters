@@ -70,8 +70,6 @@
     <Filter Include="03. GameObject\05.Tile">
       <UniqueIdentifier>{3f5d8e79-69ba-4afe-ab89-37fd086d4597}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. GameObject\06. Button">
-      <UniqueIdentifier>{e03cff35-2d81-4fc0-b141-17003fcedaad}</UniqueIdentifier>
     <Filter Include="03. GameObject\02. Monster\00. BaseMonster">
       <UniqueIdentifier>{d89099c6-b41c-429d-9f19-ec84a84cb870}</UniqueIdentifier>
     </Filter>
@@ -167,8 +165,6 @@
     <ClInclude Include="..\Header\Tile.h">
       <Filter>03. GameObject\05.Tile</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\CButton.h">
-      <Filter>03. GameObject\06. Button</Filter>
     <ClInclude Include="..\Header\Monster.h">
       <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
     </ClInclude>
@@ -249,8 +245,6 @@
     <ClCompile Include="..\Code\Tile.cpp">
       <Filter>03. GameObject\05.Tile</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\CButton.cpp">
-      <Filter>03. GameObject\06. Button</Filter>
     <ClCompile Include="..\Code\Monster.cpp">
       <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
     </ClCompile>

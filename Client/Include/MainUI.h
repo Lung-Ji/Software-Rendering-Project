@@ -20,7 +20,7 @@ public:
 
 private:
 	SpriteObject*		Component_Sprite;
-	BOOL						m_bIsPush;
+	
 
 private:
 	virtual	VOID		Free();
