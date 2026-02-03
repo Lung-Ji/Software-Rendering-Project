@@ -28,8 +28,7 @@ HRESULT MainUI::Component_Initialize() {
 	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Skill02.png", 50, 50, 70, 650);
 	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Skill03.png", 50, 50, 130, 650);
 
-	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spiki.png", 100, 100, 640, 360);
-	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spiki_Push.png", 100, 100, 640, 360);
+	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Testing.png", 50, 50, 180, 650);
 
 	return S_OK;
 }

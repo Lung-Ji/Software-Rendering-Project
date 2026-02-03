@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\Camera.h" />
+    <ClInclude Include="..\Header\CButton.h" />
     <ClInclude Include="..\Header\CubeTile.h" />
     <ClInclude Include="..\Header\DungeonScene.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -204,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Camera.cpp" />
+    <ClCompile Include="..\Code\CButton.cpp" />
     <ClCompile Include="..\Code\CubeTile.cpp" />
     <ClCompile Include="..\Code\DungeonScene.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

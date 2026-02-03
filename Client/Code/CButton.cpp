@@ -11,16 +11,26 @@ HRESULT CButton::Ready_GameObject() {
 
 	return S_OK;
 }
+
 INT	CButton::Update_GameObject(const _float& _DT) {
-	GameObject::Update_GameObject(_DT);
+
+	POINT ptMouse;
+
+	if (KeyManager::GetInstance()->Get_MouseState(DIM_LB)
+		&& (0x80 && GetCursorPos(&ptMouse)))
+	{
+		m_bCheckMouse = true;
+	}
+
+	GameObject::Update_GameObject(_DT);	
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_UI, this);
 
 	return 0;
-
 }
-VOID CButton::LateUpdate_GameObject(const _float& _DT) {
-	GameObject::LateUpdate_GameObject(_DT);
 
+VOID CButton::LateUpdate_GameObject(const _float& _DT) {
+
+	GameObject::LateUpdate_GameObject(_DT);
 }
 
 VOID CButton::Render_GameObject()
@@ -30,10 +40,10 @@ VOID CButton::Render_GameObject()
 
 HRESULT CButton::Component_Initialize() {
 	Component_Sprite = ADD_COMPONENT_SPRITE;
-
+	
 	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spiki.png", 100, 100, 640, 360);
-	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spiki_Push.png", 100, 100, 640, 360);
-
+	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spiki_Push.png", 100, 100, 700, 360);
+	
 	return S_OK;
 }
 

@@ -22,6 +22,9 @@ private:
   Buffer* m_pBuffer;
   Transform* m_pTransform;
   SpriteObject* Component_Sprite;
+  SpriteObject* Component_Sprite2;
+  
+  BOOL        m_bCheckMouse;
 
 public:
   static      CButton* Create(LPDIRECT3DDEVICE9 pGraphicDev);
