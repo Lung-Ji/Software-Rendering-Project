@@ -135,14 +135,14 @@
     <ClInclude Include="..\Header\Sprite.h">
       <Filter>99. Component\04. Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\TileManager.h">
-      <Filter>08. TileManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\Light.h">
       <Filter>09. LightManager\01. Light</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\LightManager.h">
       <Filter>09. LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\TileManager.h">
+      <Filter>08. TileManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,14 +194,14 @@
     <ClCompile Include="..\Code\Sprite.cpp">
       <Filter>99. Component\04. Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\TileManager.cpp">
-      <Filter>08. TileManager</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Light.cpp">
       <Filter>09. LightManager\01. Light</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\LightManager.cpp">
       <Filter>09. LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TileManager.cpp">
+      <Filter>08. TileManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

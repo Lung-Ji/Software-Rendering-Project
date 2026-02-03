@@ -27,7 +27,7 @@ VOID CXZTile::Render_GameObject()
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
 	m_pBuffer->Render_Buffer();
 
-	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 }
 

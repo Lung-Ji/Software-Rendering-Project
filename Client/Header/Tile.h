@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
+
 namespace Engine
 {
     TILE_SIDE;
@@ -13,14 +14,17 @@ private:
     explicit Tile(LPDIRECT3DDEVICE9 _GRPDEV);
     explicit Tile(const GameObject& ths);
     virtual ~Tile();
-
+private:
+    enum MODE_CHANGE { MODE_TILE, MODE_CUBE, MODE_END };
 public:
 
     virtual			HRESULT		Ready_GameObject();
     virtual			INT			Update_GameObject(CONST FLOAT& _DT);
     virtual			VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
     virtual			VOID		Render_GameObject();
-
+public:
+    void                        Mode_Change();
+    void                        Tile_Offset(_vec3 vMouse);
 private:
     HRESULT			Component_Initialize();
     _bool           Check_Bottom(_vec3* vOrigin);
@@ -39,6 +43,9 @@ private:
 
     TILE_SIDE       m_eTile;
     _float          m_TileHeight;
+
+private:
+    MODE_CHANGE     m_eMode;
 public:
     static      Tile* Create(LPDIRECT3DDEVICE9 pGraphicDev);
    

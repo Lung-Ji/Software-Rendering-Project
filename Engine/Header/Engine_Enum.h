@@ -22,6 +22,7 @@ namespace Engine
 	enum class BUFFER_TYPE		{ TRIANGLE, RECTANGLE, TEXTURE, TERRAIN, TILE, CUBE, TILEFRONT, TILELEFT, TILERIGHT, TILEBACK, END };
 
 	enum class TILE_SIDE		{TILE_FRONT,TILE_RIGHT,TILE_LEFT,TILE_BACK, TILE_OTHER, TILE_END};
+	enum class CUBE_SIDE		{CUBE_FRONT, CUBE_RIGHT, CUBE_LEFT, CUBE_BACK, CUBE_OTHER, CUBE_END };
 	/////////////////////////////////// KEYMANAGER ///////////////////////////////////
 	enum class KEY {
 		NUM_0, NUM_1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9,
