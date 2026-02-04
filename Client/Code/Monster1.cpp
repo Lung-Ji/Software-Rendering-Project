@@ -31,35 +31,35 @@ INT	Monster1::Update_GameObject(const _float& _DT)
 	//		
 	//	}
 	//}
-	if (D3DXVec3Length(&Dir) < TRACKINGDIS)
-	{
-		if (!Is_Tracking)
-			Tracking_Counter = 0;
-		
-		Lost_Counter = 0;
-		Is_Tracking = true;
-	}
-	else
-	{
-		++Lost_Counter;
-	}
-
-	if (Lost_Counter > TRACKINGTIME)
-		Is_Tracking = false;
-
-	if (Is_Tracking)
-	{
-		++Tracking_Counter;
-		Speed = Default_Speed;
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&Dir, &Dir), Speed, _DT);
-	}
-	else
-	{
-		if (!Is_Attacking)
-		{
-			Speed = 0;
-		}
-	}
+	//if (D3DXVec3Length(&Dir) < TRACKINGDIS)
+	//{
+	//	if (!Is_Tracking)
+	//		Tracking_Counter = 0;
+	//	
+	//	Lost_Counter = 0;
+	//	Is_Tracking = true;
+	//}
+	//else
+	//{
+	//	++Lost_Counter;
+	//}
+	//
+	//if (Lost_Counter > TRACKINGTIME)
+	//	Is_Tracking = false;
+	//
+	//if (Is_Tracking)
+	//{
+	//	++Tracking_Counter;
+	//	Speed = Default_Speed;
+	//	Component_Transform->Move_Pos(D3DXVec3Normalize(&Dir, &Dir), Speed, _DT);
+	//}
+	//else
+	//{
+	//	if (!Is_Attacking)
+	//	{
+	//		Speed = 0;
+	//	}
+	//}
 
 	if (Tracking_Counter > 300)
 	{
@@ -92,7 +92,7 @@ VOID Monster1::Render_GameObject() {
 
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	Component_Texture->Set_Texture(L"Monster1.png");
+	//Component_Texture->Set_Texture(L"Monster1.png");
 
 	Component_Buffer->Render_Buffer();
 
@@ -109,6 +109,8 @@ HRESULT Monster1::Component_Initialize() {
 
 	Component_Texture = ADD_COMPONENT_TEXTURE;
 	Component_FSM = ADD_COMPONENT_FSM;
+
+	Component_Collider = ADD_COMPONENT_COLLIDER;
 
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Monster");
 	Component_FSM->FSM_StateInit(MONSTER_IDLE::GetInstance()->Instance());

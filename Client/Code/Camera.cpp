@@ -104,11 +104,7 @@ VOID CameraObject::Camera_Transform_Control(CONST FLOAT& _DT) {
 			_vec3 Length = *D3DXVec3Normalize(&UpVector, &UpVector) * _DT * CameraSpeed;
 			EyeVec -= Length; AtVec -= Length;
 		}
-		if (KEY_DOWN(DIK_F1)) {		//	GUI 상태 바 숨김 여부 TRUE = Visible, FALSE = Hide
-			Camera_Show ? Camera_Show = FALSE : Camera_Show = TRUE;
-		}
 	}
-
 	if (KEY_DOWN(DIK_P)) {	//	마우스 커서 고정 여부 TRUE = 고정, FALSE = 고정 해제
 		MouseCheck ? MouseCheck = FALSE : MouseCheck = TRUE;
 		Camera_Move ? Camera_Move = FALSE : Camera_Move = TRUE;
@@ -147,6 +143,7 @@ VOID CameraObject::Camera_Rotation_Control(CONST FLOAT& _DT){
 		}
 	}
 }
+
 
 HRESULT CameraObject::Component_Initialize() {
 

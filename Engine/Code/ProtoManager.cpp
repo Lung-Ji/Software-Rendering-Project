@@ -20,7 +20,8 @@ HRESULT		ProtoManager::Ready_Prototype(LPDIRECT3DDEVICE9 _GRPDEV) {
 	ComponentList.push_back(Transform	::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_TRANSFORM	= 10
 	ComponentList.push_back(Texture		::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_TEXTURE		= 11
 	ComponentList.push_back(SpriteObject::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_SPRITE		= 12
-	ComponentList.push_back(StateMachine::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_FSM			= 13
+	ComponentList.push_back(Collider	::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_COLLIDER	= 13
+	ComponentList.push_back(StateMachine::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_FSM			= 14
 	
 	return S_OK;
 }

@@ -26,6 +26,7 @@ private:
 	Transform*		Component_Transform;
 	Texture*		Component_Texture;
 	StateMachine*	Component_FSM;
+	Collider*		Component_Collider;
 
 	GameObject*		pTarget;
 

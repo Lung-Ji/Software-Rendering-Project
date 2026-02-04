@@ -29,6 +29,7 @@
 #define ADD_COMPONENT_TRANSFORM			dynamic_cast<Transform*>(Add_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM));	// TRANSFORM 컴포넌트 추가
 #define ADD_COMPONENT_TEXTURE			dynamic_cast<Texture*>(Add_Component(COMPONENT_TYPE::COMPONENT_TEXTURE));		// 텍스쳐 저장 컴포넌트 추가
 #define ADD_COMPONENT_SPRITE			dynamic_cast<SpriteObject*>(Add_Component(COMPONENT_TYPE::COMPONENT_SPRITE));	// 텍스쳐 저장 컴포넌트 추가
+#define ADD_COMPONENT_COLLIDER			dynamic_cast<Collider*>(Add_Component(COMPONENT_TYPE::COMPONENT_COLLIDER));	// 텍스쳐 저장 컴포넌트 추가
 #define ADD_COMPONENT_FSM				dynamic_cast<StateMachine*>(Add_Component(COMPONENT_TYPE::COMPONENT_FSM));	// FSM 컴포넌트
 #define ADD_COMPONENT_TILE				dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILE));		// 타일
 #define ADD_COMPONENT_CUBE				dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_CUBE));		// 큐브
