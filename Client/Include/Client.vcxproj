@@ -209,9 +209,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Camera.cpp" />
-    <ClCompile Include="..\Code\CButton.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\Code\CubeTile.cpp" />
     <ClCompile Include="..\Code\DungeonScene.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
