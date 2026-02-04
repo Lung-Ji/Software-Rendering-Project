@@ -23,8 +23,13 @@ VOID	SceneManager::Free() {
 }
 HRESULT SceneManager::Scene_Transition(Scene* _SCENE) {
 	if (_SCENE == nullptr)	return E_FAIL;
-	Safe_Release(CurrentScene);
-	CurrentScene = _SCENE;
+
+	if (CurrentScene != _SCENE)
+	{
+		Safe_Release(CurrentScene);
+		CurrentScene = _SCENE;
+	}
+
 	return S_OK;
 }
 GameObject* SceneManager::Get_GameObject(CONST TCHAR* _TAG) {

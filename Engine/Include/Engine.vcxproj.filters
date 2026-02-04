@@ -67,6 +67,9 @@
     <Filter Include="09. LightManager\01. Light">
       <UniqueIdentifier>{7d495ee7-f0b3-4f15-b593-6b9d16fd510d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="08. TileManager\TileImageManager">
+      <UniqueIdentifier>{de85b09c-bdf0-41ed-ab1d-3450338f2975}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GraphicDevice.h">
@@ -135,14 +138,17 @@
     <ClInclude Include="..\Header\Sprite.h">
       <Filter>99. Component\04. Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\TileManager.h">
-      <Filter>08. TileManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\Light.h">
       <Filter>09. LightManager\01. Light</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\LightManager.h">
       <Filter>09. LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\TileManager.h">
+      <Filter>08. TileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\TileImageManager.h">
+      <Filter>08. TileManager\TileImageManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,14 +200,17 @@
     <ClCompile Include="..\Code\Sprite.cpp">
       <Filter>99. Component\04. Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\TileManager.cpp">
-      <Filter>08. TileManager</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Light.cpp">
       <Filter>09. LightManager\01. Light</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\LightManager.cpp">
       <Filter>09. LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TileManager.cpp">
+      <Filter>08. TileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TileImageManager.cpp">
+      <Filter>08. TileManager\TileImageManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

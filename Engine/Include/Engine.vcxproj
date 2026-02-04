@@ -166,6 +166,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\SceneManager.h" />
     <ClInclude Include="..\Header\SoundManager.h" />
     <ClInclude Include="..\Header\Texture.h" />
+    <ClInclude Include="..\Header\TileImageManager.h" />
     <ClInclude Include="..\Header\TileManager.h" />
     <ClInclude Include="..\Header\TimeManager.h" />
     <ClInclude Include="..\Header\Transform.h" />
@@ -187,6 +188,7 @@ call Copy.bat</Command>
     <ClCompile Include="..\Code\SceneManager.cpp" />
     <ClCompile Include="..\Code\SoundManager.cpp" />
     <ClCompile Include="..\Code\Texture.cpp" />
+    <ClCompile Include="..\Code\TileImageManager.cpp" />
     <ClCompile Include="..\Code\TileManager.cpp" />
     <ClCompile Include="..\Code\TimeManager.cpp" />
     <ClCompile Include="..\Code\Transform.cpp" />

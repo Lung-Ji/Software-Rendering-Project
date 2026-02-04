@@ -15,6 +15,10 @@ HRESULT Buffer::Ready_Buffer(BUFFER_TYPE _TYPE) {
 	else if (_TYPE == BUFFER_TYPE::TERRAIN	)		{ Ready_Terrain_Buffer()  ;	}
     else if (_TYPE == BUFFER_TYPE::TILE)			{ Ready_Tile_Buffer()	  ; }
     else if (_TYPE == BUFFER_TYPE::CUBE)			{ Ready_Cube_Buffer()	  ; }
+	else if (_TYPE == BUFFER_TYPE::TILEFRONT)		{ Ready_TileFRONT_Buffer(); }
+	else if (_TYPE == BUFFER_TYPE::TILELEFT)		{ Ready_TileLEFT_Buffer(); }
+	else if (_TYPE == BUFFER_TYPE::TILERIGHT)		{ Ready_TileRIGHT_Buffer(); }
+	else if (_TYPE == BUFFER_TYPE::TILEBACK)		{ Ready_TileBACK_Buffer(); }
 	return S_OK;
 }
 VOID	Buffer::Render_Buffer() {
@@ -192,6 +196,187 @@ HRESULT Buffer::Ready_Terrain_Buffer() {
 			TriCount++;
 		}
 	}
+
+	IndexBuffer->Unlock();
+	return S_OK;
+}
+HRESULT Buffer::Ready_TileRIGHT_Buffer()
+{
+	VertexSize = sizeof(VTXCOL);
+	VertexCount = 4;
+	TRICount = 2;
+	VertexFormat = FVF_COL;
+
+	IndexSize = sizeof(INDEX32);
+	IndexFormat = D3DFMT_INDEX32;
+
+	pVBufferPos = new _vec3[VertexCount];
+	VTXCOL* Vertex = NULL;
+	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
+	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
+	VertexBuffer->Lock(0, 0, (void**)&Vertex, 0);
+
+
+	Vertex[0].vPosition = { 1.f, 1.f, -1.f };
+	Vertex[0].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[0] = Vertex[0].vPosition;
+	Vertex[1].vPosition = { 1.f, 1.f, 1.f };
+	Vertex[1].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[1] = Vertex[1].vPosition;
+	Vertex[2].vPosition = { 1.f, -1.f, 1.f };
+	Vertex[2].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[2] = Vertex[2].vPosition;
+	Vertex[3].vPosition = { 1.f, -1.f, -1.f };
+	Vertex[3].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[3] = Vertex[3].vPosition;
+	VertexBuffer->Unlock();
+
+	INDEX32* Index = nullptr;
+
+	IndexBuffer->Lock(0, 0, (void**)&Index, 0);
+
+	Index[0]._0 = 0;
+	Index[0]._1 = 1;
+	Index[0]._2 = 2;
+
+	Index[1]._0 = 0;
+	Index[1]._1 = 2;
+	Index[1]._2 = 3;
+
+	IndexBuffer->Unlock();
+	return S_OK;
+}
+HRESULT Buffer::Ready_TileFRONT_Buffer()
+{
+	VertexSize = sizeof(VTXCOL);
+	VertexCount = 4;
+	TRICount = 2;
+	VertexFormat = FVF_COL;
+
+	IndexSize = sizeof(INDEX32);
+	IndexFormat = D3DFMT_INDEX32;
+
+	pVBufferPos = new _vec3[VertexCount];
+	VTXCOL* Vertex = NULL;
+	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
+	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
+	VertexBuffer->Lock(0, 0, (void**)&Vertex, 0);
+
+	Vertex[0].vPosition = { -1.f, 1.f, 1.f };
+	Vertex[0].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[0] = Vertex[0].vPosition;
+	Vertex[1].vPosition = { 1.f, 1.f, 1.f };
+	Vertex[1].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[1] = Vertex[1].vPosition;
+	Vertex[2].vPosition = { 1.f, -1.f, 1.f };
+	Vertex[2].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[2] = Vertex[2].vPosition;
+	Vertex[3].vPosition = { -1.f, -1.f, 1.f };
+	Vertex[3].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[3] = Vertex[3].vPosition;
+	VertexBuffer->Unlock();
+
+	INDEX32* Index = nullptr;
+
+	IndexBuffer->Lock(0, 0, (void**)&Index, 0);
+
+	Index[0]._0 = 0;
+	Index[0]._1 = 1;
+	Index[0]._2 = 2;
+
+	Index[1]._0 = 0;
+	Index[1]._1 = 2;
+	Index[1]._2 = 3;
+
+	IndexBuffer->Unlock();
+	return S_OK;
+}
+HRESULT Buffer::Ready_TileBACK_Buffer()
+{
+	VertexSize = sizeof(VTXCOL);
+	VertexCount = 4;
+	TRICount = 2;
+	VertexFormat = FVF_COL;
+
+	IndexSize = sizeof(INDEX32);
+	IndexFormat = D3DFMT_INDEX32;
+
+	pVBufferPos = new _vec3[VertexCount];
+	VTXCOL* Vertex = NULL;
+	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
+	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
+	VertexBuffer->Lock(0, 0, (void**)&Vertex, 0);
+
+	Vertex[0].vPosition = { -1.f, 1.f, -1.f };
+	Vertex[0].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[0] = Vertex[0].vPosition;
+	Vertex[1].vPosition = { 1.f, 1.f, -1.f };
+	Vertex[1].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[1] = Vertex[1].vPosition;
+	Vertex[2].vPosition = { 1.f, -1.f, -1.f };
+	Vertex[2].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[2] = Vertex[2].vPosition;
+	Vertex[3].vPosition = { -1.f, -1.f, -1.f };
+	Vertex[3].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[3] = Vertex[3].vPosition;
+	VertexBuffer->Unlock();
+
+	INDEX32* Index = nullptr;
+
+	IndexBuffer->Lock(0, 0, (void**)&Index, 0);
+
+	Index[0]._0 = 0;
+	Index[0]._1 = 1;
+	Index[0]._2 = 2;
+
+	Index[1]._0 = 0;
+	Index[1]._1 = 2;
+	Index[1]._2 = 3;
+
+	IndexBuffer->Unlock();
+	return S_OK;
+}
+HRESULT Buffer::Ready_TileLEFT_Buffer()
+{
+	VertexSize = sizeof(VTXCOL);
+	VertexCount = 4;
+	TRICount = 2;
+	VertexFormat = FVF_COL;
+
+	IndexSize = sizeof(INDEX32);
+	IndexFormat = D3DFMT_INDEX32;
+
+	pVBufferPos = new _vec3[VertexCount];
+	VTXCOL* Vertex = NULL;
+	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
+	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
+	VertexBuffer->Lock(0, 0, (void**)&Vertex, 0);
+
+	Vertex[0].vPosition = { -1.f, 1.f, -1.f };
+	Vertex[0].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[0] = Vertex[0].vPosition;
+	Vertex[1].vPosition = { -1.f, 1.f, 1.f };
+	Vertex[1].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[1] = Vertex[1].vPosition;
+	Vertex[2].vPosition = { -1.f, -1.f, 1.f };
+	Vertex[2].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[2] = Vertex[2].vPosition;
+	Vertex[3].vPosition = { -1.f, -1.f, -1.f };
+	Vertex[3].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+	pVBufferPos[3] = Vertex[3].vPosition;
+	VertexBuffer->Unlock();
+
+	INDEX32* Index = nullptr;
+
+	IndexBuffer->Lock(0, 0, (void**)&Index, 0);
+
+	Index[0]._0 = 0;
+	Index[0]._1 = 1;
+	Index[0]._2 = 2;
+
+	Index[1]._0 = 0;
+	Index[1]._1 = 2;
+	Index[1]._2 = 3;
 
 	IndexBuffer->Unlock();
 	return S_OK;

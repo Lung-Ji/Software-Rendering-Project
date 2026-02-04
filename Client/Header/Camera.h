@@ -55,6 +55,7 @@ private:
 	GameObject* Player;
 
 	bool		Camera_Show;
+	bool		Camera_Move;
 
 public:
 	static CameraObject* Create(LPDIRECT3DDEVICE9 _GRPDEV);
