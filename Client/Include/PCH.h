@@ -40,6 +40,8 @@
 #include "Tile.h"
 #include "CubeTile.h"
 #include "CXZTile.h"
+#include "MainMenuButton.h"
+#include "MainMenu.h"
 //////////////////////////////////////////// Scene List
 
 #include "StartScene.h"

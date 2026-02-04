@@ -25,8 +25,8 @@ VOID SpriteObject::Render_Sprite() {
 	GRPDEV->SetRenderState(D3DRS_ZENABLE, TRUE);
 }
 
-HRESULT SpriteObject::Import_Sprite(CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT, FLOAT _POSX, FLOAT _POSY, INT _OPACITY) {
-	TextureList.push_back(SpriteINFO(_PATH, _WIDTH, _HEIGHT, _POSX, _POSY, _OPACITY));
+HRESULT SpriteObject::Import_Sprite(CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT, FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY) {
+	TextureList.push_back(SpriteINFO(_PATH, _WIDTH, _HEIGHT, _POSX, _POSY, _VIS, _OPACITY));
 
 	D3DXCreateTextureFromFileExW(GRPDEV, TextureList.back().PATH.c_str(), TextureList.back().WIDTH, TextureList.back().HEIGHT, 
 		1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, (LPDIRECT3DTEXTURE9*)&TextureList.back().TEXTURE);

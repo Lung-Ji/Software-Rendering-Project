@@ -1,11 +1,11 @@
 #pragma once
 #include "GameObject.h"
-
-class MainUI : public GameObject {
+class MainMenuButton : public GameObject
+{
 private:
-	explicit MainUI(LPDIRECT3DDEVICE9 _GRPDEV);
-	explicit MainUI(CONST GameObject& _RHS);
-	virtual ~MainUI();
+	explicit MainMenuButton(LPDIRECT3DDEVICE9 _GRPDEV);
+	explicit MainMenuButton(CONST GameObject& _RHS);
+	virtual ~MainMenuButton();
 
 public:
 	virtual	HRESULT		Ready_GameObject();
@@ -16,11 +16,10 @@ public:
 public:
 	HRESULT Component_Initialize();
 
-	static	MainUI*		Create(LPDIRECT3DDEVICE9 _GRPDEV);
+	static	MainMenuButton* Create(LPDIRECT3DDEVICE9 _GRPDEV);
 
 private:
-	SpriteObject*		Component_Sprite;
-	
+	SpriteObject* Component_Sprite;
 
 private:
 	virtual	VOID		Free();

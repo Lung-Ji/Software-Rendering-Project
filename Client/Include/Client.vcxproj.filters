@@ -79,6 +79,12 @@
     <Filter Include="03. GameObject\02. Monster\02. Monster1">
       <UniqueIdentifier>{6d746460-77e9-4f41-ba5d-78fa66467052}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. UI\01. Sprite\MainMenu">
+      <UniqueIdentifier>{5aecb6cf-f877-4f39-8fe8-44da2610ab28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\01. Sprite\InGame">
+      <UniqueIdentifier>{05e162c7-ecde-45b1-9da7-f25a208c6058}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -156,9 +162,6 @@
     <ClInclude Include="..\Header\GUIManager.h">
       <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>
     </ClInclude>
-    <ClInclude Include="MainUI.h">
-      <Filter>04. UI\01. Sprite</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\CubeTile.h">
       <Filter>03. GameObject\05.Tile</Filter>
     </ClInclude>
@@ -179,6 +182,19 @@
     </ClInclude>
     <ClInclude Include="..\Header\Monster1.h">
       <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="..\Header\MainMenuButton.h">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyButton.h">
+      <Filter>04. UI\01. Sprite\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MainUI.h">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MainMenu.h">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -239,9 +255,6 @@
     <ClCompile Include="..\Code\GUIManager.cpp">
       <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>
     </ClCompile>
-    <ClCompile Include="MainUI.cpp">
-      <Filter>04. UI\01. Sprite</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\CubeTile.cpp">
       <Filter>03. GameObject\05.Tile</Filter>
     </ClCompile>
@@ -262,6 +275,19 @@
     </ClCompile>
     <ClCompile Include="..\Code\Monster1.cpp">
       <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial.cpp" />
+    <ClCompile Include="..\Code\MainMenuButton.cpp">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyButton.cpp">
+      <Filter>04. UI\01. Sprite\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainUI.cpp">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainMenu.cpp">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

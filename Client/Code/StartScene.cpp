@@ -63,6 +63,18 @@ HRESULT StartScene::Ready_Enviroment_Layer(CONST TCHAR* _LTAG) {
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 
+	GOBJ = MainMenuButton::Create(GRPDEV);
+	GOBJ->Set_ObjectTag(L"MainButton");
+
+	if (nullptr == GOBJ)					return E_FAIL;
+	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
+
+	GOBJ = MainMenu::Create(GRPDEV);
+	GOBJ->Set_ObjectTag(L"MainMenu");
+
+	if (nullptr == GOBJ)					return E_FAIL;
+	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
+
 	LayerList.push_back(LYR);
 	
 	return S_OK;
