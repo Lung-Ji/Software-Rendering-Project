@@ -19,8 +19,11 @@ public:
 
 public:
 	HRESULT			Scene_Transition(Scene* _SCENE);
-	Scene*			Get_CurrentScene() { return  CurrentScene; }
+	Scene*			Get_CurrentScene() { 
+		return  CurrentScene;
+	}
 	GameObject*		Get_GameObject(CONST TCHAR* _TAG);
+	void			Set_CurrentScene(Scene* scene) { CurrentScene = scene; }
 private:
 	Scene*			CurrentScene;
 
