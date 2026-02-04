@@ -69,7 +69,7 @@ HRESULT Player::Component_Initialize() {
 	//Component_FSM		= ADD_COMPONENT_FSM;
 
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Extra/Example");
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand_Front");
+	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
 
 	return S_OK;
