@@ -33,17 +33,17 @@ HRESULT StartScene::Ready_Enviroment_Layer(CONST TCHAR* _LTAG) {
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 
-	GOBJ = Monster::Create(GRPDEV);
-	GOBJ->Set_ObjectTag(L"Monster");
+	//GOBJ = Monster::Create(GRPDEV);
+	//GOBJ->Set_ObjectTag(L"Monster");
+	//
+	//if (nullptr == GOBJ)					return E_FAIL;
+	//if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 
-	if (nullptr == GOBJ)					return E_FAIL;
-	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
-
-	GOBJ = Monster1::Create(GRPDEV);
-	GOBJ->Set_ObjectTag(L"Monster1");
-
-	if (nullptr == GOBJ)					return E_FAIL;
-	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
+	//GOBJ = Monster1::Create(GRPDEV);
+	//GOBJ->Set_ObjectTag(L"Monster1");
+	//
+	//if (nullptr == GOBJ)					return E_FAIL;
+	//if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 	
 	GOBJ = Terrain::Create(GRPDEV);
 	GOBJ->Set_ObjectTag(L"Terrain");

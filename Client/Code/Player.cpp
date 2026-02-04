@@ -8,7 +8,9 @@ Player::~Player()													{}
 HRESULT Player::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
-	_defaultSpeed = 15.f;
+	_state = pState::STATE_STANDING;
+
+	_defaultSpeed = 12.f;
 	_speed = _defaultSpeed;
 
 	_isJump = false;
@@ -54,19 +56,7 @@ VOID Player::Render_GameObject() {
 
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	TCHAR FileName[128] = L"";
-
-	wsprintfW(FileName, L"Spr_Yeon_Stand_000_0%d.png", _frame);
-
-	Component_Texture->Set_Texture(FileName);
-
-	if (_frameTick > 0.1f)
-	{
-		if (++_frame > 8)
-			_frame = 1;
-
-		_frameTick = 0.f;
-	}
+	SetGrahpic();
 
 	Component_Buffer->Render_Buffer();
 
@@ -80,6 +70,7 @@ HRESULT Player::Component_Initialize() {
 
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Extra/Example");
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand_Front");
+	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
 
 	return S_OK;
 }
@@ -98,11 +89,28 @@ void Player::Key_Input(const _float& _DT)
 		D3DXVec3Normalize(&rightDir, &rightDir);
 
 		//Component_Transform->Get_Info(INFO_LOOK, &vDir);
+		_state = pState::STATE_STANDING;
+		Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
 
-		if ((KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D)) ||
-			(KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D)))
+		if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A))
 		{
 			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+			_state = pState::STATE_RUN_LU;
+		}
+		else if (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A))
+		{
+			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+			_state = pState::STATE_RUN_LD;
+		}
+		else if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D))
+		{
+			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+			_state = pState::STATE_RUN_RU;
+		}
+		else if (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D))
+		{
+			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+			_state = pState::STATE_RUN_RD;
 		}
 		else
 		{
@@ -112,21 +120,29 @@ void Player::Key_Input(const _float& _DT)
 		if (KEY_HOLD(DIK_W))
 		{
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+			if (_speed == _defaultSpeed)
+				_state = pState::STATE_RUN_UP;
 		}
 
 		if (KEY_HOLD(DIK_S))
 		{
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
+			if (_speed == _defaultSpeed)
+				_state = pState::STATE_RUN_DOWN;
 		}
 
 		if (KEY_HOLD(DIK_A))
 		{
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+			if (_speed == _defaultSpeed)
+				_state = pState::STATE_RUN_LEFT;
 		}
 
 		if (KEY_HOLD(DIK_D))
 		{
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+			if (_speed == _defaultSpeed)
+				_state = pState::STATE_RUN_RIGHT;
 		}
 		//if (KEY_DOWN(DIK_C) && !_isJump)
 		//{
@@ -159,6 +175,160 @@ void Player::Gravity(const _float& _DT)
 		_jumpSpeed = 0.f;
 
 		Component_Transform->Set_Pos({ pos.x, 1.f, pos.z });
+	}
+}
+void Player::SetGrahpic()
+{
+	TCHAR FileName[128] = L"";
+
+	_vec3 size = { 0.44f, 1.f, 1.f };
+	size *= 1.2;
+
+	switch (_state)
+	{
+	case pState::STATE_STANDING :
+		Component_Transform->Set_Scale(size);
+
+		wsprintfW(FileName, L"Spr_Yeon_Stand_000_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
+	case pState::STATE_RUN_UP:
+		Component_Transform->Set_Scale(size);
+
+		wsprintfW(FileName, L"Spr_Yeon_Run_180_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
+	case pState::STATE_RUN_DOWN:
+		Component_Transform->Set_Scale(size);
+
+		wsprintfW(FileName, L"Spr_Yeon_Run_000_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
+
+	case pState::STATE_RUN_LEFT:
+		wsprintfW(FileName, L"Spr_Yeon_Run_090_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
+
+	case pState::STATE_RUN_LU:
+		wsprintfW(FileName, L"Spr_Yeon_Run_135_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
+
+	case pState::STATE_RUN_LD:
+		wsprintfW(FileName, L"Spr_Yeon_Run_045_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
+
+	case pState::STATE_RUN_RIGHT:
+		wsprintfW(FileName, L"Spr_Yeon_Run_080_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
+
+	case pState::STATE_RUN_RU:
+		wsprintfW(FileName, L"Spr_Yeon_Run_130_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
+
+	case pState::STATE_RUN_RD:
+		wsprintfW(FileName, L"Spr_Yeon_Run_040_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
+
+	default:
+		wsprintfW(FileName, L"Spr_Yeon_Stand_000_0%d.png", _frame);
+
+		Component_Texture->Set_Texture(FileName);
+
+		if (_frameTick > 0.1f)
+		{
+			if (++_frame > 8)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+		break;
 	}
 }
 Player* Player::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
