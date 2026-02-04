@@ -15,6 +15,7 @@ HRESULT Player::Ready_GameObject() {
 	_defultJumpSpeed = 50.f;
 	_jumpSpeed = 0.f;
 	_g = 0.5f;
+	_frame = 1;
 
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
 		Get_GameObject(L"Camera"));
@@ -38,6 +39,8 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	GameObject::Update_GameObject(_DT);
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
+	_frameTick += _DT;
+
 	Gravity(_DT);
 	Key_Input(_DT);
 
@@ -51,7 +54,19 @@ VOID Player::Render_GameObject() {
 
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	Component_Texture->Set_Texture(L"»ç°ú1.jpg");
+	TCHAR FileName[128] = L"";
+
+	wsprintfW(FileName, L"Spr_Yeon_Stand_000_0%d.png", _frame);
+
+	Component_Texture->Set_Texture(FileName);
+
+	if (_frameTick > 0.1f)
+	{
+		if (++_frame > 8)
+			_frame = 1;
+
+		_frameTick = 0.f;
+	}
 
 	Component_Buffer->Render_Buffer();
 
@@ -64,6 +79,7 @@ HRESULT Player::Component_Initialize() {
 	//Component_FSM		= ADD_COMPONENT_FSM;
 
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Extra/Example");
+	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand_Front");
 
 	return S_OK;
 }

@@ -29,13 +29,16 @@ private:
 	void			Key_Input(const _float& _DT);
 	void			Gravity(const _float& _DT);
 private:
-	bool	Debug;
+	bool			Debug;
 
-	float _defaultSpeed;
-	float _speed;
+	_uint			_frame;
+	float			_frameTick;
 
-	bool _isJump;
-	float _defultJumpSpeed;
-	float _jumpSpeed;
-	float _g;
+	float			_defaultSpeed;
+	float			_speed;
+
+	bool			_isJump;
+	float			_defultJumpSpeed;
+	float			_jumpSpeed;
+	float			_g;
 };

@@ -23,7 +23,7 @@
 
 /////////////////////////////////// COMPONENT //////////////////////////////////////
 #define ADD_COMPONENT_TRIANGLE			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TRIANGLE));		// 삼각형 출력 컴포넌트 추가
-#define ADD_COMPONENT_RECTANGLE			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_RECTANGLE));		// 사각형 출력 컴포넌트 추가
+#define ADD_COMPONENT_RECTANGLE			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_RECTANGLE),x, y);		// 사각형 출력 컴포넌트 추가
 #define ADD_COMPONENT_RECTTEX			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_RECTTEX));		// 사각 텍스쳐 출력 컴포넌트 추가
 #define ADD_COMPONENT_TERRAIN			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TERRAIN));		// 지형 텍스쳐 출력 컴포넌트 추가
 #define ADD_COMPONENT_TRANSFORM			dynamic_cast<Transform*>(Add_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM));	// TRANSFORM 컴포넌트 추가
