@@ -9,9 +9,10 @@ HRESULT Player::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
 	_state = pState::STATE_STANDING;
+	_see = pSee::SEE_DOWN;
 
 	_defaultSpeed = 12.f;
-	_speed = _defaultSpeed;
+	_speed = 0.f;
 
 	_isJump = false;
 	_defultJumpSpeed = 50.f;
@@ -89,76 +90,108 @@ void Player::Key_Input(const _float& _DT)
 		D3DXVec3Normalize(&rightDir, &rightDir);
 
 		//Component_Transform->Get_Info(INFO_LOOK, &vDir);
-		_state = pState::STATE_STANDING;
+		if(_speed == 0.f)
+			_state = pState::STATE_STANDING;
 		Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
 
 		if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A))
 		{
 			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
-			_state = pState::STATE_RUN_LU;
-			_see = pSee::SEE_LU;
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+			if (_state != pState::STATE_RUN_LU)
+			{
+				_frame = 1;
+				_state = pState::STATE_RUN_LU;
+				_see = pSee::SEE_LU;
+			}
+
 		}
 		else if (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A))
 		{
 			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
-			_state = pState::STATE_RUN_LD;
-			_see = pSee::SEE_LD;
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+			if (_state != pState::STATE_RUN_LD)
+			{
+				_frame = 1;
+				_state = pState::STATE_RUN_LD;
+				_see = pSee::SEE_LD;
+			}
 		}
 		else if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D))
 		{
 			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
-			_state = pState::STATE_RUN_RU;
-			_see = pSee::SEE_RU;
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+			if (_state != pState::STATE_RUN_RU)
+			{
+				_frame = 1;
+				_state = pState::STATE_RUN_RU;
+				_see = pSee::SEE_RU;
+			}
 		}
 		else if (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D))
 		{
 			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
-			_state = pState::STATE_RUN_RD;
-			_see = pSee::SEE_RD;
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+			if (_state != pState::STATE_RUN_RD)
+			{
+				_frame = 1;
+				_state = pState::STATE_RUN_RD;
+				_see = pSee::SEE_RD;
+			}
 		}
-		else
-		{
-			_speed = _defaultSpeed;
-		}
-
-		if (KEY_HOLD(DIK_W))
+		else if (KEY_HOLD(DIK_W))
 		{
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
-			if (_speed == _defaultSpeed)
+			_speed = _defaultSpeed;
+			if (_state != pState::STATE_RUN_UP)
 			{
+				_frame = 1;
 				_state = pState::STATE_RUN_UP;
 				_see = pSee::SEE_UP;
 			}
 		}
 
-		if (KEY_HOLD(DIK_S))
+		else if (KEY_HOLD(DIK_S))
 		{
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
-			if (_speed == _defaultSpeed)
+			_speed = _defaultSpeed;
+			if (_state != pState::STATE_RUN_DOWN)
 			{
+				_frame = 1;
 				_state = pState::STATE_RUN_DOWN;
 				_see = pSee::SEE_DOWN;
 			}
 		}
 
-		if (KEY_HOLD(DIK_A))
+		else if (KEY_HOLD(DIK_A))
 		{
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
-			if (_speed == _defaultSpeed)
+			_speed = _defaultSpeed;
+			if (_state != pState::STATE_RUN_LEFT)
 			{
+				_frame = 1;
 				_state = pState::STATE_RUN_LEFT;
 				_see = pSee::SEE_LEFT;
 			}
 		}
-
-		if (KEY_HOLD(DIK_D))
+		else if (KEY_HOLD(DIK_D))
 		{
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
-			if (_speed == _defaultSpeed)
+			_speed = _defaultSpeed;
+			if (_state != pState::STATE_RUN_RIGHT)
 			{
+				_frame = 1;
 				_state = pState::STATE_RUN_RIGHT;
 				_see = pSee::SEE_RIGHT;
 			}
+		}
+		else
+		{
+			_speed = 0.f;
 		}
 		//if (KEY_DOWN(DIK_C) && !_isJump)
 		//{
