@@ -30,7 +30,6 @@ HRESULT Player::Ready_GameObject() {
 	angle = angle / D3DX_PI * 180.f;
 
 	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
-	Component_Transform->Rotation(ROT_Y, 45.f);
 	Component_Transform->Rotation(ROT_X, angle);
 	Component_Transform->Set_Pos({ 5.f, 1.f, 5.f });
 
@@ -84,8 +83,8 @@ void Player::Key_Input(const _float& _DT)
 	if (!Debug)
 	{
 		_vec3		upDir, rightDir;
-		upDir = { 1.f, 0.f, 1.f };
-		rightDir = { 1.f, 0.f, -1.f };
+		upDir = { 0.f, 0.f, 1.f };
+		rightDir = { 1.f, 0.f, 0.f };
 		D3DXVec3Normalize(&upDir, &upDir);
 		D3DXVec3Normalize(&rightDir, &rightDir);
 
