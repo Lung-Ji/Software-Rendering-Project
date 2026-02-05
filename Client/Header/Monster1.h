@@ -36,7 +36,10 @@ private:
 	Buffer*			Component_Buffer;
 	Transform*		Component_Transform;
 	Texture*		Component_Texture;
+	StateMachine*	Component_FSM;
 	Collider*		Component_Collider;
+
+	GameObject*		pTarget;
 
 public:
 	static Monster1* Create(LPDIRECT3DDEVICE9 _GRPDEV);

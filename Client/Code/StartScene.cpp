@@ -40,43 +40,36 @@ HRESULT StartScene::Ready_Enviroment_Layer(CONST TCHAR* _LTAG) {
 
 	GOBJ = Monster::Create(GRPDEV);
 	GOBJ->Set_ObjectTag(L"Monster");
-	
+
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
-	
+
 	GOBJ = Monster1::Create(GRPDEV);
 	GOBJ->Set_ObjectTag(L"Monster1");
 
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
-
-	//GOBJ = Monster::Create(GRPDEV);
-	//GOBJ->Set_ObjectTag(L"Monster");
-	//
-	//if (nullptr == GOBJ)					return E_FAIL;
-	//if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
-
-	//GOBJ = Monster1::Create(GRPDEV);
-	//GOBJ->Set_ObjectTag(L"Monster1");
-	//
-	//if (nullptr == GOBJ)					return E_FAIL;
-	//if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
-
 	
 	GOBJ = Terrain::Create(GRPDEV);
 	GOBJ->Set_ObjectTag(L"Terrain");
 	
-	if (nullptr == GOBJ)					return E_FAIL;
+if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 
-	GOBJ = MainUI::Create(GRPDEV);
-	GOBJ->Set_ObjectTag(L"MainUI");
+	GOBJ = MainMenuButton::Create(GRPDEV);
+	GOBJ->Set_ObjectTag(L"MainButton");
 
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 
 	GOBJ = Tile::Create(GRPDEV);
 	GOBJ->Set_ObjectTag(L"Tile");
+
+	if (nullptr == GOBJ)					return E_FAIL;
+	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
+
+	GOBJ = MainMenu::Create(GRPDEV);
+	GOBJ->Set_ObjectTag(L"MainMenu");
 
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
