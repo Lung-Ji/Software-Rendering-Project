@@ -1,10 +1,6 @@
 #pragma once
 #include "GameObject.h"
 
-namespace Engine
-{
-    Engine::TILE_SIDE;
-}
 
 class CXZTile :
     public GameObject
@@ -17,7 +13,7 @@ private:
 
 public:
 
-    virtual			HRESULT		Ready_GameObject();
+    virtual			HRESULT		Ready_GameObject(LPDIRECT3DDEVICE9 _GRPDEV, Engine::TILE_SIDE eId, const _tchar* pName);
     virtual			INT			Update_GameObject(CONST FLOAT& _DT);
     virtual			VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
     virtual			VOID		Render_GameObject();
@@ -26,17 +22,20 @@ public:
     void            Set_TileId(TILE_SIDE eid) { m_eTileSide = eid; }
     int             Get_TileNumber() { return m_iTileNumber; }
     void            Set_TileNumber(_int iTileNumber) { m_iTileNumber = iTileNumber; }
-
+    void            Set_TileName(const _tchar* pName) { m_pTileName = pName; }
 private:
     HRESULT			Component_Initialize();
     
-    TILE_SIDE       m_eTileSide;
-    
-    Buffer*         m_pBuffer;
-    Transform*      m_pTransform;
-    int             m_iTileNumber;
+    TILE_SIDE              m_eTileSide;
+    const  _tchar*         m_pTileName;
+    Buffer*                m_pBuffer;
+    Transform*             m_pTransform;
+    IDirect3DBaseTexture9* m_pTexture;
+
+private:
+    int                     m_iTileNumber;
 public:
-    static         CXZTile* Create(LPDIRECT3DDEVICE9 pGraphicDev, Engine::TILE_SIDE eId);
+    static         CXZTile* Create(LPDIRECT3DDEVICE9 pGraphicDev, Engine::TILE_SIDE eId, const _tchar* pName);
 
 private:
    virtual  void            Free();

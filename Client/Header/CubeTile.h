@@ -1,11 +1,6 @@
 #pragma once
 #include "GameObject.h"
 
-namespace Engine
-{
-    Engine::TILE_SIDE;
-}
-
 class CubeTile :
     public GameObject
 {

@@ -13,18 +13,17 @@ private:
     explicit TileImageManager();
     virtual ~TileImageManager();
 
+public:
+    vector<Texture*>& Get_TileImageList(TILE_IMAGEPAGE eId) { return m_vecTileImage[eId]; }
 
 public:
-    vector<Texture*>& Get_TileImageList() { return m_vecTileImage; }
-
-public:
-    HRESULT         Add_Tile(GameObject* pObject, _vec3 vPos, TILE_SIDE eTile);
+    HRESULT         Add_TileImage(Texture* pTexture, TILE_IMAGEPAGE eid);
     void            Delete_TileImage(_vec3 vPos, _vec3 Origin, _vec3 vDir);
     HRESULT         Update_TileImageList(const _float& fTimeDetla);
     void            Render_TileImageList();
 
 private:
-    vector<Texture*>     m_vecTileImage;
+    vector<Texture*>     m_vecTileImage[TILE_IMAGEPAGE::IMAGEPAGE_END];
 
 private:
     virtual void            Free();

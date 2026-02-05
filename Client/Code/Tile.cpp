@@ -1,6 +1,11 @@
 #include "Tile.h"
 #include "../Include/PCH.h"
-Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_bTileCheck(true), m_eMode(TILEMODE_CHANGE::MODE_END),m_eTile(Engine::TILE_SIDE::TILE_END), m_pBufferTileFRONT(nullptr),
+#include <iostream>
+#include <fstream>
+const _tchar* m_pTileName[128];
+Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_bTileCheck(true),m_pTexture(nullptr),
+m_pTransform(nullptr), m_pBuffer(nullptr), m_pTileName(nullptr),
+m_eMode(TILEMODE_CHANGE::MODE_END),m_eTile(Engine::TILE_SIDE::TILE_END), m_pBufferTileFRONT(nullptr),
 m_pBufferTileRIGHT(nullptr), m_pBufferTileLEFT(nullptr), m_pBufferTileBACK(nullptr) {}
 Tile::Tile(const GameObject& _RHS) : GameObject(_RHS) {}
 Tile::~Tile() {}
@@ -8,27 +13,71 @@ Tile::~Tile() {}
 HRESULT Tile::Ready_GameObject() {
 
 	if (FAILED(Component_Initialize())) return E_FAIL;
+	wstring path = L"../../Resource/Tile";
+	BITMAPINFOHEADER InfoHeader{};
+	BITMAPFILEHEADER fileHeader{};
+	_wfinddata64_t Data;
 
+	INT Result = 1;
+
+	wstring STRUNI = path + L"/*.*";
+
+	intptr_t Handle = _wfindfirst64(STRUNI.c_str(), &Data);
+
+	if (Handle == -1)	return E_FAIL;
+	while (Result != -1) 
+	{
+		wstring WideRootPath = path + L"/" + Data.name;
+		wstring* KEY = new wstring(Data.name);
+
+		ifstream fa(WideRootPath, ios_base::binary);
+		ImageFile imf = {};
+
+		imf.wstr = KEY;
+		fa.seekg(16, ios::beg);
+		unsigned char sizeBuf[8];
+		fa.read(reinterpret_cast<char*>(sizeBuf), 8);
+		
+		imf.vSize.x = (_float)(sizeBuf[0] << 24| sizeBuf[1] << 16 |
+					  sizeBuf[2] << 8 | sizeBuf[3]);
+
+		imf.vSize.y = (_float)(sizeBuf[0] << 24 | sizeBuf[1] << 16 |
+					  sizeBuf[2] << 8  | sizeBuf[3]);
+
+		m_vecImage.push_back(imf);
+		Result = _wfindnext64(Handle, &Data);
+		fa.close();
+	}
+	_findclose(Handle);
+	
 	return S_OK;
 }
 INT	Tile::Update_GameObject(const _float& _DT) {
 
-	RenderManager::GetInstance()->Add_RenderGroup(RENDER_NONALPHA, this);
+	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 	return GameObject::Update_GameObject(_DT);
 
 }
 VOID Tile::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
+	
 	Mode_Change();  //타일 큐브 스왑용 O : 큐브, P : 타일
+	Imgui();
 	Check_TilePoint();
+	
 }
 
 VOID Tile::Render_GameObject()
 {
-	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	GRPDEV->SetRenderState(D3DRS_SHADEMODE,D3DSHADE_FLAT);
+	GRPDEV->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+
+	//GRPDEV->SetRenderState(D3DRS_LIGHTING, FALSE);
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
 	
+	m_pTexture->Set_Texture(m_pTileName);
 	//switch (m_eTile)
 	//{
 	//case TILE_SIDE::TILE_FRONT:
@@ -51,7 +100,7 @@ VOID Tile::Render_GameObject()
 
 	m_pBuffer->Render_Buffer();
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	
 }
 
 void Tile::Mode_Change()
@@ -88,15 +137,126 @@ void Tile::Tile_Offset(_vec3 vMouse)
 	vMouse.y = 0;
 }
 
+void Tile::Imgui()
+{
+	bool Scale(true);
+	
+	
+	//ImGui::SetNextWindowPos({ 650,300 });
+	ImGui::SetNextWindowSize({ 600,600 });
+	ImGui::Begin("Editor",NULL,ImGuiWindowFlags_MenuBar);
+
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Save"))
+				cout << ("Save clicked\n");
+			ImGui::Separator(); //구분줄
+			if (ImGui::MenuItem("Open"))
+				cout << ("Open clicked\n");			
+			ImGui::EndMenu();
+		}
+		
+		ImGui::EndMenuBar();
+	}
+	Imgui_Setting();
+
+	
+	ImGui::End();
+}
+
+void Tile::Imgui_Setting()
+{
+	_vec3 vScale = *m_pTransform->Get_Scale();
+	_vec3 vRotation = *m_pTransform->Get_Rotation();
+	_float fMin(0.0f), fMax(10);
+	_float fRotation(0.f), fRotationMax(180);
+	if (!ImGui::CollapsingHeader("Setting"))
+		return;
+	else
+	{
+		ImGui::Text("Scale"); //텍스트 
+		ImGui::SameLine(50.f, 0.f);//텍스트 오른쪽에
+		ImGui::SliderFloat3("##1", vScale, fMin, fMax); //scale 출력
+		m_pTransform->Set_Scale(vScale);
+
+		ImGui::Text("Rotation");
+		ImGui::SameLine(100.f, 0.f);
+		ImGui::SliderFloat3("##2", vRotation, fRotation, fRotationMax);
+		m_pTransform->Set_Rotation(vRotation);
+
+		Imgui_Image();
+	}
+
+	
+}
+
+void Tile::Imgui_Image()
+{
+	_bool bSetTexture = false;
+	_int  iChoice(0);
+	const char* cTile[] = { "0","1","2","3","4","5" };
+	ImGui::Text("IMAGE");
+	ImGui::SameLine(50.f, 0.f);
+	//기본 버튼 색
+	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+	//마우스 올라갔을때 버튼색
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+	//클릭했을 때 버튼 색
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+	ImGui::Button("First");
+	ImGui::PopStyleColor(3);	
+
+	if (!ImGui::CollapsingHeader("Tiles"))
+		return;
+
+	ImGui::Text("Display Choice");
+	ImGui::SameLine(140.0f, 0.f);
+	bSetTexture = ImGui::Combo("##Choice", &iChoice, cTile, sizeof(char)*6);
+	if (bSetTexture)
+		cout << "Display Coice " << iChoice << endl;
+
+
+	ImGui::Text("Tile Choice");
+	ImVec2 chidSize = ImVec2(0.f, ImGui::GetFrameHeightWithSpacing() * 10);
+	ImGuiID id = ImGui::GetCurrentWindow()->GetID("##Tiles");
+	ImGui::BeginChildEx("##Tiles",  id, chidSize, ImGuiChildFlags_None,ImGuiWindowFlags_HorizontalScrollbar);
+	//아
+	_int nCount = 0;
+	for (size_t i = 0; i < m_vecImage.size(); i++)
+	{
+		_vec2 size = m_vecImage[i].vSize;
+		char scat[512] = "##";
+		strncat_s(scat, (char*)m_vecImage[i].wstr, sizeof(char) * 512);
+		
+		if (ImGui::ImageButton(scat,
+			m_pTexture->Find_Texture((m_vecImage[i].wstr)->c_str()),
+			ImVec2(size.x * 0.1f, size.y * 0.1f), ImVec2(0.f, 0.f), ImVec2(1.f, 1.f)
+			, ImVec4(0, 0, 0, 0)))
+		{
+			m_pTileName = m_vecImage[i].wstr->c_str();
+		}
+		nCount++;
+		if (nCount < 3)
+			ImGui::SameLine();
+		else nCount = 0;
+	}
+	
+	ImGui::EndChild();
+}
+
 
 HRESULT Tile::Component_Initialize() {
 
 	m_pBuffer		   = ADD_COMPONENT_TILE; 
 	m_pTransform	   = ADD_COMPONENT_TRANSFORM;
+	m_pTexture		   = ADD_COMPONENT_TEXTURE;
 	//m_pBufferTileFRONT = ADD_COMPONENT_TILEFRONT;
 	//m_pBufferTileRIGHT = ADD_COMPONENT_TILERIGHT;
 	//m_pBufferTileLEFT  = ADD_COMPONENT_TILELEFT;
 	//m_pBufferTileBACK  = ADD_COMPONENT_TILEBACK;
+	m_pTexture->Import_TextureFromFolder(L"../../Resource/Tile");
 	
 	return S_OK;
 }
@@ -172,7 +332,7 @@ void Tile::Check_TilePoint()
 	//픽킹 계산 :<
 	Component* ComBuff = SceneManager::GetInstance()->Get_GameObject(L"Terrain")->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TERRAIN);
 	Buffer* pBuffer = dynamic_cast<Buffer*>(ComBuff);
-
+	
 	Component* ComTransform = SceneManager::GetInstance()->Get_GameObject(L"Terrain")->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TRANSFORM);
 	Transform* pTransform = dynamic_cast<Transform*>(ComTransform);
 
@@ -213,7 +373,6 @@ void Tile::Check_TilePoint()
 	_int    iCheckZero(0);
 	//설치 되어있는 블럭 충돌 비교
 		{
-		
 			for (auto iter : TileManager::GetInstance()->Get_TileList())
 			{
 				//흠
@@ -337,7 +496,7 @@ void Tile::Check_TilePoint()
 				switch (m_eMode)
 				{
 				case TILEMODE_CHANGE::MODE_TILE:
-					pTile = CXZTile::Create(GRPDEV, m_eTile);
+					pTile = CXZTile::Create(GRPDEV, m_eTile,m_pTileName);
 					break;
 				case TILEMODE_CHANGE::MODE_CUBE:
 					pTile = CubeTile::Create(GRPDEV);
@@ -350,10 +509,16 @@ void Tile::Check_TilePoint()
 					{
 					case TILEMODE_CHANGE::MODE_TILE:
 						dynamic_cast<CXZTile*>(pTile)->Set_TileNumber((_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x);
+						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(*m_pTransform->Get_Scale());
+						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Rotation(*m_pTransform->Get_Rotation());
+
 						TileManager::GetInstance()->Add_Tile(pTile, vMouseCheck, m_eTile);
+						
 						break;
 					case TILEMODE_CHANGE::MODE_CUBE:
 						dynamic_cast<CubeTile*>(pTile)->Set_TileNumber((_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x);
+						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(*m_pTransform->Get_Scale());
+						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Rotation(*m_pTransform->Get_Rotation());
 						TileManager::GetInstance()->Add_Tile(pTile, vMouseCheck, m_eTile);
 						break;
 					}	
@@ -411,5 +576,8 @@ Tile* Tile::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	return pTile;
 }
 VOID Tile::Free() {
+	for (auto& iter : m_vecImage)
+		Safe_Delete(iter.wstr);
+
 	GameObject::Free();
 }
