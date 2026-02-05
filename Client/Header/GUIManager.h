@@ -23,5 +23,7 @@ private:
 	float matrixTranslation[3], matrixRotation[3], matrixScale[3];
 	CameraObject*				Camera;
 	BOOL						UseWindow;
+
+	bool		CameraWindow;
 };
 

@@ -1,6 +1,6 @@
 #include "../Include/PCH.h"
 #include "Monster.h"
-
+   
 Monster::Monster(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV)	{}
 Monster::Monster(const GameObject& _RHS)	: GameObject(_RHS)		{}
 Monster::~Monster()													{}
@@ -32,11 +32,6 @@ HRESULT Monster::Component_Initialize() {
 
 	Component_Buffer	= ADD_COMPONENT_RECTTEX;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
-
-	Component_Transform->Set_Pos(0.f, 0.f, 1.f);
-	Component_Transform->Set_Rotation(20.f, 20.f, 20.f);
-	Component_Transform->Set_Scale(2.f, 2.f, 2.f);
-
 	Component_Texture	= ADD_COMPONENT_TEXTURE;
 	Component_FSM		= ADD_COMPONENT_FSM;
 

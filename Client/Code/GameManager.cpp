@@ -11,18 +11,19 @@ HRESULT GameManager::Ready_GameManager() {
 }
 VOID	GameManager::Update_GameManager(CONST FLOAT& _DT) {
 	TileManager::GetInstance()->Update_TileList(_DT);
-	KeyManager	::GetInstance()->Update_KeyManager(_DT);
 	SceneManager::GetInstance()->Update_SceneManager(_DT);
+	KeyManager	::GetInstance()->Update_KeyManager(_DT);
 }
 VOID	GameManager::LateUpdate_GameManager(CONST FLOAT& _DT) {
-	KeyManager	::GetInstance()->LateUpdate_KeyManager(_DT);
 	SceneManager::GetInstance()->LateUpdate_SceneManager(_DT);
+	KeyManager	::GetInstance()->LateUpdate_KeyManager(_DT);
 }
 VOID	GameManager::Render_GameManager() {
 	DEVCLASS->Render_Begin(D3DXCOLOR(0.f, 0.f, 1.f, 1.f));
 
-	TileManager::GetInstance()->Render_TileList();
 	SceneManager::GetInstance()->Render_SceneManager(GRPDEV);
+
+	TileManager::GetInstance()->Render_TileList();
 #ifdef _DEBUG
 	//cout << "File I/O Ãâ·Â" << endl;
 #endif // _DEBUG
@@ -52,6 +53,7 @@ HRESULT GameManager::Ready_DefaultSetting() {
 	return S_OK;
 }
 HRESULT GameManager::Ready_SceneSetting() {
+
 	Scene* StartScene = StartScene::Create(GRPDEV);
 	
 	if (StartScene == nullptr)	return E_FAIL;
@@ -62,6 +64,8 @@ HRESULT GameManager::Ready_SceneSetting() {
 	}
 	return S_OK;
 }
+
+
 GameManager* GameManager::Create() {
 	GameManager* Instance = new GameManager;
 	if (FAILED(Instance->Ready_GameManager())) {
@@ -76,14 +80,15 @@ VOID		 GameManager::Free() {
 	Safe_Release(DEVCLASS);
 	Safe_Release(GRPDEV);
 
-	GraphicDevice::DestroyInstance();
-	KeyManager	 ::DestroyInstance();
-	TimeManager	 ::DestroyInstance();
-	SceneManager ::DestroyInstance();
-	ProtoManager ::DestroyInstance();
-	SoundManager ::DestroyInstance();
-	RenderManager::DestroyInstance();
-	GUIManager	 ::DestroyInstance();
-	TileManager	 ::DestroyInstance();
-	DEVCLASS     ->DestroyInstance();
+	GraphicDevice	::DestroyInstance();
+	KeyManager		::DestroyInstance();
+	CollisionManager::DestroyInstance();
+	TimeManager		::DestroyInstance();
+	SceneManager	::DestroyInstance();
+	ProtoManager	::DestroyInstance();
+	SoundManager	::DestroyInstance();
+	RenderManager	::DestroyInstance();
+	GUIManager		::DestroyInstance();
+	TileManager		::DestroyInstance();
+	DEVCLASS		->DestroyInstance();
 }

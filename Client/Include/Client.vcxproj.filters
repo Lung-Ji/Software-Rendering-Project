@@ -70,8 +70,26 @@
     <Filter Include="03. GameObject\05.Tile">
       <UniqueIdentifier>{3f5d8e79-69ba-4afe-ab89-37fd086d4597}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. GameObject\06. Button">
-      <UniqueIdentifier>{e03cff35-2d81-4fc0-b141-17003fcedaad}</UniqueIdentifier>
+    <Filter Include="03. GameObject\02. Monster\00. BaseMonster">
+      <UniqueIdentifier>{d89099c6-b41c-429d-9f19-ec84a84cb870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\02. Monster\01. Boss">
+      <UniqueIdentifier>{9a7b2918-49d6-4c1f-a5b1-a218d111c477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\02. Monster\02. Monster1">
+      <UniqueIdentifier>{6d746460-77e9-4f41-ba5d-78fa66467052}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\01. Sprite\MainMenu">
+      <UniqueIdentifier>{5aecb6cf-f877-4f39-8fe8-44da2610ab28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\01. Sprite\InGame">
+      <UniqueIdentifier>{05e162c7-ecde-45b1-9da7-f25a208c6058}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Scene\99. UITest">
+      <UniqueIdentifier>{3d87992a-1f5e-4047-b98a-ef2dc5d8e336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\02. Font">
+      <UniqueIdentifier>{f7012392-cc5f-455f-87de-da63f8d84670}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -107,9 +125,6 @@
     </ClInclude>
     <ClInclude Include="..\Header\Player.h">
       <Filter>03. GameObject\01. Player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Monster.h">
-      <Filter>03. GameObject\02. Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\NPC.h">
       <Filter>03. GameObject\03. NPC</Filter>
@@ -153,18 +168,45 @@
     <ClInclude Include="..\Header\GUIManager.h">
       <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>
     </ClInclude>
-    <ClInclude Include="MainUI.h">
-      <Filter>04. UI\01. Sprite</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\CubeTile.h">
       <Filter>03. GameObject\05.Tile</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Tile.h">
       <Filter>03. GameObject\05.Tile</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Monster_State.h" />
-    <ClInclude Include="..\Header\CButton.h">
-      <Filter>03. GameObject\06. Button</Filter>
+    <ClInclude Include="CXZTile.h">
+      <Filter>03. GameObject\05.Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster.h">
+      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMonster.h">
+      <Filter>03. GameObject\02. Monster\01. Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster_State.h">
+      <Filter>03. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster1.h">
+      <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="..\Header\MainMenuButton.h">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyButton.h">
+      <Filter>04. UI\01. Sprite\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MainUI.h">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MainMenu.h">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\UITest.h">
+      <Filter>02. Scene\99. UITest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MainMenuLogo.h">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +227,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\Player.cpp">
       <Filter>03. GameObject\01. Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Monster.cpp">
-      <Filter>03. GameObject\02. Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\NPC.cpp">
       <Filter>03. GameObject\03. NPC</Filter>
@@ -228,18 +267,45 @@
     <ClCompile Include="..\Code\GUIManager.cpp">
       <Filter>05. IMGUI\00. EditorManager\01. MainEditor</Filter>
     </ClCompile>
-    <ClCompile Include="MainUI.cpp">
-      <Filter>04. UI\01. Sprite</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\CubeTile.cpp">
       <Filter>03. GameObject\05.Tile</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Tile.cpp">
       <Filter>03. GameObject\05.Tile</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Monster_State.cpp" />
-    <ClCompile Include="..\Code\CButton.cpp">
-      <Filter>03. GameObject\06. Button</Filter>
+    <ClCompile Include="CXZTile.cpp">
+      <Filter>03. GameObject\05.Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster.cpp">
+      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMonster.cpp">
+      <Filter>03. GameObject\02. Monster\01. Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster_State.cpp">
+      <Filter>03. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster1.cpp">
+      <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial.cpp" />
+    <ClCompile Include="..\Code\MainMenuButton.cpp">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyButton.cpp">
+      <Filter>04. UI\01. Sprite\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainUI.cpp">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainMenu.cpp">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UITest.cpp">
+      <Filter>02. Scene\99. UITest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainMenuLogo.cpp">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

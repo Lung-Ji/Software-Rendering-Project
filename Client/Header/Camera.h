@@ -32,8 +32,6 @@ public:
 	FLOAT*			Get_Speed() { return &CameraSpeed; }
 	BOOL			Set_Speed(FLOAT _Value) { CameraSpeed = _Value; return TRUE; }
 
-	BOOL			Show_StateWindow() { return Camera_Show; }
-
 private:
 	HRESULT			Component_Initialize();
 
@@ -42,6 +40,7 @@ private:
 
 	_matrix		ViewMatrix, ProjMatrix;
 
+	_vec3		DefaultEyeVec, DefaultAtVec;
 	_vec3		EyeVec, AtVec, RightVec, UpVec, LookVec;
 	FLOAT		FOVValue, AspectValue, NearValue, FarValue, CameraSpeed;
 
@@ -55,6 +54,7 @@ private:
 	GameObject* Player;
 
 	bool		Camera_Show;
+	bool		Camera_Move;
 
 public:
 	static CameraObject* Create(LPDIRECT3DDEVICE9 _GRPDEV);

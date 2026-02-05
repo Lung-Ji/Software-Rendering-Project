@@ -3,7 +3,7 @@
 
 IMPLEMENT_SINGLETON(GUIManager)
 
-GUIManager::GUIManager() {};
+GUIManager::GUIManager() : CameraWindow(TRUE) {};
 GUIManager::~GUIManager()	{};
 
 VOID GUIManager::Ready_GUIManager() {
@@ -45,13 +45,14 @@ VOID GUIManager::Update_GUIManager() {
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
 }
 VOID GUIManager::LateUpdate_GUIManager() {
 
 }
 VOID GUIManager::Render_GUIManager() {
     // 카메라 세팅
-    bool CameraWindow = dynamic_cast<CameraObject*>(Camera)->Show_StateWindow();
+    
     if(CameraWindow){
         ImGui::Begin("Camera Setting [F1]", &CameraWindow);
         ImGui::Text("Transform");

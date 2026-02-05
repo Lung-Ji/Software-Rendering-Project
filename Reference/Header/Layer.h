@@ -19,6 +19,7 @@ public:
 	//virtual VOID		Render_Layer();
 
 	GameObject*			Get_GameObject(GAMEOBJECT_TYPE _OID);
+	vector<GameObject*>* Get_GameObjectList() { return &GameObjectList; }
 	Component*			Get_Component(GAMEOBJECT_TYPE _OID, COMPONENT_TYPE _CID);
 
 private:

@@ -16,6 +16,7 @@ VOID	SceneManager::LateUpdate_SceneManager(const FLOAT& _DT) {
 }
 VOID	SceneManager::Render_SceneManager(LPDIRECT3DDEVICE9 _GRPDEV) {
 	RenderManager::GetInstance()->Render_GameObject(_GRPDEV);
+	CollisionManager::GetInstance()->Render_CollisionManager();
 	//CurrentScene->Render_Scene();
 }
 VOID	SceneManager::Free() {
@@ -23,8 +24,13 @@ VOID	SceneManager::Free() {
 }
 HRESULT SceneManager::Scene_Transition(Scene* _SCENE) {
 	if (_SCENE == nullptr)	return E_FAIL;
-	Safe_Release(CurrentScene);
-	CurrentScene = _SCENE;
+
+	if (CurrentScene != _SCENE)
+	{
+		Safe_Release(CurrentScene);
+		CurrentScene = _SCENE;
+	}
+
 	return S_OK;
 }
 GameObject* SceneManager::Get_GameObject(CONST TCHAR* _TAG) {

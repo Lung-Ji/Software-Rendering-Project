@@ -15,17 +15,21 @@ private:
 
 
 public:
-    vector<GameObject*>& Get_TileList() { return m_vecTileBuffer; }
+    vector<GameObject*>& Get_TileList(TILEMODE_CHANGE eid) {
+       
+            return m_vecTileBuffer[eid];
+        }
 
 public:
-    HRESULT         Add_Tile(GameObject* pObject, _vec3 vPos );
+    HRESULT         Add_Tile(GameObject* pObject, _vec3 vPos, TILEMODE_CHANGE eMode);
     void            Delete_Tile(_vec3 vPos, _vec3 Origin, _vec3 vDir);
     HRESULT         Update_TileList(const _float& fTimeDetla);
     void            Render_TileList();
+    void            Set_TileMode(TILEMODE_CHANGE eMode) { m_eMode = eMode; }
 
 private:
-    vector<GameObject*>     m_vecTileBuffer;
-
+    TILEMODE_CHANGE         m_eMode;
+    vector<GameObject*>     m_vecTileBuffer[TILEMODE_CHANGE::MODE_END];
 private:
     virtual void            Free();
 };

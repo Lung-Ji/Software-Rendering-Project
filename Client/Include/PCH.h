@@ -34,19 +34,24 @@
 #include "NPC.h"
 #include "Monster_State.h"
 #include "Monster.h"
+#include "Monster1.h"
+#include "BossMonster.h"
 #include "Player.h"
 #include "Tile.h"
 #include "CubeTile.h"
-#include "CButton.h"
-
+#include "CXZTile.h"
+#include "MainMenuButton.h"
+#include "MainMenu.h"
 //////////////////////////////////////////// Scene List
 
 #include "StartScene.h"
 #include "VillageScene.h"
 #include "DungeonScene.h"
+#include "UITest.h"
 
 //////////////////////////////////////////// Manager
 #include "GUIManager.h"
+#include "CollisionManager.h"
 #include "KeyManager.h"
 #include "SoundManager.h"
 #include "RenderManager.h"
