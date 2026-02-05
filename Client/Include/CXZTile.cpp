@@ -1,7 +1,7 @@
 #include "CXZTile.h"
 #include "../Include/PCH.h"
 
-CXZTile::CXZTile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV),m_pBuffer(nullptr), m_pTexture(nullptr), m_pTransform(nullptr), m_iTileNumber(0), m_eTileSide(TILE_SIDE::TILE_END) {}
+CXZTile::CXZTile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV),m_pBuffer(nullptr), m_pTexture(nullptr), m_pTransform(nullptr), m_iTileNumber(0), m_eTileState(TILE_STATE::STATE_END),m_eTileSide(TILE_SIDE::TILE_END) {}
 CXZTile::CXZTile(const GameObject& _RHS) : GameObject(_RHS) {}
 CXZTile::~CXZTile() { Free(); }
 
@@ -11,8 +11,12 @@ HRESULT CXZTile::Ready_GameObject(LPDIRECT3DDEVICE9 _GRPDEV, Engine::TILE_SIDE e
 
 	wstring  path = L"../../Resource/Tile";
 	wstring WideRootPath = path + L"/"+pName;
-	D3DXCreateTextureFromFile(_GRPDEV, WideRootPath.c_str(), (LPDIRECT3DTEXTURE9*)&m_pTexture);
+	D3DXIMAGE_INFO img;
 	
+//	D3DXCreateTextureFromFile(_GRPDEV, WideRootPath.c_str(), (LPDIRECT3DTEXTURE9*)&m_pTexture);
+	D3DXCreateTextureFromFileEx(_GRPDEV, WideRootPath.c_str(),0,0,1,0,
+		D3DFMT_UNKNOWN,D3DPOOL_MANAGED,D3DX_FILTER_NONE, D3DX_FILTER_NONE,0,
+		&img,NULL,(LPDIRECT3DTEXTURE9*)&m_pTexture);
 	return S_OK;
 }
 INT	CXZTile::Update_GameObject(const _float& _DT) {

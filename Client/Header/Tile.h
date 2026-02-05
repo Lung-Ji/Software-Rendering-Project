@@ -22,7 +22,6 @@ public:
     virtual			VOID		Render_GameObject();
 public:
     void                        Mode_Change();
-    void                        Tile_Offset(_vec3 vMouse);
     void                        Imgui();
     void                        Imgui_Setting();
     void                        Imgui_Image();
@@ -33,25 +32,18 @@ private:
     void                        Check_Distance(_vec3 vMouse);
     //타일 체크용 버퍼
     Buffer*         m_pBuffer;
-    Buffer*         m_pBufferTileFRONT;
-    Buffer*         m_pBufferTileRIGHT;
-    Buffer*         m_pBufferTileLEFT;
-    Buffer*         m_pBufferTileBACK;
-
     Texture*        m_pTexture;
-
     Transform*      m_pTransform;
 
     vector<ImageFile>     m_vecImage;
     _bool           m_bTileCheck;
 
-    TILE_SIDE       m_eTile;
-
 
     const _tchar*   m_pTileName;
 
 private:
-  
+    _vec2               m_vXZ;
+    TILE_SIDE           m_eTile;
     TILEMODE_CHANGE     m_eMode;
 public:
     static      Tile* Create(LPDIRECT3DDEVICE9 pGraphicDev);
