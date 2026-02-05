@@ -8,7 +8,7 @@ CameraObject::~CameraObject() {}
 HRESULT CameraObject::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
-	DefaultEyeVec = { 0.f,10.f,0.f };	DefaultAtVec = { 1.f,8.f,1.f };
+	DefaultEyeVec = { 0.f,10.f,0.f };	DefaultAtVec = { 0.f,8.f,1.f };
 	EyeVec = DefaultEyeVec;			AtVec = DefaultAtVec;				UpVec = { 0.f,1.f,0.f };
 	FOVValue = D3DXToRadian(60.f);		AspectValue = (_float)WINCX / WINCY;	NearValue = 0.1f; FarValue = 1000.f;
 
@@ -41,8 +41,8 @@ INT	CameraObject::Update_GameObject(const _float& _DT) {
 
 		_vec3* playerPos = (dynamic_cast<Transform*>(player->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM)))->Get_Position();
 
-		_vec3 eyeCalc = { -5.f, DefaultEyeVec.y - 1.f, -5.f };
-		_vec3 atCalc = { -4.f, DefaultAtVec.y - 1.f, -4.f };
+		_vec3 eyeCalc = { 0.f, DefaultEyeVec.y - 1.f, -5.f };
+		_vec3 atCalc = { 0.f, DefaultAtVec.y - 1.f, -4.f };
 
 		EyeVec = (*playerPos) + eyeCalc;
 		AtVec = (*playerPos) + atCalc;
