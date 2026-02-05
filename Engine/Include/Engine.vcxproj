@@ -170,6 +170,9 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\TileManager.h" />
     <ClInclude Include="..\Header\TimeManager.h" />
     <ClInclude Include="..\Header\Transform.h" />
+    <ClInclude Include="..\Header\UIManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Buffer.cpp" />
@@ -192,6 +195,9 @@ call Copy.bat</Command>
     <ClCompile Include="..\Code\TileManager.cpp" />
     <ClCompile Include="..\Code\TimeManager.cpp" />
     <ClCompile Include="..\Code\Transform.cpp" />
+    <ClCompile Include="..\Code\UIManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

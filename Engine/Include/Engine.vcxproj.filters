@@ -70,6 +70,9 @@
     <Filter Include="08. TileManager\TileImageManager">
       <UniqueIdentifier>{de85b09c-bdf0-41ed-ab1d-3450338f2975}</UniqueIdentifier>
     </Filter>
+    <Filter Include="10. UIManager">
+      <UniqueIdentifier>{06dba40a-cde8-4d74-a015-c5cfb226400f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GraphicDevice.h">
@@ -150,6 +153,9 @@
     <ClInclude Include="..\Header\TileImageManager.h">
       <Filter>08. TileManager\TileImageManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\UIManager.h">
+      <Filter>10. UIManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GraphicDevice.cpp">
@@ -211,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\TileImageManager.cpp">
       <Filter>08. TileManager\TileImageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UIManager.cpp">
+      <Filter>10. UIManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

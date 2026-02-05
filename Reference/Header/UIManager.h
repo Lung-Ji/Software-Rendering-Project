@@ -1,22 +1,31 @@
 #pragma once
+
 #include "Base.h"
+#include "GameObject.h"
+#include "Sprite.h"
 #include "Engine_Define.h"
 
 BEGIN(Engine)
+
 class ENGINE_DLL UIManager : public Base {
 	DECLARE_SINGLETON(UIManager)
+
 private:
 	explicit UIManager();
 	virtual ~UIManager();
 
 public:
-	VOID	Ready_UIManager(LPDIRECT3DDEVICE9 _GRPDEV);
-	VOID	Update_UIManager();
-	VOID	Render_UIManager();
-private:
-	LPDIRECT3DDEVICE9 GRPDEV;
+	HRESULT Ready_UIObject(SpriteObject* _Component_Sprite );
+	VOID  Show_UI(SpriteObject* _Sprite);
+	VOID	Hide_UI(SpriteObject* _Sprite);
+
+
 private:
 	virtual VOID	Free();
+	BOOL		isActive;
+private:
+	std::list<vector<SpriteINFO>*> ActiveList;
+	std::list<vector<SpriteINFO>*> ReverseList;
 };
 
 END

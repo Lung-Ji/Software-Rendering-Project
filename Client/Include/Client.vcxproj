@@ -180,6 +180,9 @@
     <ClInclude Include="..\Header\LoadThread.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Header\MainMenu.h" />
+    <ClInclude Include="..\Header\MainMenuButton.h" />
+    <ClInclude Include="..\Header\MainUI.h" />
     <ClInclude Include="..\Header\Monster.h" />
     <ClInclude Include="..\Header\Monster1.h" />
     <ClInclude Include="..\Header\Monster_State.h">
@@ -197,6 +200,7 @@
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="BossMonster.h" />
+    <ClInclude Include="CKeyButton.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="CXZTile.h" />
     <ClInclude Include="framework.h" />
@@ -205,7 +209,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="DEFINE.h" />
     <ClInclude Include="ENUM.h" />
-    <ClInclude Include="MainUI.h" />
+    <ClInclude Include="Tutorial.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Camera.cpp" />
@@ -245,6 +249,9 @@
     <ClCompile Include="..\Code\LoadThread.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Code\MainMenu.cpp" />
+    <ClCompile Include="..\Code\MainMenuButton.cpp" />
+    <ClCompile Include="..\Code\MainUI.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
     <ClCompile Include="..\Code\Monster1.cpp" />
     <ClCompile Include="..\Code\Monster_State.cpp">
@@ -262,6 +269,7 @@
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="BossMonster.cpp" />
+    <ClCompile Include="CKeyButton.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="CXZTile.cpp" />
     <ClCompile Include="PCH.cpp">
@@ -270,7 +278,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="MainUI.cpp" />
+    <ClCompile Include="Tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

@@ -8,10 +8,11 @@ CameraObject::~CameraObject() {}
 HRESULT CameraObject::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
-	EyeVec = { 0.f,10.f,0.f };		AtVec = { 1.f,8.f,1.f };				UpVec = { 0.f,1.f,0.f };
-	FOVValue = D3DXToRadian(60.f);	AspectValue = (_float)WINCX / WINCY;	NearValue = 0.1f; FarValue = 1000.f;
+	DefaultEyeVec = { 0.f,10.f,0.f };	DefaultAtVec = { 1.f,8.f,1.f };
+	EyeVec = DefaultEyeVec;			AtVec = DefaultAtVec;				UpVec = { 0.f,1.f,0.f };
+	FOVValue = D3DXToRadian(60.f);		AspectValue = (_float)WINCX / WINCY;	NearValue = 0.1f; FarValue = 1000.f;
 
-	Angle = { 0.f, 0.f, 0.f };		CameraSpeed = 10.f;
+	Angle = { 0.f, 0.f, 0.f };			CameraSpeed = 10.f;
 
 	MouseCheck = FALSE;
 
@@ -28,6 +29,11 @@ HRESULT CameraObject::Ready_GameObject() {
 }
 INT	CameraObject::Update_GameObject(const _float& _DT) {
 
+	if (KEY_DOWN(DIK_F2)) {	//	마우스 커서 고정 여부 TRUE = 고정, FALSE = 고정 해제
+		MouseCheck ? MouseCheck = FALSE : MouseCheck = TRUE;
+		Camera_Move ? Camera_Move = FALSE : Camera_Move = TRUE;
+	}
+
 	if (!Camera_Move)
 	{
 		GameObject* player = dynamic_cast<GameObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
@@ -35,8 +41,8 @@ INT	CameraObject::Update_GameObject(const _float& _DT) {
 
 		_vec3* playerPos = (dynamic_cast<Transform*>(player->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM)))->Get_Position();
 
-		_vec3 eyeCalc = { -5.f, 9.f, -5.f };
-		_vec3 atCalc = { -4.f, 7.f, -4.f };
+		_vec3 eyeCalc = { -5.f, DefaultEyeVec.y - 1.f, -5.f };
+		_vec3 atCalc = { -4.f, DefaultAtVec.y - 1.f, -4.f };
 
 		EyeVec = (*playerPos) + eyeCalc;
 		AtVec = (*playerPos) + atCalc;
@@ -49,6 +55,7 @@ INT	CameraObject::Update_GameObject(const _float& _DT) {
 }
 VOID CameraObject::LateUpdate_GameObject(const _float& _DT) {
 	Camera_Transform_Control(_DT);
+
 	if (MouseCheck) {
 		POINT       ptMouse{ WINCX >> 1, WINCY >> 1 };
 
@@ -107,11 +114,6 @@ VOID CameraObject::Camera_Transform_Control(CONST FLOAT& _DT) {
 		if (KEY_DOWN(DIK_F1)) {		//	GUI 상태 바 숨김 여부 TRUE = Visible, FALSE = Hide
 			Camera_Show ? Camera_Show = FALSE : Camera_Show = TRUE;
 		}
-	}
-
-	if (KEY_DOWN(DIK_P)) {	//	마우스 커서 고정 여부 TRUE = 고정, FALSE = 고정 해제
-		MouseCheck ? MouseCheck = FALSE : MouseCheck = TRUE;
-		Camera_Move ? Camera_Move = FALSE : Camera_Move = TRUE;
 	}
 }
 VOID CameraObject::Camera_Rotation_Control(CONST FLOAT& _DT){

@@ -42,6 +42,7 @@ private:
 
 	_matrix		ViewMatrix, ProjMatrix;
 
+	_vec3		DefaultEyeVec, DefaultAtVec;
 	_vec3		EyeVec, AtVec, RightVec, UpVec, LookVec;
 	FLOAT		FOVValue, AspectValue, NearValue, FarValue, CameraSpeed;
 
