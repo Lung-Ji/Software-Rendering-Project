@@ -108,6 +108,9 @@ HRESULT Monster1::Component_Initialize() {
 	Component_Texture = ADD_COMPONENT_TEXTURE;
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Monster/Bat");
 
+	Component_Collider = ADD_COMPONENT_COLLIDER;
+	Component_Collider->Set_CenterPos(Component_Transform);
+	Component_Collider->Set_Scale(1.f, 1.f, 1.f);
 	return S_OK;
 }
 Monster1* Monster1::Create(LPDIRECT3DDEVICE9 _GRPDEV) {

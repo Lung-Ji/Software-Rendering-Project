@@ -399,16 +399,16 @@ HRESULT Buffer::Ready_Tile_Buffer()
 
 
 	Vertex[0].vPosition = { -1.f, 0.f, 1.f };
-	Vertex[0].vTexUV = {0,0,0};
+	Vertex[0].vTexUV = {0,0,1};
 
 	Vertex[1].vPosition = { 1.f, 0.f, 1.f };
 	Vertex[1].vTexUV = {1,0,0};
 
 	Vertex[2].vPosition = { 1.f, 0.f, -1.f };
-	Vertex[2].vTexUV = { 1,1,0 };
+	Vertex[2].vTexUV = { 1,0,0 };
 
 	Vertex[3].vPosition = { -1.f, 0.f, -1.f };
-	Vertex[3].vTexUV = { 0,1,0 };
+	Vertex[3].vTexUV = { 0,0,0 };
 	VertexBuffer->Unlock();
 
 	INDEX32* Index = nullptr;
@@ -439,7 +439,7 @@ HRESULT Buffer::Ready_Cube_Buffer()
 
 	VTXCUBE* pVertex = NULL;
 
-	// &pVertex : ¹öÅØ½º¹öÆÛ¿¡ º¸°üµÈ ¹öÅØ½º Áß Ã¹ ¹øÂ° ¹öÅØ½ºÀÇ ÁÖ¼Ò¸¦ ¾ò¾î¿È
+	// &pVertex : ë²„í…ìŠ¤ë²„í¼ì— ë³´ê´€ëœ ë²„í…ìŠ¤ ì¤‘ ì²« ë²ˆì§¸ ë²„í…ìŠ¤ì˜ ì£¼ì†Œë¥¼ ì–»ì–´ì˜´
 	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
 	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
 

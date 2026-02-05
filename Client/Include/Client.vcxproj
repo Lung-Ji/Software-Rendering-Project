@@ -182,6 +182,7 @@
     </ClInclude>
     <ClInclude Include="..\Header\MainMenu.h" />
     <ClInclude Include="..\Header\MainMenuButton.h" />
+    <ClInclude Include="..\Header\MainMenuLogo.h" />
     <ClInclude Include="..\Header\MainUI.h" />
     <ClInclude Include="..\Header\Monster.h" />
     <ClInclude Include="..\Header\Monster1.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="..\Header\StartScene.h" />
     <ClInclude Include="..\Header\Terrain.h" />
     <ClInclude Include="..\Header\Tile.h" />
+    <ClInclude Include="..\Header\UITest.h" />
     <ClInclude Include="..\Header\VillageScene.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
@@ -251,6 +253,7 @@
     </ClCompile>
     <ClCompile Include="..\Code\MainMenu.cpp" />
     <ClCompile Include="..\Code\MainMenuButton.cpp" />
+    <ClCompile Include="..\Code\MainMenuLogo.cpp" />
     <ClCompile Include="..\Code\MainUI.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
     <ClCompile Include="..\Code\Monster1.cpp" />
@@ -264,6 +267,7 @@
     <ClCompile Include="..\Code\StartScene.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\Tile.cpp" />
+    <ClCompile Include="..\Code\UITest.cpp" />
     <ClCompile Include="..\Code\VillageScene.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>

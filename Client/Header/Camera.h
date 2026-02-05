@@ -32,8 +32,6 @@ public:
 	FLOAT*			Get_Speed() { return &CameraSpeed; }
 	BOOL			Set_Speed(FLOAT _Value) { CameraSpeed = _Value; return TRUE; }
 
-	BOOL			Show_StateWindow() { return Camera_Show; }
-
 private:
 	HRESULT			Component_Initialize();
 

@@ -16,6 +16,7 @@ VOID	SceneManager::LateUpdate_SceneManager(const FLOAT& _DT) {
 }
 VOID	SceneManager::Render_SceneManager(LPDIRECT3DDEVICE9 _GRPDEV) {
 	RenderManager::GetInstance()->Render_GameObject(_GRPDEV);
+	CollisionManager::GetInstance()->Render_CollisionManager();
 	//CurrentScene->Render_Scene();
 }
 VOID	SceneManager::Free() {

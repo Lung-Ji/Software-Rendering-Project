@@ -2,6 +2,7 @@
 #include "Base.h"
 #include "Scene.h"
 #include "RenderManager.h"
+#include "CollisionManager.h"
 
 BEGIN(Engine)
 

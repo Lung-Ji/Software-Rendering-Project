@@ -24,6 +24,11 @@ public:
 	virtual VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
 	virtual VOID		Render_GameObject() = 0;
 
+public:
+	virtual BOOL		OnCollisionEnter(GameObject* _Other)	{ return TRUE; }
+	virtual BOOL		OnCollisionStay	(GameObject* _Other)	{ return TRUE; }
+	virtual BOOL		OnCollisionExit	(GameObject* _Other)	{ return TRUE; }
+
 protected:
 	vector<Component*>				ComponentList;
 	LPDIRECT3DDEVICE9				GRPDEV;

@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "Texture.h"
 #include "Sprite.h"
+#include "Collider.h"
 #include "StateMachine.h"
 
 BEGIN(Engine)

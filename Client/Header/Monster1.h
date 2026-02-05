@@ -36,8 +36,10 @@ private:
 	Buffer*			Component_Buffer;
 	Transform*		Component_Transform;
 	Texture*		Component_Texture;
-	//SpriteObject*	Component_Sprite;
-	//StateMachine*	Component_FSM;
+	StateMachine*	Component_FSM;
+	Collider*		Component_Collider;
+
+	GameObject*		pTarget;
 
 public:
 	static Monster1* Create(LPDIRECT3DDEVICE9 _GRPDEV);
@@ -46,7 +48,6 @@ private:
 
 	VOID Set_Target(CONST TCHAR* _TAG);
 
-	GameObject* pTarget;
 	_vec3*		pTargetPos;
 	_vec3		vDir;
 

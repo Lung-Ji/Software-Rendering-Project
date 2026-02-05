@@ -30,9 +30,9 @@ HRESULT Player::Ready_GameObject() {
 	angle = angle / D3DX_PI * 180.f;
 
 	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
-	Component_Transform->Rotation(ROT_Y, 45.f);
 	Component_Transform->Rotation(ROT_X, angle);
 	Component_Transform->Set_Pos({ 5.f, 1.f, 5.f });
+
 
 	Debug = false;
 
@@ -69,6 +69,10 @@ HRESULT Player::Component_Initialize() {
 	Component_Texture	= ADD_COMPONENT_TEXTURE;
 	//Component_FSM		= ADD_COMPONENT_FSM;
 
+	Component_Collider = ADD_COMPONENT_COLLIDER;					// 충돌체 컴포넌트 추가
+	Component_Collider->Set_CenterPos(Component_Transform);			// 충돌체가 오브젝트를 따라 다니도록
+	Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// 충돌체의 범위 조절
+
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Extra/Example");
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
@@ -84,8 +88,8 @@ void Player::Key_Input(const _float& _DT)
 	if (!Debug)
 	{
 		_vec3		upDir, rightDir;
-		upDir = { 1.f, 0.f, 1.f };
-		rightDir = { 1.f, 0.f, -1.f };
+		upDir = { 0.f, 0.f, 1.f };
+		rightDir = { 1.f, 0.f, 0.f };
 		D3DXVec3Normalize(&upDir, &upDir);
 		D3DXVec3Normalize(&rightDir, &rightDir);
 
