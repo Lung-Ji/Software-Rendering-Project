@@ -47,6 +47,7 @@
 #include "StartScene.h"
 #include "VillageScene.h"
 #include "DungeonScene.h"
+#include "UITest.h"
 
 //////////////////////////////////////////// Manager
 #include "GUIManager.h"

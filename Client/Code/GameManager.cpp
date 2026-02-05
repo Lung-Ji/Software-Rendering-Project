@@ -53,6 +53,7 @@ HRESULT GameManager::Ready_DefaultSetting() {
 	return S_OK;
 }
 HRESULT GameManager::Ready_SceneSetting() {
+
 	Scene* StartScene = StartScene::Create(GRPDEV);
 	
 	if (StartScene == nullptr)	return E_FAIL;
@@ -63,6 +64,8 @@ HRESULT GameManager::Ready_SceneSetting() {
 	}
 	return S_OK;
 }
+
+
 GameManager* GameManager::Create() {
 	GameManager* Instance = new GameManager;
 	if (FAILED(Instance->Ready_GameManager())) {

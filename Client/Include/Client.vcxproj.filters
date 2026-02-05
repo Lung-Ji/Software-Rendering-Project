@@ -85,6 +85,12 @@
     <Filter Include="04. UI\01. Sprite\InGame">
       <UniqueIdentifier>{05e162c7-ecde-45b1-9da7-f25a208c6058}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Scene\99. UITest">
+      <UniqueIdentifier>{3d87992a-1f5e-4047-b98a-ef2dc5d8e336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\02. Font">
+      <UniqueIdentifier>{f7012392-cc5f-455f-87de-da63f8d84670}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -196,6 +202,12 @@
     <ClInclude Include="..\Header\MainMenu.h">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\UITest.h">
+      <Filter>02. Scene\99. UITest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MainMenuLogo.h">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -287,6 +299,12 @@
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\MainMenu.cpp">
+      <Filter>04. UI\01. Sprite\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UITest.cpp">
+      <Filter>02. Scene\99. UITest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainMenuLogo.cpp">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClCompile>
   </ItemGroup>
