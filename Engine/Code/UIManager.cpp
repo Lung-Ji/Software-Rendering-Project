@@ -1,14 +1,21 @@
 #include "UIManager.h"
 
 IMPLEMENT_SINGLETON(UIManager)
-UIManager::UIManager(){}
-UIManager::~UIManager()
+
+HRESULT UIManager::Ready_UIObject(SpriteObject* _Sprite)
+{
+  return S_OK;
+}
+
+VOID UIManager::Show_UI(SpriteObject* _Sprite)
 {
 }
 
-VOID UIManager::Ready_UIManager(LPDIRECT3DDEVICE9 _GRPDEV) {
-	
+VOID UIManager::Hide_UI(SpriteObject* _Sprite)
+{
 }
-VOID	UIManager::Free() {
 
+
+VOID UIManager::Free() 
+{
 }

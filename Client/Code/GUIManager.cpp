@@ -45,6 +45,7 @@ VOID GUIManager::Update_GUIManager() {
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
 }
 VOID GUIManager::LateUpdate_GUIManager() {
 
