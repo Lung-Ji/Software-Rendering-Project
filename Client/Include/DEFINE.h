@@ -1,49 +1,52 @@
 #pragma once
 
 /////////////////////////////////// SOUNDMANAGER ///////////////////////////////////
-#define PLAY_SOUND(FILENAME, CHANNEL)	SoundManager::GetInstance()->Play_Sound(FILENAME, CHANNEL);						// Ã¤³Î¿¡ »ç¿îµå ÇÃ·¹ÀÌ
-#define STOP_SOUND(CHANNEL)				SoundManager::GetInstance()->Stop_Sound(CHANNEL);								// ÇØ´ç Ã¤³Î »ç¿îµå Á¤Áö
-#define STOP_ALLSOUND					SoundManager::GetInstance()->Stop_AllSound();									// ¸ğµç Ã¤³Î »ç¿îµå Á¤Áö
-#define CHECK_SOUNDPLAYING(CHANNEL)		SoundManager::GetInstance()->IsPlaying(CHANNEL);								// À½¾Ç ÇÃ·¹ÀÌ ¿©ºÎ È®ÀÎ
+#define PLAY_SOUND(FILENAME, CHANNEL)	SoundManager::GetInstance()->Play_Sound(FILENAME, CHANNEL);						// ì±„ë„ì— ì‚¬ìš´ë“œ í”Œë ˆì´
+#define STOP_SOUND(CHANNEL)				SoundManager::GetInstance()->Stop_Sound(CHANNEL);								// í•´ë‹¹ ì±„ë„ ì‚¬ìš´ë“œ ì •ì§€
+#define STOP_ALLSOUND					SoundManager::GetInstance()->Stop_AllSound();									// ëª¨ë“  ì±„ë„ ì‚¬ìš´ë“œ ì •ì§€
+#define CHECK_SOUNDPLAYING(CHANNEL)		SoundManager::GetInstance()->IsPlaying(CHANNEL);								// ìŒì•… í”Œë ˆì´ ì—¬ë¶€ í™•ì¸
 ////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////// KEYMANAGER /////////////////////////////////////
-#define KEY_DOWN(KEY_IDX)				KeyManager::GetInstance()->KEY_STATE_DOWN(KEY_IDX)	== TRUE						// ÇØ´ç Å° ÃÖÃÊ ÀÔ·Â
-#define KEY_HOLD(KEY_IDX)				KeyManager::GetInstance()->KEY_STATE_HOLD(KEY_IDX)	== TRUE						// ÇØ´ç Å° ÀÔ·Â À¯Áö
-#define KEY_UP(KEY_IDX)					KeyManager::GetInstance()->KEY_STATE_UP(KEY_IDX)	== TRUE						// ÇØ´ç Å° ÀÔ·Â ÁßÁö
+#define KEY_DOWN(KEY_IDX)				KeyManager::GetInstance()->KEY_STATE_DOWN(KEY_IDX)	== TRUE						// í•´ë‹¹ í‚¤ ìµœì´ˆ ì…ë ¥
+#define KEY_HOLD(KEY_IDX)				KeyManager::GetInstance()->KEY_STATE_HOLD(KEY_IDX)	== TRUE						// í•´ë‹¹ í‚¤ ì…ë ¥ ìœ ì§€
+#define KEY_UP(KEY_IDX)					KeyManager::GetInstance()->KEY_STATE_UP(KEY_IDX)	== TRUE						// í•´ë‹¹ í‚¤ ì…ë ¥ ì¤‘ì§€
 
 #define MOUSE_LBUTTON					KeyManager::GetInstance()->MOUSE_LB_DOWN()
 #define MOUSE_RBUTTON					KeyManager::GetInstance()->MOUSE_RB_DOWN()
-#define MOUSE_MOVE(KEY_IDX)				KeyManager::GetInstance()->Get_MouseMove(KEY_IDX)								// ¸¶¿ì½º ¿òÁ÷ÀÓ °¨Áö
+#define MOUSE_MOVE(KEY_IDX)				KeyManager::GetInstance()->Get_MouseMove(KEY_IDX)								// ë§ˆìš°ìŠ¤ ì›€ì§ì„ ê°ì§€
 ////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////// SCENEMANAGER /////////////////////////////////////
-#define CHANGE_SCENE_START				SceneManager::GetInstance()->Scene_Transition(StartScene::Create(GRPDEV));		// ½ÃÀÛ ¾ÀÀ¸·Î ÀüÈ¯
-#define CHANGE_SCENE_VILLAGE			SceneManager::GetInstance()->Scene_Transition(VillageScene::Create(GRPDEV));	// ¸¶À» ¾ÀÀ¸·Î ÀüÈ¯
-#define CHANGE_SCENE_DUNGEON			SceneManager::GetInstance()->Scene_Transition(DungeonScene::Create(GRPDEV));	// ´øÀü ¾ÀÀ¸·Î ÀüÈ¯
+#define CHANGE_SCENE_START				SceneManager::GetInstance()->Scene_Transition(StartScene::Create(GRPDEV));		// ì‹œì‘ ì”¬ìœ¼ë¡œ ì „í™˜
+#define CHANGE_SCENE_VILLAGE			SceneManager::GetInstance()->Scene_Transition(VillageScene::Create(GRPDEV));	// ë§ˆì„ ì”¬ìœ¼ë¡œ ì „í™˜
+#define CHANGE_SCENE_DUNGEON			SceneManager::GetInstance()->Scene_Transition(DungeonScene::Create(GRPDEV));	// ë˜ì „ ì”¬ìœ¼ë¡œ ì „í™˜
 ////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////// COMPONENT //////////////////////////////////////
-#define ADD_COMPONENT_TRIANGLE			dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_TRIANGLE));		// »ï°¢Çü Ãâ·Â ÄÄÆ÷³ÍÆ® Ãß°¡
-#define ADD_COMPONENT_RECTANGLE			dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_RECTANGLE),x, y);	// »ç°¢Çü Ãâ·Â ÄÄÆ÷³ÍÆ® Ãß°¡
-#define ADD_COMPONENT_RECTTEX			dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_RECTTEX));			// »ç°¢ ÅØ½ºÃÄ Ãâ·Â ÄÄÆ÷³ÍÆ® Ãß°¡
-#define ADD_COMPONENT_TERRAIN			dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_TERRAIN));			// ÁöÇü ÅØ½ºÃÄ Ãâ·Â ÄÄÆ÷³ÍÆ® Ãß°¡
-#define ADD_COMPONENT_TRANSFORM			dynamic_cast<Transform*>	(Add_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM));		// TRANSFORM ÄÄÆ÷³ÍÆ® Ãß°¡
-#define ADD_COMPONENT_TEXTURE			dynamic_cast<Texture*>		(Add_Component(COMPONENT_TYPE::COMPONENT_TEXTURE));			// ÅØ½ºÃÄ ÀúÀå ÄÄÆ÷³ÍÆ® Ãß°¡
-#define ADD_COMPONENT_SPRITE			dynamic_cast<SpriteObject*>	(Add_Component(COMPONENT_TYPE::COMPONENT_SPRITE));			// ÅØ½ºÃÄ ÀúÀå ÄÄÆ÷³ÍÆ® Ãß°¡
-#define ADD_COMPONENT_COLLIDER			dynamic_cast<Collider*>		(Add_Component(COMPONENT_TYPE::COMPONENT_COLLIDER));		// ÅØ½ºÃÄ ÀúÀå ÄÄÆ÷³ÍÆ® Ãß°¡
-#define ADD_COMPONENT_FSM				dynamic_cast<StateMachine*>	(Add_Component(COMPONENT_TYPE::COMPONENT_FSM));				// FSM ÄÄÆ÷³ÍÆ®
-#define ADD_COMPONENT_TILE				dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_TILE));			// Å¸ÀÏ
-#define ADD_COMPONENT_CUBE				dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_CUBE));			// Å¥ºê
-#define ADD_COMPONENT_TILEFRONT			dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_TILEFRONT));		// Å¸ÀÏ ¿·¸é
-#define ADD_COMPONENT_TILELEFT			dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_TILELEFT));
-#define ADD_COMPONENT_TILERIGHT			dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_TILERIGHT));
-#define ADD_COMPONENT_TILEBACK			dynamic_cast<Buffer*>		(Add_Component(COMPONENT_TYPE::COMPONENT_TILEBACK));
+
+#define ADD_COMPONENT_TRIANGLE			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TRIANGLE));		// ì‚¼ê°í˜• ì¶œë ¥ ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+#define ADD_COMPONENT_RECTANGLE			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_RECTANGLE),x, y);		// ì‚¬ê°í˜• ì¶œë ¥ ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+#define ADD_COMPONENT_RECTTEX			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_RECTTEX));		// ì‚¬ê° í…ìŠ¤ì³ ì¶œë ¥ ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+#define ADD_COMPONENT_TERRAIN			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TERRAIN));		// ì§€í˜• í…ìŠ¤ì³ ì¶œë ¥ ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+#define ADD_COMPONENT_TRANSFORM			dynamic_cast<Transform*>(Add_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM));	// TRANSFORM ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+#define ADD_COMPONENT_TEXTURE			dynamic_cast<Texture*>(Add_Component(COMPONENT_TYPE::COMPONENT_TEXTURE));		// í…ìŠ¤ì³ ì €ì¥ ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+#define ADD_COMPONENT_SPRITE			dynamic_cast<SpriteObject*>(Add_Component(COMPONENT_TYPE::COMPONENT_SPRITE));	// í…ìŠ¤ì³ ì €ì¥ ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+#define ADD_COMPONENT_COLLIDER			dynamic_cast<Collider*>(Add_Component(COMPONENT_TYPE::COMPONENT_COLLIDER));	// í…ìŠ¤ì³ ì €ì¥ ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+#define ADD_COMPONENT_FSM				dynamic_cast<StateMachine*>(Add_Component(COMPONENT_TYPE::COMPONENT_FSM));	// FSM ì»´í¬ë„ŒíŠ¸
+#define ADD_COMPONENT_TILE				dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILE));		// íƒ€ì¼
+#define ADD_COMPONENT_CUBE				dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_CUBE));		// íë¸Œ
+#define ADD_COMPONENT_TILEFRONT			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILEFRONT));   // íƒ€ì¼ ì˜†ë©´
+#define ADD_COMPONENT_TILELEFT			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILELEFT));
+#define ADD_COMPONENT_TILERIGHT			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILERIGHT));
+#define ADD_COMPONENT_TILEBACK			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILEBACK));
+#define ADD_COMPONENT_TILEINFO			dynamic_cast<TileInfo*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILEINFO));
+
 ////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////// EFFECT /////////////////////////////////////////				
 #define PLAY_PLAYER_EFFECT(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,		\
-	Effect::Create(GRPDEV, SKILL_TYPE, Component_Transform, TRUE, PLAYTIME));						// ÀÌÆåÆ® ¹İº¹ ½ÇÇà
+	Effect::Create(GRPDEV, SKILL_TYPE, Component_Transform, TRUE, PLAYTIME));						// ì´í™íŠ¸ ë°˜ë³µ ì‹¤í–‰
 #define PLAY_PLAYER_EFFECT_ONCE(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,	\
-	Effect::Create(GRPDEV, SKILL_TYPE, Component_Transform, FALSE, PLAYTIME));						// ÀÌÆåÆ® ÃÖÃÊ ÇÑ¹ø ½ÇÇà
+	Effect::Create(GRPDEV, SKILL_TYPE, Component_Transform, FALSE, PLAYTIME));						// ì´í™íŠ¸ ìµœì´ˆ í•œë²ˆ ì‹¤í–‰
 ////////////////////////////////////////////////////////////////////////////////////

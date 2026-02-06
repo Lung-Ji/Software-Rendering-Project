@@ -79,6 +79,12 @@
     <Filter Include="13. EffectManager">
       <UniqueIdentifier>{f8acfc71-ce06-4098-b39d-8df3019fb773}</UniqueIdentifier>
     </Filter>
+    <Filter Include="10. UIManager">
+      <UniqueIdentifier>{06dba40a-cde8-4d74-a015-c5cfb226400f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Component\06.Tile">
+      <UniqueIdentifier>{4e2a987d-50f6-4e59-bd84-9e0016b96795}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GraphicDevice.h">
@@ -168,6 +174,9 @@
     <ClInclude Include="..\Header\EffectManager.h">
       <Filter>13. EffectManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\TileInfo.h">
+      <Filter>99. Component\06.Tile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GraphicDevice.cpp">
@@ -238,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\EffectManager.cpp">
       <Filter>13. EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TileInfo.cpp">
+      <Filter>99. Component\06.Tile</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

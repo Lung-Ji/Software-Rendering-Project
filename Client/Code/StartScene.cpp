@@ -31,7 +31,7 @@ VOID StartScene::Render_Scene() {
 }
 HRESULT StartScene::Ready_Enviroment_Layer() {
 	Add_GameObjectToScene<Terrain>			(LAYER_TYPE::LAYER_STATIC_OBJECT , GAMEOBJECT_TYPE::OBJECT_TERRAIN, L"Terrain"		);
-	return S_OK;
+  return S_OK;
 }
 HRESULT StartScene::Ready_GameLogic_Layer() {
 	Add_GameObjectToScene<CameraObject>		(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_CAMERA , L"Camera"		);
@@ -43,6 +43,13 @@ HRESULT StartScene::Ready_GameLogic_Layer() {
 HRESULT StartScene::Ready_UserInterface_Layer() {
 	Add_GameObjectToScene<MainMenuButton>	(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  ,	L"MainButton"	);
 	Add_GameObjectToScene<MainMenu>			(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  ,	L"MainMenu"		);
+	return S_OK;
+}
+HRESULT StartScene::Ready_Tile_Layer(CONST TCHAR* _LTAG)
+{
+
+		
+
 	return S_OK;
 }
 StartScene* StartScene::Create(LPDIRECT3DDEVICE9 _GRPDEV) {

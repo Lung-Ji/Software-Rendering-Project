@@ -202,33 +202,31 @@ HRESULT Buffer::Ready_Terrain_Buffer() {
 }
 HRESULT Buffer::Ready_TileRIGHT_Buffer()
 {
-	VertexSize = sizeof(VTXCOL);
+	VertexSize = sizeof(VTXCUBE);
 	VertexCount = 4;
 	TRICount = 2;
-	VertexFormat = FVF_COL;
+	VertexFormat = FVF_CUBE;
 
 	IndexSize = sizeof(INDEX32);
 	IndexFormat = D3DFMT_INDEX32;
 
-	pVBufferPos = new _vec3[VertexCount];
-	VTXCOL* Vertex = NULL;
+	VTXCUBE* Vertex = NULL;
 	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
 	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
 	VertexBuffer->Lock(0, 0, (void**)&Vertex, 0);
 
 
 	Vertex[0].vPosition = { 1.f, 1.f, -1.f };
-	Vertex[0].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[0] = Vertex[0].vPosition;
+	Vertex[0].vTexUV = { 0,0,0 };
+
 	Vertex[1].vPosition = { 1.f, 1.f, 1.f };
-	Vertex[1].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[1] = Vertex[1].vPosition;
+	Vertex[1].vTexUV = { 1,0,0 };
+
 	Vertex[2].vPosition = { 1.f, -1.f, 1.f };
-	Vertex[2].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[2] = Vertex[2].vPosition;
+	Vertex[2].vTexUV = { 1,1,0 };
+
 	Vertex[3].vPosition = { 1.f, -1.f, -1.f };
-	Vertex[3].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[3] = Vertex[3].vPosition;
+	Vertex[3].vTexUV = { 0,1,0 };
 	VertexBuffer->Unlock();
 
 	INDEX32* Index = nullptr;
@@ -248,32 +246,32 @@ HRESULT Buffer::Ready_TileRIGHT_Buffer()
 }
 HRESULT Buffer::Ready_TileFRONT_Buffer()
 {
-	VertexSize = sizeof(VTXCOL);
+
+	VertexSize = sizeof(VTXCUBE);
 	VertexCount = 4;
 	TRICount = 2;
-	VertexFormat = FVF_COL;
+	VertexFormat = FVF_CUBE;
 
 	IndexSize = sizeof(INDEX32);
 	IndexFormat = D3DFMT_INDEX32;
 
-	pVBufferPos = new _vec3[VertexCount];
-	VTXCOL* Vertex = NULL;
+	VTXCUBE* Vertex = NULL;
 	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
 	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
 	VertexBuffer->Lock(0, 0, (void**)&Vertex, 0);
 
-	Vertex[0].vPosition = { -1.f, 1.f, 1.f };
-	Vertex[0].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[0] = Vertex[0].vPosition;
-	Vertex[1].vPosition = { 1.f, 1.f, 1.f };
-	Vertex[1].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[1] = Vertex[1].vPosition;
-	Vertex[2].vPosition = { 1.f, -1.f, 1.f };
-	Vertex[2].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[2] = Vertex[2].vPosition;
-	Vertex[3].vPosition = { -1.f, -1.f, 1.f };
-	Vertex[3].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[3] = Vertex[3].vPosition;
+
+	Vertex[0].vPosition = { -1.f, 1.f, 0.f };
+	Vertex[0].vTexUV = { 0,0,0 };
+
+	Vertex[1].vPosition = { 1.f, 1.f, 0.f };
+	Vertex[1].vTexUV = { 1,0,0 };
+
+	Vertex[2].vPosition = { 1.f, -1.f, 0.f };
+	Vertex[2].vTexUV = { 1,1,0 };
+
+	Vertex[3].vPosition = { -1.f, -1.f, 0.f };
+	Vertex[3].vTexUV = { 0,1,0 };
 	VertexBuffer->Unlock();
 
 	INDEX32* Index = nullptr;
@@ -301,24 +299,22 @@ HRESULT Buffer::Ready_TileBACK_Buffer()
 	IndexSize = sizeof(INDEX32);
 	IndexFormat = D3DFMT_INDEX32;
 
-	pVBufferPos = new _vec3[VertexCount];
 	VTXCOL* Vertex = NULL;
 	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
 	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
 	VertexBuffer->Lock(0, 0, (void**)&Vertex, 0);
 
-	Vertex[0].vPosition = { -1.f, 1.f, -1.f };
-	Vertex[0].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[0] = Vertex[0].vPosition;
-	Vertex[1].vPosition = { 1.f, 1.f, -1.f };
-	Vertex[1].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[1] = Vertex[1].vPosition;
-	Vertex[2].vPosition = { 1.f, -1.f, -1.f };
-	Vertex[2].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[2] = Vertex[2].vPosition;
-	Vertex[3].vPosition = { -1.f, -1.f, -1.f };
-	Vertex[3].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[3] = Vertex[3].vPosition;
+	Vertex[0].vPosition = { -1.f, 0.f, 1.f };
+	Vertex[0].dwColor = D3DXCOLOR(1.0f, 0.f, 0.f, 0.3f);
+
+	Vertex[1].vPosition = { 1.f, 0.f, 1.f };
+	Vertex[1].dwColor = D3DXCOLOR(1.0f, 0.f, 1.f, 0.3f);
+
+	Vertex[2].vPosition = { 1.f, 0.f, -1.f };
+	Vertex[2].dwColor = D3DXCOLOR(1.0f, 0.f, 0.f, 0.3f);
+	
+	Vertex[3].vPosition = { -1.f, 0.f, -1.f };
+	Vertex[3].dwColor = D3DXCOLOR(1.0f, 1.f, 0.f, 0.3f);
 	VertexBuffer->Unlock();
 
 	INDEX32* Index = nullptr;
@@ -338,32 +334,30 @@ HRESULT Buffer::Ready_TileBACK_Buffer()
 }
 HRESULT Buffer::Ready_TileLEFT_Buffer()
 {
-	VertexSize = sizeof(VTXCOL);
+	VertexSize = sizeof(VTXCUBE);
 	VertexCount = 4;
 	TRICount = 2;
-	VertexFormat = FVF_COL;
+	VertexFormat = FVF_CUBE;
 
 	IndexSize = sizeof(INDEX32);
 	IndexFormat = D3DFMT_INDEX32;
 
-	pVBufferPos = new _vec3[VertexCount];
-	VTXCOL* Vertex = NULL;
+	VTXCUBE* Vertex = NULL;
 	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
 	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
 	VertexBuffer->Lock(0, 0, (void**)&Vertex, 0);
 
-	Vertex[0].vPosition = { -1.f, 1.f, -1.f };
-	Vertex[0].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[0] = Vertex[0].vPosition;
-	Vertex[1].vPosition = { -1.f, 1.f, 1.f };
-	Vertex[1].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[1] = Vertex[1].vPosition;
-	Vertex[2].vPosition = { -1.f, -1.f, 1.f };
-	Vertex[2].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[2] = Vertex[2].vPosition;
-	Vertex[3].vPosition = { -1.f, -1.f, -1.f };
-	Vertex[3].dwColor = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
-	pVBufferPos[3] = Vertex[3].vPosition;
+	Vertex[0].vPosition = { -1.f, 0.f, 1.f };
+	Vertex[0].vTexUV = { 0,0,0 };
+
+	Vertex[1].vPosition = { 1.f, 0.f, 1.f };
+	Vertex[1].vTexUV = { 1,0,0 };
+
+	Vertex[2].vPosition = { 1.f, 0.f, -1.f };
+	Vertex[2].vTexUV = { 1,1,0 };
+
+	Vertex[3].vPosition = { -1.f, 0.f, -1.f };
+	Vertex[3].vTexUV = { 0,1,0 };
 	VertexBuffer->Unlock();
 
 	INDEX32* Index = nullptr;
@@ -391,7 +385,6 @@ HRESULT Buffer::Ready_Tile_Buffer()
 	IndexSize = sizeof(INDEX32);
 	IndexFormat = D3DFMT_INDEX32;
 
-	pVBufferPos = new _vec3[VertexCount];
 	VTXCUBE* Vertex = NULL;
 	if (FAILED(GRPDEV->CreateVertexBuffer(VertexSize * VertexCount, 0, VertexFormat, D3DPOOL_MANAGED, &VertexBuffer, NULL)))	return E_FAIL;
 	if (FAILED(GRPDEV->CreateIndexBuffer(IndexSize * TRICount, 0, IndexFormat, D3DPOOL_MANAGED, &IndexBuffer, NULL)))			return E_FAIL;
@@ -399,16 +392,16 @@ HRESULT Buffer::Ready_Tile_Buffer()
 
 
 	Vertex[0].vPosition = { -1.f, 0.f, 1.f };
-	Vertex[0].vTexUV = {0,0,1};
+	Vertex[0].vTexUV = {0,0,0};
 
 	Vertex[1].vPosition = { 1.f, 0.f, 1.f };
 	Vertex[1].vTexUV = {1,0,0};
 
 	Vertex[2].vPosition = { 1.f, 0.f, -1.f };
-	Vertex[2].vTexUV = { 1,0,0 };
+	Vertex[2].vTexUV = { 1,1,0 };
 
 	Vertex[3].vPosition = { -1.f, 0.f, -1.f };
-	Vertex[3].vTexUV = { 0,0,0 };
+	Vertex[3].vTexUV = { 0,1,0 };
 	VertexBuffer->Unlock();
 
 	INDEX32* Index = nullptr;
