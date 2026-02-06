@@ -27,6 +27,12 @@ enum class pState
 	STATE_ATTACK_RUN_LD,
 	STATE_ATTACK_RUN_RD,
 
+	STATE_ATTACK_RUN_BACK_LU,
+	STATE_ATTACK_RUN_BACK_RU,
+	STATE_ATTACK_RUN_BACK_LD,
+	STATE_ATTACK_RUN_BACK_RD,
+	
+	STATE_SLIDE,
 	STATE_VICTORY,
 	STATE_DEAD,
 
@@ -86,6 +92,7 @@ private:
 	void			Key_Input(const _float& _DT);
 	void			Gravity(const _float& _DT);
 	void			SetGrahpic();
+	void			Anim(TCHAR FileName[128], float delay, int maxIdx, bool reverse = false);
 private:
 	bool			Debug;
 	float			_cameraAngle;

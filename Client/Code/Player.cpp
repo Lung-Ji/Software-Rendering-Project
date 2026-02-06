@@ -17,7 +17,7 @@ HRESULT Player::Ready_GameObject() {
 	_isJump = false;
 	_defultJumpSpeed = 50.f;
 	_jumpSpeed = 0.f;
-	_g = 0.5f;
+	_g = 9.8f;
 	_frame = 1;
 
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
@@ -137,13 +137,13 @@ void Player::Key_Input(const _float& _DT)
 				_state = pState::STATE_ATTACK_RUN_LU;
 				break;
 			case pState::STATE_ATTACK_RU:
-				_state = pState::STATE_ATTACK_RUN_RU;
+				_state = pState::STATE_ATTACK_RUN_BACK_RU;
 				break;
 			case pState::STATE_ATTACK_LD:
 				_state = pState::STATE_ATTACK_RUN_LD;
 				break;
 			case pState::STATE_ATTACK_RD:
-				_state = pState::STATE_ATTACK_RUN_RD;
+				_state = pState::STATE_ATTACK_RUN_BACK_RD;
 				break;
 			case pState::STATE_RUN_LU:
 				break;
@@ -174,13 +174,13 @@ void Player::Key_Input(const _float& _DT)
 				_state = pState::STATE_ATTACK_RUN_LU;
 				break;
 			case pState::STATE_ATTACK_RU:
-				_state = pState::STATE_ATTACK_RUN_RU;
+				_state = pState::STATE_ATTACK_RUN_BACK_RU;
 				break;
 			case pState::STATE_ATTACK_LD:
 				_state = pState::STATE_ATTACK_RUN_LD;
 				break;
 			case pState::STATE_ATTACK_RD:
-				_state = pState::STATE_ATTACK_RUN_RD;
+				_state = pState::STATE_ATTACK_RUN_BACK_RD;
 				break;
 			case pState::STATE_RUN_LD:
 				break;
@@ -207,13 +207,13 @@ void Player::Key_Input(const _float& _DT)
 			switch (_state)
 			{
 			case pState::STATE_ATTACK_LU:
-				_state = pState::STATE_ATTACK_RUN_LU;
+				_state = pState::STATE_ATTACK_RUN_BACK_LU;
 				break;
 			case pState::STATE_ATTACK_RU:
 				_state = pState::STATE_ATTACK_RUN_RU;
 				break;
 			case pState::STATE_ATTACK_LD:
-				_state = pState::STATE_ATTACK_RUN_LD;
+				_state = pState::STATE_ATTACK_RUN_BACK_LD;
 				break;
 			case pState::STATE_ATTACK_RD:
 				_state = pState::STATE_ATTACK_RUN_RD;
@@ -242,13 +242,13 @@ void Player::Key_Input(const _float& _DT)
 			switch (_state)
 			{
 			case pState::STATE_ATTACK_LU:
-				_state = pState::STATE_ATTACK_RUN_LU;
+				_state = pState::STATE_ATTACK_RUN_BACK_LU;
 				break;
 			case pState::STATE_ATTACK_RU:
 				_state = pState::STATE_ATTACK_RUN_RU;
 				break;
 			case pState::STATE_ATTACK_LD:
-				_state = pState::STATE_ATTACK_RUN_LD;
+				_state = pState::STATE_ATTACK_RUN_BACK_LD;
 				break;
 			case pState::STATE_ATTACK_RD:
 				_state = pState::STATE_ATTACK_RUN_RD;
@@ -283,10 +283,10 @@ void Player::Key_Input(const _float& _DT)
 				_state = pState::STATE_ATTACK_RUN_RU;
 				break;
 			case pState::STATE_ATTACK_LD:
-				_state = pState::STATE_ATTACK_RUN_LD;
+				_state = pState::STATE_ATTACK_RUN_BACK_LD;
 				break;
 			case pState::STATE_ATTACK_RD:
-				_state = pState::STATE_ATTACK_RUN_RD;
+				_state = pState::STATE_ATTACK_RUN_BACK_RD;
 				break;
 			case pState::STATE_RUN_UP:
 				break;
@@ -311,10 +311,10 @@ void Player::Key_Input(const _float& _DT)
 			switch (_state)
 			{
 			case pState::STATE_ATTACK_LU:
-				_state = pState::STATE_ATTACK_RUN_LU;
+				_state = pState::STATE_ATTACK_RUN_BACK_LU;
 				break;
 			case pState::STATE_ATTACK_RU:
-				_state = pState::STATE_ATTACK_RUN_RU;
+				_state = pState::STATE_ATTACK_RUN_BACK_RU;
 				break;
 			case pState::STATE_ATTACK_LD:
 				_state = pState::STATE_ATTACK_RUN_LD;
@@ -346,13 +346,13 @@ void Player::Key_Input(const _float& _DT)
 				_state = pState::STATE_ATTACK_RUN_LU;
 				break;
 			case pState::STATE_ATTACK_RU:
-				_state = pState::STATE_ATTACK_RUN_RU;
+				_state = pState::STATE_ATTACK_RUN_BACK_RU;
 				break;
 			case pState::STATE_ATTACK_LD:
 				_state = pState::STATE_ATTACK_RUN_LD;
 				break;
 			case pState::STATE_ATTACK_RD:
-				_state = pState::STATE_ATTACK_RUN_RD;
+				_state = pState::STATE_ATTACK_RUN_BACK_RD;
 				break;
 			case pState::STATE_RUN_LEFT:
 				break;
@@ -375,13 +375,13 @@ void Player::Key_Input(const _float& _DT)
 			switch (_state)
 			{
 			case pState::STATE_ATTACK_LU:
-				_state = pState::STATE_ATTACK_RUN_LU;
+				_state = pState::STATE_ATTACK_RUN_BACK_LU;
 				break;
 			case pState::STATE_ATTACK_RU:
 				_state = pState::STATE_ATTACK_RUN_RU;
 				break;
 			case pState::STATE_ATTACK_LD:
-				_state = pState::STATE_ATTACK_RUN_LD;
+				_state = pState::STATE_ATTACK_RUN_BACK_LD;
 				break;
 			case pState::STATE_ATTACK_RD:
 				_state = pState::STATE_ATTACK_RUN_RD;
@@ -403,7 +403,23 @@ void Player::Key_Input(const _float& _DT)
 		}
 		else
 		{
-			_speed = 0.f;
+			if (_speed > 0.f)
+			{
+				_speed -= _DT * _g;
+				if (_speed < 0.f)
+					_speed = 0.f;
+
+				switch (_see)
+				{
+				case pSee::SEE_LEFT :
+					_state = pState::STATE_STANDING;
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+					break;
+				default:
+					_speed = 0.f;
+					break;
+				}
+			}
 		}
 		//if (KEY_DOWN(DIK_C) && !_isJump)
 		//{
@@ -444,9 +460,6 @@ void Player::SetGrahpic()
 
 	Component_Transform->Set_Scale({ 2.f, 2.f, 2.f });
 
-	_vec3 size = { 0.44f, 1.f, 1.f };
-	size *= 1.2;
-
 	switch (_state)
 	{
 	case pState::STATE_STANDING :
@@ -468,7 +481,7 @@ void Player::SetGrahpic()
 			wsprintfW(FileName, L"Player_Stand_LT%d.png", _frame);
 			break;
 		case pSee::SEE_RU:
-			wsprintfW(FileName, L"StandRT0%d.png", _frame);
+			wsprintfW(FileName, L"Player_Stand_RT%d.png", _frame);
 			break;
 		case pSee::SEE_LD:
 			wsprintfW(FileName, L"Stand_LB0%d.png", _frame);
@@ -477,255 +490,126 @@ void Player::SetGrahpic()
 			wsprintfW(FileName, L"Stand_RB0%d.png", _frame);
 			break;
 		}
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 8);
 		break;
 	case pState::STATE_RUN_UP:
 		wsprintfW(FileName, L"Player_Run_UP%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 8);
 		break;
 	case pState::STATE_RUN_DOWN:
 		wsprintfW(FileName, L"Player_Run_Down%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 8);
 		break;
-
 	case pState::STATE_RUN_LEFT:
 		wsprintfW(FileName, L"Player_Run_LEFT%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 8);
 		break;
-
 	case pState::STATE_RUN_LU:
 		wsprintfW(FileName, L"Player_Run_LU%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 8);
 		break;
 
 	case pState::STATE_RUN_LD:
 		wsprintfW(FileName, L"Player_Run_LD%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 8);
 		break;
 
 	case pState::STATE_RUN_RIGHT:
 		wsprintfW(FileName, L"Player_Run_Right%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 8);
 		break;
 
 	case pState::STATE_RUN_RU:
 		wsprintfW(FileName, L"RTRun0%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 8);
 		break;
 
 	case pState::STATE_RUN_RD:
 		wsprintfW(FileName, L"Player_Run_RD%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 8);
 		break;
 
 	case pState::STATE_ATTACK_LU:
 		wsprintfW(FileName, L"Player_Attack_Stand_LU%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 10)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 10);
 		break;
 
 	case pState::STATE_ATTACK_LD:
 		wsprintfW(FileName, L"Player_Attack_Stand_LD%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 10)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 10);
 		break;
-
 	case pState::STATE_ATTACK_RU:
 		wsprintfW(FileName, L"Player_Attack_Stand_RU%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 10)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 10);
 		break;
 
 	case pState::STATE_ATTACK_RD:
 		wsprintfW(FileName, L"Player_Attack_Stand_RD%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 10)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 10);
 		break;
-
 	case pState::STATE_ATTACK_RUN_LU:
 		wsprintfW(FileName, L"Player_Attack_LU%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 10)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 10);
 		break;
-
 	case pState::STATE_ATTACK_RUN_LD:
 		wsprintfW(FileName, L"Player_Attack_LD%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 10)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 10);
 		break;
-
 	case pState::STATE_ATTACK_RUN_RU:
 		wsprintfW(FileName, L"Player_Attack_RU%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 10)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 10);
 		break;
-
 	case pState::STATE_ATTACK_RUN_RD:
 		wsprintfW(FileName, L"Player_Attack_RD%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 10)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		Anim(FileName, 0.1f, 10);
 		break;
-
-
+	case pState::STATE_ATTACK_RUN_BACK_LU:
+		wsprintfW(FileName, L"Player_Attack_LU%d.png", _frame);
+		Anim(FileName, 0.1f, 10, true);
+		break;
+	case pState::STATE_ATTACK_RUN_BACK_LD:
+		wsprintfW(FileName, L"Player_Attack_LD%d.png", _frame);
+		Anim(FileName, 0.1f, 10, true);
+		break;
+	case pState::STATE_ATTACK_RUN_BACK_RU:
+		wsprintfW(FileName, L"Player_Attack_RU%d.png", _frame);
+		Anim(FileName, 0.1f, 10, true);
+		break;
+	case pState::STATE_ATTACK_RUN_BACK_RD:
+		wsprintfW(FileName, L"Player_Attack_RD%d.png", _frame);
+		Anim(FileName, 0.1f, 10, true);
+		break;
 	default:
-		wsprintfW(FileName, L"Spr_Yeon_Stand_000_0%d.png", _frame);
-
-		Component_Texture->Set_Texture(FileName);
-
-		if (_frameTick > 0.1f)
-		{
-			if (++_frame > 8)
-				_frame = 1;
-
-			_frameTick = 0.f;
-		}
+		wsprintfW(FileName, L"Player_Stand_Down%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
 		break;
 	}
+}
+void Player::Anim(TCHAR FileName[128], float delay, int maxIdx, bool reverse)
+{
+	Component_Texture->Set_Texture(FileName);
+
+	if (!reverse)
+	{
+		if (_frameTick > delay)
+		{
+			if (++_frame > maxIdx)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+	}
+	else
+	{
+		if (_frameTick > delay)
+		{
+			if (--_frame < 1)
+				_frame = maxIdx;
+
+			_frameTick = 0.f;
+		}
+	}
+
 }
 Player* Player::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	Player* PLAYER = new Player(_GRPDEV);
