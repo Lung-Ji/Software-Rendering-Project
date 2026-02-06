@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Header\Bullet_Standard.h" />
     <ClInclude Include="..\Header\Camera.h" />
     <ClInclude Include="..\Header\CubeTile.h" />
     <ClInclude Include="..\Header\DungeonScene.h">
@@ -214,6 +215,7 @@
     <ClInclude Include="Tutorial.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Code\Bullet_Standard.cpp" />
     <ClCompile Include="..\Code\Camera.cpp" />
     <ClCompile Include="..\Code\CubeTile.cpp" />
     <ClCompile Include="..\Code\DungeonScene.cpp">
