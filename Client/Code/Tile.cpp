@@ -24,7 +24,7 @@ HRESULT Tile::Component_Initialize() {
 	m_pTexture->Import_TextureFromFolder(L"../../Tile/AnimationObject");
 	m_vecName[TILE_STATE::STATE_NORMAL].push_back(L"../../Tile/Stage1");
 	m_vecName[TILE_STATE::STATE_ANIMATION].push_back(L"../../Tile/AnimationObject");
-
+  
 	return S_OK;
 }
 HRESULT Tile::Ready_GameObject() {

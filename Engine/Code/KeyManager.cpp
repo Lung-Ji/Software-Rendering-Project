@@ -48,7 +48,7 @@ VOID KeyManager::LateUpdate_KeyManager(CONST FLOAT& _DT) {
 }
 
 BOOL KeyManager::KEY_STATE_DOWN(_ubyte _KEY) {
-	if (!KEY_STATE[_KEY] && KeyState[_KEY] & 0x80) {
+	if (!KEY_STATE[_KEY] && (KeyState[_KEY] & 0x80)) {
 		KEY_STATE[_KEY] = !KEY_STATE[_KEY];
 		return true;
 	}

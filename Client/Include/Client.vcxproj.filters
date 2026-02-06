@@ -28,9 +28,6 @@
     <Filter Include="02. Scene\01. StartScene">
       <UniqueIdentifier>{cf46baff-be85-4afa-b63b-eb461dffd27c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. GameObject\99. Camera">
-      <UniqueIdentifier>{4e81e72d-aaba-4f6f-aadb-fd7b0e176224}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. Scene\03. Dungeon">
       <UniqueIdentifier>{03b4ef92-5c7d-4db3-a93d-5822de3e36ef}</UniqueIdentifier>
     </Filter>
@@ -93,6 +90,12 @@
     </Filter>
     <Filter Include="02. Scene\88. MapScene">
       <UniqueIdentifier>{76ac9252-3a58-4a11-91e2-f721f733b660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\06. ProJectile">
+      <UniqueIdentifier>{439bbeef-a25b-49de-a227-87dae46c6b96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\99. Camera">
+      <UniqueIdentifier>{4e81e72d-aaba-4f6f-aadb-fd7b0e176224}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +217,9 @@
     <ClInclude Include="..\Header\MapScene.h">
       <Filter>02. Scene\88. MapScene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Bullet_Standard.h">
+      <Filter>03. GameObject\06. ProJectile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -315,6 +321,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\MapScene.cpp">
       <Filter>02. Scene\88. MapScene</Filter>
+   </ClCompile>
+    <ClCompile Include="..\Code\Bullet_Standard.cpp">
+      <Filter>03. GameObject\06. ProJectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
