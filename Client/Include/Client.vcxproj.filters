@@ -88,6 +88,9 @@
     <Filter Include="04. UI\02. Font">
       <UniqueIdentifier>{f7012392-cc5f-455f-87de-da63f8d84670}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Scene\88. MapScene">
+      <UniqueIdentifier>{76ac9252-3a58-4a11-91e2-f721f733b660}</UniqueIdentifier>
+    </Filter>
     <Filter Include="03. GameObject\06. ProJectile">
       <UniqueIdentifier>{439bbeef-a25b-49de-a227-87dae46c6b96}</UniqueIdentifier>
     </Filter>
@@ -211,6 +214,9 @@
     <ClInclude Include="..\Header\MainMenuLogo.h">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\MapScene.h">
+      <Filter>02. Scene\88. MapScene</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\Bullet_Standard.h">
       <Filter>03. GameObject\06. ProJectile</Filter>
     </ClInclude>
@@ -313,6 +319,9 @@
     <ClCompile Include="..\Code\MainMenuLogo.cpp">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\MapScene.cpp">
+      <Filter>02. Scene\88. MapScene</Filter>
+   </ClCompile>
     <ClCompile Include="..\Code\Bullet_Standard.cpp">
       <Filter>03. GameObject\06. ProJectile</Filter>
     </ClCompile>

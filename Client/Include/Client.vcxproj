@@ -185,6 +185,7 @@
     <ClInclude Include="..\Header\MainMenuButton.h" />
     <ClInclude Include="..\Header\MainMenuLogo.h" />
     <ClInclude Include="..\Header\MainUI.h" />
+    <ClInclude Include="..\Header\MapScene.h" />
     <ClInclude Include="..\Header\Monster.h" />
     <ClInclude Include="..\Header\Monster1.h" />
     <ClInclude Include="..\Header\Monster_State.h">
@@ -257,6 +258,7 @@
     <ClCompile Include="..\Code\MainMenuButton.cpp" />
     <ClCompile Include="..\Code\MainMenuLogo.cpp" />
     <ClCompile Include="..\Code\MainUI.cpp" />
+    <ClCompile Include="..\Code\MapScene.cpp" />
     <ClCompile Include="..\Code\Monster.cpp" />
     <ClCompile Include="..\Code\Monster1.cpp" />
     <ClCompile Include="..\Code\Monster_State.cpp">

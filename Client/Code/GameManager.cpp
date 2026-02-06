@@ -23,7 +23,6 @@ VOID	GameManager::Render_GameManager() {
 
 	SceneManager::GetInstance()->Render_SceneManager(GRPDEV);
 
-	TileManager::GetInstance()->Render_TileList();
 #ifdef _DEBUG
 	//cout << "File I/O Ãâ·Â" << endl;
 #endif // _DEBUG

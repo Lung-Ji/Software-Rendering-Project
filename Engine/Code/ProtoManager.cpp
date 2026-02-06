@@ -22,7 +22,7 @@ HRESULT		ProtoManager::Ready_Prototype(LPDIRECT3DDEVICE9 _GRPDEV) {
 	ComponentList.push_back(SpriteObject::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_SPRITE		= 12
 	ComponentList.push_back(Collider::Create(_GRPDEV));									//COMPONENT_TYPE::COMPONENT_COLLIDER	= 13
 	ComponentList.push_back(StateMachine::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_FSM			= 14
-	
+	ComponentList.push_back(TileInfo::Create(_GRPDEV));								    //COMPONENT_TYPE::COMPONENT_TILEINFO	= 15
 	return S_OK;
 }
 Component*	ProtoManager::Clone_Prototype(COMPONENT_TYPE _TYPE) {

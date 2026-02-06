@@ -76,8 +76,11 @@
     <Filter Include="10. CollisionManager">
       <UniqueIdentifier>{5b2479a8-ade8-4ea4-916a-156bb09c66f3}</UniqueIdentifier>
     </Filter>
-     <Filter Include="10. UIManager">
+    <Filter Include="10. UIManager">
       <UniqueIdentifier>{06dba40a-cde8-4d74-a015-c5cfb226400f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Component\06.Tile">
+      <UniqueIdentifier>{4e2a987d-50f6-4e59-bd84-9e0016b96795}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +162,7 @@
     <ClInclude Include="..\Header\TileImageManager.h">
       <Filter>08. TileManager\TileImageManager</Filter>
     </ClInclude>
-     <ClInclude Include="..\Header\Collider.h">
+    <ClInclude Include="..\Header\Collider.h">
       <Filter>99. Component\05. Collider</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\CollisionManager.h">
@@ -167,6 +170,9 @@
     </ClInclude>
     <ClInclude Include="..\Header\UIManager.h">
       <Filter>10. UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\TileInfo.h">
+      <Filter>99. Component\06.Tile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +241,10 @@
     </ClCompile>
     <ClCompile Include="..\Code\CollisionManager.cpp">
       <Filter>10. CollisionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UIManager.cpp" />
+    <ClCompile Include="..\Code\TileInfo.cpp">
+      <Filter>99. Component\06.Tile</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

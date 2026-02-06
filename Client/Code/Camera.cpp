@@ -60,7 +60,7 @@ VOID CameraObject::LateUpdate_GameObject(const _float& _DT) {
 		POINT       ptMouse{ WINCX >> 1, WINCY >> 1 };
 
 		ClientToScreen(hWnd, &ptMouse);
-		//SetCursorPos(ptMouse.x, ptMouse.y);
+		SetCursorPos(ptMouse.x, ptMouse.y);
 
 		Camera_Rotation_Control(_DT);
 	}

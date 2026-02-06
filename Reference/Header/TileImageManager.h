@@ -21,7 +21,7 @@ public:
     void            Delete_TileImage(_vec3 vPos, _vec3 Origin, _vec3 vDir);
     HRESULT         Update_TileImageList(const _float& fTimeDetla);
     void            Render_TileImageList();
-
+   
 private:
     vector<Texture*>     m_vecTileImage[TILE_IMAGEPAGE::IMAGEPAGE_END];
 

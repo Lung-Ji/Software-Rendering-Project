@@ -28,6 +28,7 @@ HRESULT Player::Ready_GameObject() {
 	_float angle = acosf(D3DXVec3Dot(D3DXVec3Normalize(&cameraDir, &cameraDir), D3DXVec3Normalize(&planeDir, &planeDir)));
 	_cameraAngle = angle / D3DX_PI * 180.f;
 
+	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
 	Component_Transform->Rotation(ROT_X, 90.f - _cameraAngle);
 	Component_Transform->Set_Pos({ 5.f, 1.f, 5.f });
 
@@ -82,9 +83,9 @@ HRESULT Player::Component_Initialize() {
 	Component_Texture	= ADD_COMPONENT_TEXTURE;
 	//Component_FSM		= ADD_COMPONENT_FSM;
 
-	Component_Collider = ADD_COMPONENT_COLLIDER;					// Ãæµ¹Ã¼ ÄÄÆ÷³ÍÆ® Ãß°¡
-	Component_Collider->Set_CenterPos(Component_Transform);			// Ãæµ¹Ã¼°¡ ¿ÀºêÁ§Æ®¸¦ µû¶ó ´Ù´Ïµµ·Ï
-	Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// Ãæµ¹Ã¼ÀÇ ¹üÀ§ Á¶Àý
+	Component_Collider = ADD_COMPONENT_COLLIDER;					// ì¶©ëŒì²´ ì»´í¬ë„ŒíŠ¸ ì¶”ê°€
+	Component_Collider->Set_CenterPos(Component_Transform);			// ì¶©ëŒì²´ê°€ ì˜¤ë¸Œì íŠ¸ë¥¼ ë”°ë¼ ë‹¤ë‹ˆë„ë¡
+	Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// ì¶©ëŒì²´ì˜ ë²”ìœ„ ì¡°ì ˆ
 
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
@@ -97,7 +98,7 @@ void Player::IDLE_STATE(const _float& _DT)
 {
 	// Idle_Final_Input(_DT);
 
-	if (KEY_DOWN(DIK_F3)) {	//	¸¶¿ì½º Ä¿¼­ °íÁ¤ ¿©ºÎ TRUE = °íÁ¤, FALSE = °íÁ¤ ÇØÁ¦
+	if (KEY_DOWN(DIK_F3)) {	//	ë§ˆìš°ìŠ¤ ì»¤ì„œ ê³ ì • ì—¬ë¶€ TRUE = ê³ ì •, FALSE = ê³ ì • í•´ì œ
 		Debug ? Debug = FALSE : Debug = TRUE;
 	}
 
