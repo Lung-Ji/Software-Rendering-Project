@@ -110,4 +110,5 @@ private:
 	float			_defultJumpSpeed;
 	float			_jumpSpeed;
 	float			_g;
+	float			_slideTime;
 };

@@ -14,10 +14,11 @@ HRESULT Player::Ready_GameObject() {
 	_defaultSpeed = 8.f;
 	_speed = 0.f;
 
+	_slideTime = 0.f;
 	_isJump = false;
 	_defultJumpSpeed = 50.f;
 	_jumpSpeed = 0.f;
-	_g = 9.8f;
+	_g = 30.f;
 	_frame = 1;
 
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
@@ -405,15 +406,59 @@ void Player::Key_Input(const _float& _DT)
 		{
 			if (_speed > 0.f)
 			{
-				_speed -= _DT * _g;
-				if (_speed < 0.f)
-					_speed = 0.f;
+				if (_slideTime < 0.001f && _speed <= _defaultSpeed * 0.5) {
+					_speed = 0.f; _slideTime = 0.f;
+				}
 
+				_slideTime += _DT;
+				_speed -= _DT * _g;
+				if (_speed < 0.f){
+					_speed = 0.f;
+					_slideTime = 0.f;
+				}
+					
+				float tempSpeed = _speed;
 				switch (_see)
 				{
 				case pSee::SEE_LEFT :
 					_state = pState::STATE_STANDING;
 					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+					break;
+				case pSee::SEE_RIGHT:
+					_state = pState::STATE_STANDING;
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+					break;
+				case pSee::SEE_UP:
+					_state = pState::STATE_STANDING;
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+					break;
+				case pSee::SEE_DOWN:
+					_state = pState::STATE_STANDING;
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
+					break;
+				case pSee::SEE_LU:
+					_state = pState::STATE_STANDING;
+					tempSpeed = tempSpeed * cos(D3DX_PI * 0.25f);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -tempSpeed, _DT);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), tempSpeed, _DT);
+					break;
+				case pSee::SEE_RU:
+					_state = pState::STATE_STANDING;
+					tempSpeed = tempSpeed * cos(D3DX_PI * 0.25f);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), tempSpeed, _DT);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), tempSpeed, _DT);
+					break;
+				case pSee::SEE_LD:
+					_state = pState::STATE_STANDING;
+					tempSpeed = tempSpeed * cos(D3DX_PI * 0.25f);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -tempSpeed, _DT);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -tempSpeed, _DT);
+					break;
+				case pSee::SEE_RD:
+					_state = pState::STATE_STANDING;
+					tempSpeed = tempSpeed * cos(D3DX_PI * 0.25f);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), tempSpeed, _DT);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -tempSpeed, _DT);
 					break;
 				default:
 					_speed = 0.f;
@@ -466,65 +511,109 @@ void Player::SetGrahpic()
 		switch (_see)
 		{
 		case pSee::SEE_DOWN :
-			wsprintfW(FileName, L"Player_Stand_Down%d.png", _frame);
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Player_Stand_Down%d.png", _frame);
+			}
+			else {
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_Down_Slide%d.png", _frame);
+			}
 			break;
 		case pSee::SEE_UP:
-			wsprintfW(FileName, L"Player_Stand_UP%d.png", _frame);
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Player_Stand_UP%d.png", _frame);
+			}
+			else {
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_Up_Slide%d.png", _frame);
+			}
 			break;
 		case pSee::SEE_RIGHT:
-			wsprintfW(FileName, L"StandRS0%d.png", _frame);
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"StandRS0%d.png", _frame);
+			}
+			else {
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_Right_Slide%d.png", _frame);
+			}
 			break;
 		case pSee::SEE_LEFT:
-			wsprintfW(FileName, L"Player_Stand_Left%d.png", _frame);
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Player_Stand_Left%d.png", _frame);
+			}
+			else{
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_Left_Slide%d.png", _frame);
+			}
 			break;
 		case pSee::SEE_LU:
+			if (_frame > 8) _frame = 1;
 			wsprintfW(FileName, L"Player_Stand_LT%d.png", _frame);
 			break;
 		case pSee::SEE_RU:
+			if (_frame > 8) _frame = 1;
 			wsprintfW(FileName, L"Player_Stand_RT%d.png", _frame);
 			break;
 		case pSee::SEE_LD:
+			if (_frame > 8) _frame = 1;
 			wsprintfW(FileName, L"Stand_LB0%d.png", _frame);
 			break;
 		case pSee::SEE_RD:
+			if (_frame > 8) _frame = 1;
 			wsprintfW(FileName, L"Stand_RB0%d.png", _frame);
 			break;
 		}
-		Anim(FileName, 0.1f, 8);
+		if (_speed <= 0)
+			Anim(FileName, 0.1f, 8);
+		else
+			Anim(FileName, 0.1f, 4);
+		
 		break;
 	case pState::STATE_RUN_UP:
+		if (_frame > 8) _frame = 1;
 		wsprintfW(FileName, L"Player_Run_UP%d.png", _frame);
 		Anim(FileName, 0.1f, 8);
 		break;
 	case pState::STATE_RUN_DOWN:
+		if (_frame > 8) _frame = 1;
 		wsprintfW(FileName, L"Player_Run_Down%d.png", _frame);
 		Anim(FileName, 0.1f, 8);
 		break;
 	case pState::STATE_RUN_LEFT:
+		if (_frame > 8) _frame = 1;
 		wsprintfW(FileName, L"Player_Run_LEFT%d.png", _frame);
 		Anim(FileName, 0.1f, 8);
 		break;
 	case pState::STATE_RUN_LU:
+		if (_frame > 8) _frame = 1;
 		wsprintfW(FileName, L"Player_Run_LU%d.png", _frame);
 		Anim(FileName, 0.1f, 8);
 		break;
 
 	case pState::STATE_RUN_LD:
+		if (_frame > 8) _frame = 1;
 		wsprintfW(FileName, L"Player_Run_LD%d.png", _frame);
 		Anim(FileName, 0.1f, 8);
 		break;
 
 	case pState::STATE_RUN_RIGHT:
+		if (_frame > 8) _frame = 1;
 		wsprintfW(FileName, L"Player_Run_Right%d.png", _frame);
 		Anim(FileName, 0.1f, 8);
 		break;
 
 	case pState::STATE_RUN_RU:
+		if (_frame > 8) _frame = 1;
 		wsprintfW(FileName, L"RTRun0%d.png", _frame);
 		Anim(FileName, 0.1f, 8);
 		break;
 
 	case pState::STATE_RUN_RD:
+		if (_frame > 8) _frame = 1;
 		wsprintfW(FileName, L"Player_Run_RD%d.png", _frame);
 		Anim(FileName, 0.1f, 8);
 		break;
@@ -576,10 +665,12 @@ void Player::SetGrahpic()
 		Anim(FileName, 0.1f, 10, true);
 		break;
 	case pState::STATE_ATTACK_RUN_BACK_RD:
+		if (_frame > 10) _frame = 1;
 		wsprintfW(FileName, L"Player_Attack_RD%d.png", _frame);
 		Anim(FileName, 0.1f, 10, true);
 		break;
 	default:
+		if (_frame > 8) _frame = 1;
 		wsprintfW(FileName, L"Player_Stand_Down%d.png", _frame);
 		Anim(FileName, 0.1f, 8);
 		break;
