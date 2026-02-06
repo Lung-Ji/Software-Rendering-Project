@@ -94,9 +94,6 @@
     <Filter Include="02. Scene\99. DebugScene">
       <UniqueIdentifier>{463a72e6-4ff4-4d4b-8a1f-42b0355fbd5e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. Scene\99. MapScene">
-      <UniqueIdentifier>{6d0fd941-630a-451e-b6d4-9323d821d0bb}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -217,9 +214,6 @@
     <ClInclude Include="..\Header\DebugScene.h">
       <Filter>02. Scene\99. DebugScene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\MapScene.h">
-      <Filter>02. Scene\99. MapScene</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -321,9 +315,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\DebugScene.cpp">
       <Filter>02. Scene\99. DebugScene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\MapScene.cpp">
-      <Filter>02. Scene\99. MapScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

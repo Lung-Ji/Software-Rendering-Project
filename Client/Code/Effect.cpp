@@ -62,6 +62,30 @@ INT  Effect::Update_GameObject(CONST FLOAT& _DT) {
 }
 VOID Effect::LateUpdate_GameObject(CONST FLOAT& _DT) {
 	if (!Sustainablility)	return ;
+	_matrix		BillboardMat, WorldMat, ViewMat;
+
+	WorldMat = *Component_Transform->Get_World();
+	GRPDEV->GetTransform(D3DTS_VIEW, &ViewMat);
+
+	D3DXMatrixIdentity(&BillboardMat);
+
+	// y축 회전만 제거
+	BillboardMat._11 = ViewMat._11;
+	BillboardMat._13 = ViewMat._13;
+	BillboardMat._31 = ViewMat._31;
+	BillboardMat._33 = ViewMat._33;
+
+	D3DXMatrixInverse(&BillboardMat, 0, &BillboardMat);
+
+	// 주의 할 것
+	WorldMat = BillboardMat * WorldMat;
+
+	Component_Transform->Set_World(&WorldMat);
+
+	_vec3		vPos;
+	Component_Transform->Get_Info(INFO_POS, &vPos);
+
+	AlphaSorting(&vPos);
 	if (FrameTick > PlayTime / ENDFRAME) {
 		if (TextureIndex++ >= ENDFRAME - 2) {	
 			if (Repeatable) { TextureIndex = 0;}
