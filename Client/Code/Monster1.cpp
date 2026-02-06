@@ -214,7 +214,7 @@ VOID Monster1::State_Attacking(const _float& _DT)
 		Speed = Default_Speed * 5;
 		Timer2 += _DT;
 
-		if (Timer2 > 0.1f)
+		if (Timer2 > 0.2f)
 		{
 			Timer2 = 0.f;
 			GameObject* pBullet = Bullet_Standard::Create(GRPDEV);
@@ -227,7 +227,7 @@ VOID Monster1::State_Attacking(const _float& _DT)
 				_vec3 vShootingDir;
 				vShootingDir = *pTargetPos - *MYPOS;
 				static_cast<Bullet_Standard*>(pBullet)->Set_Dir(*D3DXVec3Normalize(&vShootingDir, &vShootingDir));
-				SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)
+				SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_STATIC_OBJECT)
 					->Add_GameObject(pBullet);
 			}
 		}
