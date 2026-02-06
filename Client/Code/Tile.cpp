@@ -12,7 +12,7 @@ Tile::~Tile() {}
 HRESULT Tile::Ready_GameObject() {
 
 	if (FAILED(Component_Initialize())) return E_FAIL;
-	wstring path = L"../../../Tile";
+	wstring path = L"../../Resource/Tile";
 	BITMAPINFOHEADER InfoHeader{};
 	BITMAPFILEHEADER fileHeader{};
 	_wfinddata64_t Data;
