@@ -23,10 +23,13 @@ VOID CXZTile::LateUpdate_GameObject(const _float& _DT) {
 
 VOID CXZTile::Render_GameObject()
 {
+	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
 	GRPDEV->SetTexture(0, m_pTileInfo->Get_TileTexture());
 	if(m_pBuffer!=nullptr)
 	m_pBuffer->Render_Buffer();
+
+	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
 
 void CXZTile::Set_Buffer(TILE_SIDE eid)

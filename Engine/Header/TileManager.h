@@ -28,8 +28,9 @@ public:
     void            Set_TileMode(TILEMODE_CHANGE eMode) { m_eMode = eMode; }
 
     void            Save_Tile(HWND g_hWnd);
-    void     Load_Tile(HWND g_hWnd);
-    void            Load_TilePush(GameObject* pGame) { m_vecTileBuffer[TILEMODE_CHANGE::MODE_TILE].push_back(pGame); }
+    void            Load_TilePush(GameObject* pGame,TILEMODE_CHANGE eMod) { m_vecTileBuffer[eMod].push_back(pGame); }
+
+    void            Reset_TileList();
 private:
     TILEMODE_CHANGE         m_eMode;
     vector<GameObject*>     m_vecTileBuffer[TILEMODE_CHANGE::MODE_END];

@@ -11,7 +11,7 @@ HRESULT Terrain::Ready_GameObject() {
 }
 INT	Terrain::Update_GameObject(const _float& _DT) {
 	GameObject::Update_GameObject(_DT);
-	RenderManager::GetInstance()->Add_RenderGroup(RENDER_TILE, this);
+	RenderManager::GetInstance()->Add_RenderGroup(RENDER_NONALPHA, this);
 	return 0;
 }
 VOID Terrain::LateUpdate_GameObject(const _float& _DT) {

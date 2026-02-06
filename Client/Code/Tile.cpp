@@ -67,8 +67,11 @@ VOID Tile::LateUpdate_GameObject(const _float& _DT) {
 	{
 		LoadFile();
 	}
+
 	Mode_Change();  //타일 큐브 스왑용 O : 큐브, P : 타일
 	Imgui();
+	auto& io = ImGui::GetIO(); //마우스 ui에서 사용중이면 리턴
+	if (io.WantCaptureMouse) return;
 	Check_TilePoint();
 }
 
@@ -141,16 +144,17 @@ void Tile::Imgui_Setting()
 {
 	_vec3 vScale = *m_pTransform->Get_Scale();
 	_vec3 vRotation = *m_pTransform->Get_Rotation();
-	_float fMin(0.0f), fMax(10);
-	_float fRotation(0.f), fRotationMax(180);
-
+	_float fMin(0.0f), fMax(100);
+	_float fRotation(-180.f), fRotationMax(180);
+	_vec3 vSca = { 1.f,1.f,1.f };
+	_vec3 vRot = { 0.f,0.f,0.f };
 	if (!ImGui::CollapsingHeader("Setting"))
 		return;
 	else
 	{
 		ImGui::Text("Scale"); //텍스트 
 		ImGui::SameLine(50.f, 0.f);//텍스트 오른쪽에
-		ImGui::SliderFloat3("##1", vScale, fMin, fMax); //scale 출력
+		ImGui::SliderFloat3("##1", vScale, fMin, fMax); //scale 출력 ##하면 글자 다음으로 출력됨
 		m_pTransform->Set_Scale(vScale);
 
 		ImGui::Text("Rotation");
@@ -158,6 +162,18 @@ void Tile::Imgui_Setting()
 		ImGui::SliderFloat3("##2", vRotation, fRotation, fRotationMax);
 		m_pTransform->Set_Rotation(vRotation);
 
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		//마우스 올라갔을때 버튼색
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		//클릭했을 때 버튼 색
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button("Reset Option"))
+		{
+			m_pTransform->Set_Scale(vSca);
+			m_pTransform->Set_Rotation(vRot);
+		}
+		ImGui::PopStyleColor(3);
+		
 		Imgui_Image();
 
 	}
@@ -167,18 +183,9 @@ void Tile::Imgui_Setting()
 void Tile::Imgui_Image()
 {
 	_bool bSetTexture = false;
-	ImGui::Text("IMAGE");
-	ImGui::SameLine(50.f, 0.f);
-	//기본 버튼 색
-	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-	//마우스 올라갔을때 버튼색
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-	//클릭했을 때 버튼 색
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-	ImGui::Button("First");
-	ImGui::PopStyleColor(3);	
 
-	if (!ImGui::CollapsingHeader("Tiles"))
+
+	if (!ImGui::CollapsingHeader("Tiles")) //그냥 타이틀 이름
 		return;
 
 	ImGui::Text("Display Choice");
@@ -200,7 +207,7 @@ void Tile::Imgui_Image()
 		if (ImGui::ImageButton(scat,
 			m_pTexture->Find_Texture((m_vecImage[i].wstr)->c_str()),
 			ImVec2(size.x * 0.1f, size.y * 0.1f), ImVec2(0.f, 0.f), ImVec2(1.f, 1.f)
-			, ImVec4(0, 0, 0, 0)))
+			, ImVec4(0, 0, 0, 0))) //이미지 클릭 관련해서 true false 반환
 		{
 			m_pTileName = m_vecImage[i].wstr->c_str();
 		}
@@ -219,7 +226,7 @@ void Tile::Imgui_ModeChanger()
 	_int  iChoice(0);
 	const char* cTile[] = { "TILE_FRONT","TILE_RIGHT","TILE_LEFT","TILEBACK"};
 	const char* cSelect_Tile = nullptr;
-
+	
 	if (!ImGui::CollapsingHeader("TILEMode"))
 		return;
 	else
@@ -230,9 +237,13 @@ void Tile::Imgui_ModeChanger()
 	    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
 	    //클릭했을 때 버튼 색
 	    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-	    if (ImGui::Button("Mode_END"))
-	    	m_eMode = TILEMODE_CHANGE::MODE_END;
-	    ImGui::PopStyleColor(3);
+		
+		if (ImGui::Button("Mode_END"))
+		{
+			m_eMode = TILEMODE_CHANGE::MODE_END;
+			m_eTile = TILE_SIDE::TILE_END;
+		}
+		ImGui::PopStyleColor(3);
 
 		//////////////////MODE_TILE////////////////////////
 		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
@@ -313,25 +324,23 @@ HRESULT Tile::LoadFile()
 	}
 
 	DWORD	dwByte(0);		// eof 역할
-
 	_int             iTilenum = 0;
 	TILE_SIDE        eTileSide = TILE_SIDE::TILE_END;
 	TILE_STATE       eTileState = TILE_STATE::STATE_END;
 	TILEMODE_CHANGE  eTileMode = TILEMODE_CHANGE::MODE_END;
-	_tchar cTileName[256] = {};
+	_tchar cTileName[128] = {};
 	_vec3		     Info = {};
 	_vec3 Scale = {};
 	_vec3 Rotation = {};
-
+	TileManager::GetInstance()->Render_TileList();
 	while (true)
 	{
-
 		ReadFile(hFile, &Info,		 sizeof(_vec3),			  &dwByte, NULL);
 		ReadFile(hFile, &iTilenum,   sizeof(_int),			  &dwByte, NULL);
 		ReadFile(hFile, &eTileSide,  sizeof(TILE_SIDE),		  &dwByte, NULL);
 		ReadFile(hFile, &eTileState, sizeof(TILE_STATE),	  &dwByte, NULL);
 		ReadFile(hFile, &eTileMode,  sizeof(TILEMODE_CHANGE), &dwByte, NULL);
-		ReadFile(hFile, &cTileName,  sizeof(_tchar) * 256,	  &dwByte, NULL);
+		ReadFile(hFile, &cTileName,  sizeof(_tchar) * 128,	  &dwByte, NULL);
 		ReadFile(hFile, &Scale,		 sizeof(_vec3),			  &dwByte, NULL);
 		ReadFile(hFile, &Rotation,   sizeof(_vec3),			  &dwByte, NULL);
 
@@ -339,6 +348,7 @@ HRESULT Tile::LoadFile()
 			break;
 
 		GameObject* GOBJ = nullptr;
+		GRPDEV->AddRef();
 		GOBJ = CXZTile::Create(GRPDEV, eTileSide);
 		GOBJ->Set_ObjectTag(L"CXZTile");
 
@@ -346,7 +356,7 @@ HRESULT Tile::LoadFile()
 		dynamic_cast<Transform*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(Scale);
 		dynamic_cast<Transform*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Rotation(Rotation);
 		dynamic_cast<Transform*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Pos(Info);
-		TileManager::GetInstance()->Load_TilePush(GOBJ);
+		TileManager::GetInstance()->Load_TilePush(GOBJ, eTileMode);
 	}
 
 	MSG_BOX("로드 성공");

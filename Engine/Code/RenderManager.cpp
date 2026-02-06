@@ -50,15 +50,17 @@ VOID RenderManager::Render_UI(LPDIRECT3DDEVICE9& _GRPDEV)	{
 VOID RenderManager::Render_TILE(LPDIRECT3DDEVICE9& _GRPDEV)
 {
 
+	
 	_GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	_GRPDEV->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	_GRPDEV->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
+
+	TileManager::GetInstance()->Render_TileList();
 	for (auto& _OBJ : RenderGroup[RENDER_TILE])
 		_OBJ->Render_GameObject();
 
-	TileManager::GetInstance()->Render_TileList();
 	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	_GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	return VOID();

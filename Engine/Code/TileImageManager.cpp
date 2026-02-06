@@ -35,6 +35,8 @@ void TileImageManager::Render_TileImageList()
 {
 }
 
+
+
 void TileImageManager::Free()
 {
 	for (size_t i = 0; i < TILE_IMAGEPAGE::IMAGEPAGE_END; ++i)
