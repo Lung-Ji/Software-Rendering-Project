@@ -148,7 +148,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\Collider.h" />
     <ClInclude Include="..\Header\CollisionManager.h" />
     <ClInclude Include="..\Header\Component.h" />
-    <ClInclude Include="..\Header\EffectManager.h "/>
+    <ClInclude Include="..\Header\EffectManager.h " />
     <ClInclude Include="..\Header\TileInfo.h" />
     <ClInclude Include="..\Header\Engine_Define.h" />
     <ClInclude Include="..\Header\Engine_Enum.h" />
