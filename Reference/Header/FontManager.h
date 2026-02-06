@@ -1,7 +1,6 @@
 #pragma once
 #include "Base.h"
 #include "Engine_Define.h"
-#include "Font.h"
 
 BEGIN(Engine)
 ENGINE_DLL class FontManager : public Base{

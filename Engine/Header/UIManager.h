@@ -1,11 +1,15 @@
 #pragma once
 
-#include "Base.h"
-#include "GameObject.h"
-#include "Sprite.h"
-#include "Engine_Define.h"
+#include "Component.h"
+#include "UISprite.h"
 
 BEGIN(Engine)
+
+enum class UIType {
+	Inventory,
+	Object,
+	Settings
+};
 
 class ENGINE_DLL UIManager : public Base {
 	DECLARE_SINGLETON(UIManager)
@@ -15,17 +19,35 @@ private:
 	virtual ~UIManager();
 
 public:
-	HRESULT Ready_UIObject(SpriteObject* _Component_Sprite );
-	VOID  Show_UI(SpriteObject* _Sprite);
-	VOID	Hide_UI(SpriteObject* _Sprite);
+	HRESULT Ready_UIObject(UIManager* _Component_Sprite );
+	UISprite* Find_Sprite(const _tchar* pSpriteTag);
 
+	UISprite* Set_UIType(UIType _type);
+
+	VOID  Show_UI(UIManager* _Sprite);
+	VOID	Hide_UI(UIManager* _Sprite);
+
+public:
+	HRESULT		Ready_UI();
+	INT				Update_UI();
+	VOID			Render_UI(CONST _tchar* _UINAME);
+
+	HRESULT		Import_UISprite(const _tchar* _UINAME, CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT, FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY = 255);
+
+public:
+	static  UIManager* Create(LPDIRECT3DDEVICE9 _GRPDEV,CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT,
+  FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY);
 
 private:
 	virtual VOID	Free();
 	BOOL		isActive;
+
 private:
-	std::list<vector<SpriteINFO>*> ActiveList;
-	std::list<vector<SpriteINFO>*> ReverseList;
+	ID3DXSprite* Sprite;
+	map<const _tchar*, SpriteINFO> UIList;
+private:
+	virtual VOID Free();
+
 };
 
 END

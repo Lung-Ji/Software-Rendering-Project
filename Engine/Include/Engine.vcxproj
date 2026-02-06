@@ -152,8 +152,12 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\Engine_Macro.h" />
     <ClInclude Include="..\Header\Engine_Struct.h" />
     <ClInclude Include="..\Header\Engine_Typedef.h" />
-    <ClInclude Include="..\Header\Font.h" />
-    <ClInclude Include="..\Header\FontManager.h" />
+    <ClInclude Include="..\Header\Font.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Header\FontManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Header\KeyManager.h" />
     <ClInclude Include="..\Header\Light.h" />
     <ClInclude Include="..\Header\LightManager.h" />
@@ -173,14 +177,19 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\TimeManager.h" />
     <ClInclude Include="..\Header\Transform.h" />
     <ClInclude Include="..\Header\UIManager.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Header\UISprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Buffer.cpp" />
     <ClCompile Include="..\Code\Component.cpp" />
-    <ClCompile Include="..\Code\Font.cpp" />
-    <ClCompile Include="..\Code\FontManager.cpp" />
+    <ClCompile Include="..\Code\Font.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Code\FontManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Code\KeyManager.cpp" />
     <ClCompile Include="..\Code\Light.cpp" />
     <ClCompile Include="..\Code\LightManager.cpp" />
@@ -200,8 +209,9 @@ call Copy.bat</Command>
     <ClCompile Include="..\Code\TimeManager.cpp" />
     <ClCompile Include="..\Code\Transform.cpp" />
     <ClCompile Include="..\Code\UIManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Code\UISprite.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

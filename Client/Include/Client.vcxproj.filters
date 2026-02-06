@@ -88,9 +88,6 @@
     <Filter Include="02. Scene\99. UITest">
       <UniqueIdentifier>{3d87992a-1f5e-4047-b98a-ef2dc5d8e336}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. UI\02. Font">
-      <UniqueIdentifier>{f7012392-cc5f-455f-87de-da63f8d84670}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -189,7 +186,6 @@
     <ClInclude Include="..\Header\Monster1.h">
       <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
     </ClInclude>
-    <ClInclude Include="Tutorial.h" />
     <ClInclude Include="..\Header\MainMenuButton.h">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClInclude>
@@ -207,9 +203,6 @@
     </ClInclude>
     <ClInclude Include="..\Header\MainMenuLogo.h">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Font.h">
-      <Filter>04. UI\02. Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -291,7 +284,6 @@
     <ClCompile Include="..\Code\Monster1.cpp">
       <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
     </ClCompile>
-    <ClCompile Include="Tutorial.cpp" />
     <ClCompile Include="..\Code\MainMenuButton.cpp">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClCompile>
@@ -309,9 +301,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\MainMenuLogo.cpp">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Font.cpp">
-      <Filter>04. UI\02. Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
