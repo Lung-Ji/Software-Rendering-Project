@@ -171,7 +171,9 @@
     <ClInclude Include="..\Header\TileInfo.h">
       <Filter>99. Component\06. Tile</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\EffectManager.h " />
+    <ClInclude Include="..\Header\EffectManager.h ">
+      <Filter>12. EffectManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GraphicDevice.cpp">

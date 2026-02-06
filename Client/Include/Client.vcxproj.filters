@@ -192,9 +192,6 @@
     <ClInclude Include="BossMonster.h">
       <Filter>03. GameObject\02. Monster\01. Boss</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Monster_State.h">
-      <Filter>03. GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\Monster1.h">
       <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
     </ClInclude>
@@ -224,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="..\Header\Bullet_Standard.h">
       <Filter>03. GameObject\07. ProJectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster_State.h">
+      <Filter>03. GameObject\02. Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -299,9 +299,6 @@
     <ClCompile Include="BossMonster.cpp">
       <Filter>03. GameObject\02. Monster\01. Boss</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Monster_State.cpp">
-      <Filter>03. GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Monster1.cpp">
       <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
     </ClCompile>
@@ -331,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Bullet_Standard.cpp">
       <Filter>03. GameObject\07. ProJectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster_State.cpp">
+      <Filter>03. GameObject\02. Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
