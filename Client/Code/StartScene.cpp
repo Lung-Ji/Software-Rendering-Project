@@ -9,6 +9,7 @@ HRESULT	StartScene::Ready_Scene() {
 	ProtoManager::GetInstance()->Push_ProtoType(GRPDEV, StateMachine::Create(GRPDEV));
 	if (FAILED(Ready_Enviroment_Layer(L"Enviroment_Layer")))	return E_FAIL;
 	if (FAILED(Ready_GameLogic_Layer(L"GameLogic_Layer")))		return E_FAIL;
+	if (FAILED(Ready_Tile_Layer(L"Tile_Layer")))				return E_FAIL;
 	KeyManager::GetInstance()->Ready_KeyManager(hInst, hWnd);
 	CollisionManager::GetInstance()->Get_AllObjectOfScene();
 	return S_OK;
@@ -86,6 +87,8 @@ if (nullptr == GOBJ)					return E_FAIL;
 	if (nullptr == GOBJ)					return E_FAIL;
 	if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 
+
+
 	LayerList.push_back(LYR);
 	
 	return S_OK;
@@ -107,6 +110,13 @@ HRESULT StartScene::Ready_GameLogic_Layer(CONST TCHAR* _LTAG) {
 	return S_OK;
 }
 HRESULT StartScene::Ready_UserInterface_Layer(CONST TCHAR* _LTAG) {
+	return S_OK;
+}
+HRESULT StartScene::Ready_Tile_Layer(CONST TCHAR* _LTAG)
+{
+
+		
+
 	return S_OK;
 }
 StartScene* StartScene::Create(LPDIRECT3DDEVICE9 _GRPDEV) {

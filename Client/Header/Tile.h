@@ -25,26 +25,33 @@ public:
     void                        Imgui();
     void                        Imgui_Setting();
     void                        Imgui_Image();
+    void                        Imgui_ModeChanger();
+                            
 private:
+    HRESULT                     LoadFile();
     HRESULT			            Component_Initialize();
     _bool                       Check_Bottom(_vec3* vOrigin);
     void                        Check_TilePoint();
     void                        Check_Distance(_vec3 vMouse);
     //타일 체크용 버퍼
-    Buffer*         m_pBuffer;
-    Texture*        m_pTexture;
-    Transform*      m_pTransform;
+    Buffer*                      m_pBuffer;
+    Buffer*                      m_pTileLeft;
+    Buffer*                      m_pTileRight;
+    Buffer*                      m_pTileBack;
+    Buffer*                      m_pTileFront;
+    Texture*                     m_pTexture;
+    Transform*                   m_pTransform;
 
-    vector<ImageFile>     m_vecImage;
-    _bool           m_bTileCheck;
+    vector<ImageFile>            m_vecImage;
+    _bool                        m_bTileCheck;
 
 
-    const _tchar*   m_pTileName;
+    const _tchar*                m_pTileName;
 
 private:
-    _vec2               m_vXZ;
-    TILE_SIDE           m_eTile;
-    TILEMODE_CHANGE     m_eMode;
+    TILE_SIDE                    m_eTile;
+    TILE_STATE                   m_eTileState;
+    TILEMODE_CHANGE              m_eMode;
 public:
     static      Tile* Create(LPDIRECT3DDEVICE9 pGraphicDev);
    

@@ -16,7 +16,7 @@ private:
 	HRESULT		Ready_Enviroment_Layer(CONST TCHAR* _LTAG);
 	HRESULT		Ready_GameLogic_Layer(CONST TCHAR* _LTAG);
 	HRESULT		Ready_UserInterface_Layer(CONST TCHAR* _LTAG);
-
+	HRESULT		Ready_Tile_Layer(CONST TCHAR* _LTAG);
 public:
 	static	StartScene* Create(LPDIRECT3DDEVICE9 _GRPDEV);
 private:

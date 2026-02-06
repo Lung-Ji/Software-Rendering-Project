@@ -11,7 +11,7 @@ HRESULT Terrain::Ready_GameObject() {
 }
 INT	Terrain::Update_GameObject(const _float& _DT) {
 	GameObject::Update_GameObject(_DT);
-	RenderManager::GetInstance()->Add_RenderGroup(RENDER_NONALPHA, this);
+	RenderManager::GetInstance()->Add_RenderGroup(RENDER_TILE, this);
 	return 0;
 }
 VOID Terrain::LateUpdate_GameObject(const _float& _DT) {
@@ -20,13 +20,13 @@ VOID Terrain::LateUpdate_GameObject(const _float& _DT) {
 VOID Terrain::Render_GameObject() {
 
 	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-
+	GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
 	GRPDEV->SetTexture(0, StaticTexture);
 
 	Component_Buffer->Render_Buffer();
-
+	GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	GRPDEV->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 HRESULT Terrain::Component_Initialize() {
