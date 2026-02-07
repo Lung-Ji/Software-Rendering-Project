@@ -31,9 +31,10 @@
 #include "Camera.h"
 #include "Terrain.h"
 #include "MainUI.h"
-#include "Effect.h"
+#include "PlayerEffect.h"
+#include "MonsterEffect.h"
 #include "NPC.h"
-//
+
 #include "Monster_State.h"
 //#include "Monster.h"
 #include "Monster1.h"

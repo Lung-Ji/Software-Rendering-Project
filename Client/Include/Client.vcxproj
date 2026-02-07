@@ -44,7 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableUnitySupport>false</EnableUnitySupport>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -160,7 +160,8 @@
     <ClInclude Include="..\Header\DungeonScene.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\Header\Effect.h" />
+    <ClInclude Include="..\Header\MonsterEffect.h" />
+    <ClInclude Include="..\Header\PlayerEffect.h" />
     <ClInclude Include="..\Header\GameManager.h" />
     <ClInclude Include="..\Header\GUIManager.h" />
     <ClInclude Include="..\Header\imconfig.h" />
@@ -222,7 +223,8 @@
     <ClCompile Include="..\Code\DungeonScene.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\Code\Effect.cpp" />
+    <ClCompile Include="..\Code\MonsterEffect.cpp" />
+    <ClCompile Include="..\Code\PlayerEffect.cpp" />
     <ClCompile Include="..\Code\GameManager.cpp" />
     <ClCompile Include="..\Code\GUIManager.cpp" />
     <ClCompile Include="..\Code\imgui.cpp">

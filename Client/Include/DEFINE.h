@@ -12,8 +12,8 @@
 #define KEY_HOLD(KEY_IDX)				KeyManager::GetInstance()->KEY_STATE_HOLD(KEY_IDX)	== TRUE						// 해당 키 입력 유지
 #define KEY_UP(KEY_IDX)					KeyManager::GetInstance()->KEY_STATE_UP(KEY_IDX)	== TRUE						// 해당 키 입력 중지
 
-#define MOUSE_LBUTTON					KeyManager::GetInstance()->MOUSE_LB_DOWN()
-#define MOUSE_RBUTTON					KeyManager::GetInstance()->MOUSE_RB_DOWN()
+#define MOUSE_LBUTTON					KeyManager::GetInstance()->MOUSE_LB_DOWN()										// 마우스 L 버튼 최초 입력
+#define MOUSE_RBUTTON					KeyManager::GetInstance()->MOUSE_RB_DOWN()										// 마우스 R 버튼 최초 입력
 #define MOUSE_MOVE(KEY_IDX)				KeyManager::GetInstance()->Get_MouseMove(KEY_IDX)								// 마우스 움직임 감지
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +26,7 @@
 /////////////////////////////////// COMPONENT //////////////////////////////////////
 
 #define ADD_COMPONENT_TRIANGLE			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TRIANGLE));		// 삼각형 출력 컴포넌트 추가
-#define ADD_COMPONENT_RECTANGLE			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_RECTANGLE),x, y);		// 사각형 출력 컴포넌트 추가
+#define ADD_COMPONENT_RECTANGLE			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_RECTANGLE),x, y);	// 사각형 출력 컴포넌트 추가
 #define ADD_COMPONENT_RECTTEX			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_RECTTEX));		// 사각 텍스쳐 출력 컴포넌트 추가
 #define ADD_COMPONENT_TERRAIN			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TERRAIN));		// 지형 텍스쳐 출력 컴포넌트 추가
 #define ADD_COMPONENT_TRANSFORM			dynamic_cast<Transform*>(Add_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM));	// TRANSFORM 컴포넌트 추가
@@ -46,7 +46,11 @@
 
 /////////////////////////////////// EFFECT /////////////////////////////////////////				
 #define PLAY_PLAYER_EFFECT(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,		\
-	Effect::Create(GRPDEV, SKILL_TYPE, Component_Transform, TRUE, PLAYTIME));						// 이펙트 반복 실행
+	PlayerEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, TRUE, PLAYTIME));						// 이펙트 반복 실행
 #define PLAY_PLAYER_EFFECT_ONCE(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,	\
-	Effect::Create(GRPDEV, SKILL_TYPE, Component_Transform, FALSE, PLAYTIME));						// 이펙트 최초 한번 실행
+	PlayerEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, FALSE, PLAYTIME));					// 이펙트 최초 한번 실행
+#define PLAY_MONSTER_EFFECT(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::MONSTER,		\
+	MonsterEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, TRUE, PLAYTIME));						// 이펙트 반복 실행
+#define PLAY_MONSTER_EFFECT_ONCE(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::MONSTER,	\
+	MonsterEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, FALSE, PLAYTIME));					// 이펙트 최초 한번 실행
 ////////////////////////////////////////////////////////////////////////////////////
