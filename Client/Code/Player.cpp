@@ -28,7 +28,7 @@ HRESULT Player::Ready_GameObject() {
 	_float angle = acosf(D3DXVec3Dot(D3DXVec3Normalize(&cameraDir, &cameraDir), D3DXVec3Normalize(&planeDir, &planeDir)));
 	_cameraAngle = angle / D3DX_PI * 180.f;
 
-	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
+	Component_Transform->Set_Scale({ 2.f, 2.f, 2.f });
 	Component_Transform->Rotation(ROT_X, 90.f - _cameraAngle);
 	Component_Transform->Set_Pos({ 5.f, 1.f, 5.f });
 
@@ -110,6 +110,7 @@ void Player::IDLE_STATE(const _float& _DT)
 		rightDir = { 1.f, 0.f, 0.f };
 		D3DXVec3Normalize(&upDir, &upDir);
 		D3DXVec3Normalize(&rightDir, &rightDir);
+		Component_Transform->Set_Scale({ 2.f, 2.f, 2.f });
 
 		//Component_Transform->Get_Info(INFO_LOOK, &vDir);
 		if (_speed == 0.f)
@@ -144,8 +145,6 @@ void Player::IDLE_STATE(const _float& _DT)
 				_eState = eState::STATE_ATTACK_RU;
 
 		}
-			
-		Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
 
 		if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A))
 		{
