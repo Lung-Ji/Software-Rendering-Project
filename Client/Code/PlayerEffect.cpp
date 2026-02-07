@@ -1,14 +1,14 @@
 #include "../Include/PCH.h"
-#include "Effect.h"
+#include "PlayerEffect.h"
 
-Effect:: Effect(LPDIRECT3DDEVICE9 _GRPDEV)	: GameObject(_GRPDEV), TextureIndex(0), FrameTick(0.f){}
-Effect:: Effect(CONST GameObject& _RHS)		: GameObject(_RHS), TextureIndex(0), FrameTick(0.f) {}
-Effect::~Effect(){}
+PlayerEffect:: PlayerEffect(LPDIRECT3DDEVICE9 _GRPDEV)	: GameObject(_GRPDEV), TextureIndex(0), FrameTick(0.f){}
+PlayerEffect:: PlayerEffect(CONST GameObject& _RHS)		: GameObject(_RHS), TextureIndex(0), FrameTick(0.f) {}
+PlayerEffect::~PlayerEffect(){}
 
-HRESULT Effect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
+HRESULT PlayerEffect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
-	if (_SKILLTYPE == PLAYER_SKILL::SKILL_1)		{ Make_TextureList(L"Spr_Effect_ExplosionNormal02_");		}
+	if		(_SKILLTYPE == PLAYER_SKILL::SKILL_1)	{ Make_TextureList(L"Spr_Effect_ExplosionNormal02_");		}
 	else if (_SKILLTYPE == PLAYER_SKILL::SKILL_2)	{ Make_TextureList(L"Spr_Ui_Effect_BossClear_lraCharge_");	}
 	else if (_SKILLTYPE == PLAYER_SKILL::SKILL_3)	{ Make_TextureList(L"Spr_Ui_Stage01_TureMapEffect_");		}
 
@@ -29,7 +29,8 @@ HRESULT Effect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOO
 
 	return S_OK;
 }
-HRESULT Effect::Make_TextureList(wstring _FileName) {
+
+HRESULT PlayerEffect::Make_TextureList(wstring _FileName) {
 	INT FRAME = 0;
 	while (++FRAME){
 		wstring FileName = _FileName + to_wstring(FRAME) + L".png";
@@ -42,38 +43,39 @@ HRESULT Effect::Make_TextureList(wstring _FileName) {
 
 	return S_OK;
 }
-INT  Effect::Update_GameObject(CONST FLOAT& _DT) {
+
+INT  PlayerEffect::Update_GameObject(CONST FLOAT& _DT) {
 	if (ObjectDead)	return 0;
 	GameObject::Update_GameObject(_DT);
-
+	 
 	FrameTick += _DT;
 
 	return 0;
 }
-VOID Effect::LateUpdate_GameObject(CONST FLOAT& _DT) {
+VOID PlayerEffect::LateUpdate_GameObject(CONST FLOAT& _DT) {
 	if (ObjectDead)	return ;
-	_matrix		BillboardMat, WorldMat, ViewMat;
-
-	WorldMat = *Component_Transform->Get_World();
-	GRPDEV->GetTransform(D3DTS_VIEW, &ViewMat);
-
-	D3DXMatrixIdentity(&BillboardMat);
-
-	BillboardMat._11 = ViewMat._11;
-	BillboardMat._13 = ViewMat._13;
-	BillboardMat._31 = ViewMat._31;
-	BillboardMat._33 = ViewMat._33;
-
-	D3DXMatrixInverse(&BillboardMat, 0, &BillboardMat);
-
-	WorldMat = BillboardMat * WorldMat;
-
-	Component_Transform->Set_World(&WorldMat);
-
-	_vec3		vPos;
-	Component_Transform->Get_Info(INFO_POS, &vPos);
-
-	AlphaSorting(&vPos);
+	//_matrix		BillboardMat, WorldMat, ViewMat;
+	//
+	//WorldMat = *Component_Transform->Get_World();
+	//GRPDEV->GetTransform(D3DTS_VIEW, &ViewMat);
+	//
+	//D3DXMatrixIdentity(&BillboardMat);
+	//
+	//BillboardMat._11 = ViewMat._11;
+	//BillboardMat._13 = ViewMat._13;
+	//BillboardMat._31 = ViewMat._31;
+	//BillboardMat._33 = ViewMat._33;
+	//
+	//D3DXMatrixInverse(&BillboardMat, 0, &BillboardMat);
+	//
+	//WorldMat = BillboardMat * WorldMat;
+	//
+	//Component_Transform->Set_World(&WorldMat);
+	//
+	//_vec3		vPos;
+	//Component_Transform->Get_Info(INFO_POS, &vPos);
+	//
+	//AlphaSorting(&vPos);
 	if (FrameTick > PlayTime / ENDFRAME) {
 		if (TextureIndex++ >= ENDFRAME - 2) {	
 			if (Repeatable) { TextureIndex = 0;}
@@ -85,7 +87,7 @@ VOID Effect::LateUpdate_GameObject(CONST FLOAT& _DT) {
 		FrameTick = 0.f;
 	}
 }
-VOID Effect::Render_GameObject() {
+VOID PlayerEffect::Render_GameObject() {
 	if (ObjectDead)	return;
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
@@ -97,16 +99,16 @@ VOID Effect::Render_GameObject() {
 
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
-BOOL Effect::OnCollisionEnter(GameObject* _Other) {
+BOOL PlayerEffect::OnCollisionEnter(GameObject* _Other) {
 	return TRUE;
 }	 
-BOOL Effect::OnCollisionStay(GameObject* _Other) {
+BOOL PlayerEffect::OnCollisionStay(GameObject* _Other) {
 	return TRUE;
 }	 
-BOOL Effect::OnCollisionExit(GameObject* _Other) {
+BOOL PlayerEffect::OnCollisionExit(GameObject* _Other) {
 	return TRUE;
 }
-HRESULT	Effect::Component_Initialize() {
+HRESULT	PlayerEffect::Component_Initialize() {
 	Component_Buffer	= ADD_COMPONENT_RECTTEX;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
 
@@ -118,8 +120,8 @@ HRESULT	Effect::Component_Initialize() {
 
 	return S_OK;
 }
-Effect* Effect::Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
-	Effect* EFT = new Effect(_GRPDEV);
+PlayerEffect* PlayerEffect::Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
+	PlayerEffect* EFT = new PlayerEffect(_GRPDEV);
 	if (FAILED(EFT->Ready_Effect(_SKILLTYPE, _PlayerPOS, _Repeatable, _PlayTime))) {
 		MSG_BOX("Cannot Create Effect.");
 		Safe_Release(EFT);
@@ -127,6 +129,6 @@ Effect* Effect::Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, Trans
 	}
 	return EFT;
 }
-VOID Effect::Free() {
+VOID PlayerEffect::Free() {
 	GameObject::Free();
 }

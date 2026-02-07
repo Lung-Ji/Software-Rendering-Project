@@ -100,6 +100,18 @@
     <Filter Include="03. GameObject\07. ProJectile">
       <UniqueIdentifier>{439bbeef-a25b-49de-a227-87dae46c6b96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GameObject\06. Effect\01. PlayerEffect">
+      <UniqueIdentifier>{c06fa3c8-29a5-4f3f-8a94-48e018a67418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\06. Effect\02. MonsterEffect">
+      <UniqueIdentifier>{34704031-17da-4c00-892b-afee47c0af80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\06. Effect\03. EnvEffect">
+      <UniqueIdentifier>{67951d9e-7d40-478f-8302-55c93ba9b870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\06. Effect\04. UIEffect">
+      <UniqueIdentifier>{3d0f4b54-c5a7-4a58-8a72-32c6f6dc846f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -213,9 +225,6 @@
     <ClInclude Include="..\Header\MainMenuLogo.h">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Effect.h">
-      <Filter>03. GameObject\06. Effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\DebugScene.h">
       <Filter>02. Scene\99. DebugScene</Filter>
     </ClInclude>
@@ -224,6 +233,12 @@
     </ClInclude>
     <ClInclude Include="..\Header\Bullet_Standard.h">
       <Filter>03. GameObject\07. ProJectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\PlayerEffect.h">
+      <Filter>03. GameObject\06. Effect\01. PlayerEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MonsterEffect.h">
+      <Filter>03. GameObject\06. Effect\02. MonsterEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -320,9 +335,6 @@
     <ClCompile Include="..\Code\MainMenuLogo.cpp">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Effect.cpp">
-      <Filter>03. GameObject\06. Effect</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\DebugScene.cpp">
       <Filter>02. Scene\99. DebugScene</Filter>
     </ClCompile>
@@ -331,6 +343,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\Bullet_Standard.cpp">
       <Filter>03. GameObject\07. ProJectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\PlayerEffect.cpp">
+      <Filter>03. GameObject\06. Effect\01. PlayerEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MonsterEffect.cpp">
+      <Filter>03. GameObject\06. Effect\02. MonsterEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

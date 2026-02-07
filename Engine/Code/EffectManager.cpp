@@ -91,23 +91,6 @@ HRESULT EffectManager::Append_Effect(EFFECT_OWNER _Owner, GameObject* _Effect) {
 
 	return S_OK;
 }
-HRESULT EffectManager::Remove_Effect(EFFECT_OWNER _Owner, GameObject* _Effect) {
-	list<GameObject*>::iterator iter = Container_PlayerEffect.begin();
-
-	if (_Owner == EFFECT_OWNER::PLAYER) {
-		for (auto& PE : Container_PlayerEffect) {
-			if (PE == (*iter)) {
-				Container_PlayerEffect.erase(iter);
-				break;
-			}
-			else {
-				++iter;
-			}
-		}
-		
-	}
-	return S_OK;
-}
 VOID	EffectManager::Free() {
 	for (auto& EFF : Container_PlayerEffect)
 		Safe_Release(EFF);
