@@ -33,18 +33,21 @@ VOID UIManager::Render_UI(UIType _uitype, CONST TCHAR* _UINAME)
 {
   GRPDEV->SetRenderState(D3DRS_ZENABLE, FALSE);
   Sprite->Begin(D3DXSPRITE_ALPHABLEND);
-  for (auto& pair : vecList)
+  if(isActive)
   {
-    if (pair.first == _uitype)
+    for (auto& pair : vecList)
     {
-      for (auto& sprite : pair.second)
-        Sprite->Draw(sprite.TEXTURE, NULL, NULL, &sprite.POS, D3DCOLOR_ARGB(sprite.OPACITY, 255, 255, 255));
-      return;
-    }
-    else
-    {
-      MSG_BOX("Cannot Rend UISprite");
-      return;
+      if (pair.first == _uitype)
+      {
+        for (auto& sprite : pair.second)
+          Sprite->Draw(sprite.TEXTURE, NULL, NULL, &sprite.POS, D3DCOLOR_ARGB(sprite.OPACITY, 255, 255, 255));
+        return;
+      }
+      else
+      {
+        MSG_BOX("Not exist UIType");
+        return;
+      }
     }
   }
   Sprite->End();
@@ -61,5 +64,4 @@ INT UIManager::Update_UI() {
 
 VOID UIManager::Free()
 {
-
 }
