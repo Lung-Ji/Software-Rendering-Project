@@ -12,8 +12,9 @@ HRESULT Player::Ready_GameObject() {
 	_eState				= eState::STATE_STANDING;
 	_see				= pSee::SEE_DOWN;
 	_defaultSpeed		= 8.f;
-	_dashSpeed			= 0.f;
+	_dashStart			= false;
 	_dashTime			= 0.f;
+	_dashG				= 30.f;
 	_speed				= 0.f;
 	_slideTime			= 0.f;
 	_g					= 30.f;
@@ -47,9 +48,11 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	switch (_pState)
 	{
 	case pState::STATE_IDLE:
+		Idle_Final_Input(_DT);
 		IDLE_STATE(_DT);
 		break;
 	case pState::STATE_DASH:
+		DASH_STATE(_DT);
 		break;
 	case pState::STATE_ATTACK:
 		break;
@@ -95,13 +98,12 @@ HRESULT Player::Component_Initialize() {
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Slide");
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Attack");
+	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/NewDash");
 
 	return S_OK;
 }
 void Player::IDLE_STATE(const _float& _DT)
 {
-	Idle_Final_Input(_DT);
-
 	if (KEY_DOWN(DIK_F3)) {	//	마우스 커서 고정 여부 TRUE = 고정, FALSE = 고정 해제
 		Debug ? Debug = FALSE : Debug = TRUE;
 	}
@@ -507,55 +509,101 @@ void Player::DASH_STATE(const _float& _DT)
 
 	_dashTime += _DT;
 
-	if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) {
-		_eState = eState::STATE_DASH_LU;
-		_see = pSee::SEE_LU;
+	if (_dashStart)
+	{
+		if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) {
+			_eState = eState::STATE_DASH_LU;
+			_see = pSee::SEE_LU;
+		}
+		else if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D)) {
+			_eState = eState::STATE_DASH_RU;
+			_see = pSee::SEE_RU;
+		}
+		else if (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A)) {
+			_eState = eState::STATE_DASH_LD;
+			_see = pSee::SEE_LD;
+		}
+		else if (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D)) {
+			_eState = eState::STATE_DASH_RD;
+			_see = pSee::SEE_RD;
+		}
+		else if (KEY_HOLD(DIK_A))
+		{
+			_eState = eState::STATE_DASH_LEFT;
+			_see = pSee::SEE_LEFT;
+		}
+		else if (KEY_HOLD(DIK_D))
+		{
+			_eState = eState::STATE_DASH_RIGHT;
+			_see = pSee::SEE_RIGHT;
+		}
+		else if (KEY_HOLD(DIK_W))
+		{
+			_eState = eState::STATE_DASH_UP;
+			_see = pSee::SEE_UP;
+		}
+		else if (KEY_HOLD(DIK_S))
+		{
+			_eState = eState::STATE_DASH_DOWN;
+			_see = pSee::SEE_DOWN;
+		}
+		else {
+			_eState = eState::STATE_DASH_DOWN;
+			_see = pSee::SEE_DOWN;
+		}
+		_speed = _defaultSpeed + 10.f;
+		_dashStart = false;
+	}
 
-		_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
-
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
-	}
-	else if (KEY_HOLD(DIK_A))
-	{
-		_eState = eState::STATE_DASH_LEFT;
-		_see = pSee::SEE_LEFT;
-		_speed = _defaultSpeed;
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
-	}
-	else if (KEY_HOLD(DIK_D))
-	{
-		_eState = eState::STATE_DASH_RIGHT;
-		_see = pSee::SEE_RIGHT;
-		_speed = _defaultSpeed;
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
-	}
-	else if (KEY_HOLD(DIK_W))
-	{
-		_eState = eState::STATE_DASH_UP;
-		_see = pSee::SEE_UP;
-		_speed = _defaultSpeed;
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
-	}
-	else if (KEY_HOLD(DIK_S))
-	{
-		_eState = eState::STATE_DASH_DOWN;
-		_see = pSee::SEE_DOWN;
-		_speed = _defaultSpeed;
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
-	}
-
+	_speed -= _dashG * _DT;
+	float tempSpeed = _speed;
 	switch (_eState)
 	{
+	case eState::STATE_DASH_LU:
+		tempSpeed = _speed * cos(D3DX_PI * 0.25f);
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), tempSpeed, _DT);
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -tempSpeed, _DT);
+		break;
+	case eState::STATE_DASH_RU:
+		tempSpeed = _speed * cos(D3DX_PI * 0.25f);
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), tempSpeed, _DT);
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), tempSpeed, _DT);
+		break;
+	case eState::STATE_DASH_LD:
+		tempSpeed = _speed * cos(D3DX_PI * 0.25f);
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -tempSpeed, _DT);
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -tempSpeed, _DT);
+		break;
+	case eState::STATE_DASH_RD:
+		tempSpeed = _speed * cos(D3DX_PI * 0.25f);
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -tempSpeed, _DT);
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), tempSpeed, _DT);
+		break;
+	case eState::STATE_DASH_UP :
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+		break;
 	case eState::STATE_DASH_DOWN :
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
+		break;
+	case eState::STATE_DASH_LEFT :
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+		break;
+	case eState::STATE_DASH_RIGHT :
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
 		break;
 
 	default:
 		break;
 	}
 
-	if (_dashTime > 4.0f)
+	if (_speed < 0.f)
+	{
 		_pState = pState::STATE_IDLE;
+		_speed = 0;
+		_dashTime = 0.f;
+		_frame = 1;
+	}
+		
 }
 
 void Player::ATTACK_STATE(const _float& _DT)
@@ -566,6 +614,7 @@ void Player::Idle_Final_Input(const _float& _DT)
 {
 	if (KEY_DOWN(DIK_LSHIFT)) {
 		_pState = pState::STATE_DASH;
+		_dashStart = true;
 		_frame = 1;
 	}
 }
@@ -758,20 +807,60 @@ void Player::SetGrahpic()
 		break;
 	case eState::STATE_ATTACK_RUN_BACK_LU:
 		wsprintfW(FileName, L"Player_Attack_LU%d.png", _frame);
-		Anim(FileName, 0.1f, 10, true);
+		Anim(FileName, 0.1f, 10);
 		break;
 	case eState::STATE_ATTACK_RUN_BACK_LD:
 		wsprintfW(FileName, L"Player_Attack_LD%d.png", _frame);
-		Anim(FileName, 0.1f, 10, true);
+		Anim(FileName, 0.1f, 10);
 		break;
 	case eState::STATE_ATTACK_RUN_BACK_RU:
 		wsprintfW(FileName, L"Player_Attack_RU%d.png", _frame);
-		Anim(FileName, 0.1f, 10, true);
+		Anim(FileName, 0.1f, 10);
 		break;
 	case eState::STATE_ATTACK_RUN_BACK_RD:
 		if (_frame > 10) _frame = 1;
 		wsprintfW(FileName, L"Player_Attack_RD%d.png", _frame);
-		Anim(FileName, 0.1f, 10, true);
+		Anim(FileName, 0.1f, 10);
+		break;
+	case eState::STATE_DASH_LU:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Dash_LU%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_DASH_RU:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Dash_RU%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_DASH_LD:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Dash_LD%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_DASH_RD:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Dash_RD%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_DASH_UP:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Dash_Up%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_DASH_DOWN:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Dash_Down%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_DASH_LEFT:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Dash_Left%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_DASH_RIGHT:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Dash_Right%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
 		break;
 	default:
 		if (_frame > 8) _frame = 1;

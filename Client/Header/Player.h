@@ -133,8 +133,8 @@ private:
 	_uint			_frame;
 	float			_frameTick;
 
+	bool			_dashStart;
 	float			_defaultSpeed;
-	float			_dashSpeed;
 	float			_dashTime;
 	float			_dashG;
 	float			_speed;
