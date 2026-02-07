@@ -44,7 +44,10 @@ INT	Player::Update_GameObject(const _float& _DT) {
 
 	_frameTick += _DT;
 
-	Gravity(_DT);
+	// 광윤 - KeyInput이란 함수에 넣었었는데 Merge하니까 다른 곳으로 옮겨졌어요,////////////////////
+	if (KEY_DOWN(DIK_1)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_1, 0.5f); }
+	if (KEY_DOWN(DIK_2)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_2, 0.5f); }
+	if (KEY_DOWN(DIK_3)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_3, 0.5f); }
 
 	switch (_pState)
 	{
@@ -97,7 +100,7 @@ HRESULT Player::Component_Initialize() {
 }
 void Player::IDLE_STATE(const _float& _DT)
 {
-	// Idle_Final_Input(_DT);
+	Idle_Final_Input(_DT);
 
 	if (KEY_DOWN(DIK_F3)) {	//	마우스 커서 고정 여부 TRUE = 고정, FALSE = 고정 해제
 		Debug ? Debug = FALSE : Debug = TRUE;
@@ -482,16 +485,6 @@ void Player::IDLE_STATE(const _float& _DT)
 				}
 			}
 		}
-
-		//if (KEY_DOWN(DIK_C) && !_isJump)
-		//{
-		//	_isJump = true;
-		//	_jumpSpeed = _defaultSpeed;
-		//}
-	// 광윤 - KeyInput이란 함수에 넣었었는데 Merge하니까 다른 곳으로 옮겨졌어요,////////////////////
-		if (KEY_DOWN(DIK_1)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_1, 0.5f); }
-		if (KEY_DOWN(DIK_2)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_2, 0.5f); }
-		if (KEY_DOWN(DIK_3)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_3, 0.5f); }
 	}
 	if (MOUSE_LBUTTON)
 	{
@@ -511,6 +504,8 @@ void Player::DASH_STATE(const _float& _DT)
 	rightDir = { 1.f, 0.f, 0.f };
 	D3DXVec3Normalize(&upDir, &upDir);
 	D3DXVec3Normalize(&rightDir, &rightDir);
+
+	_dashTime += _DT;
 
 	if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) {
 		_eState = eState::STATE_DASH_LU;
@@ -535,7 +530,7 @@ void Player::DASH_STATE(const _float& _DT)
 		_speed = _defaultSpeed;
 		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
 	}
-	else if (KEY_HOLD(DIK_U))
+	else if (KEY_HOLD(DIK_W))
 	{
 		_eState = eState::STATE_DASH_UP;
 		_see = pSee::SEE_UP;
@@ -552,9 +547,14 @@ void Player::DASH_STATE(const _float& _DT)
 
 	switch (_eState)
 	{
+	case eState::STATE_DASH_DOWN :
+		break;
 
+	default:
+		break;
 	}
-	if (_dashSpeed <= 0)
+
+	if (_dashTime > 4.0f)
 		_pState = pState::STATE_IDLE;
 }
 
@@ -567,34 +567,9 @@ void Player::Idle_Final_Input(const _float& _DT)
 	if (KEY_DOWN(DIK_LSHIFT)) {
 		_pState = pState::STATE_DASH;
 		_frame = 1;
-
 	}
 }
 
-void Player::Gravity(const _float& _DT)
-{
-	//_vec3 pos;
-	//Component_Transform->Get_Info(INFO_POS, &pos);
-	//float tempy = pos.y;
-
-	//if (pos.y > 1.f || _isJump)
-	//{
-	//	_jumpSpeed -= _g;
-	//	tempy += _jumpSpeed * _DT;
-	//	_vec3		vDir;
-	//	Component_Transform->Get_Info(INFO_UP, &vDir);
-
-	//	Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _jumpSpeed, _DT);
-	//}
-
-	//if (tempy < 1.f)
-	//{
-	//	_isJump = false;
-	//	_jumpSpeed = 0.f;
-
-	//	Component_Transform->Set_Pos({ pos.x, 1.f, pos.z });
-	//}
-}
 void Player::SetGrahpic()
 {
 	TCHAR FileName[128] = L"";

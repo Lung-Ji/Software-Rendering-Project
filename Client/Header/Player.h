@@ -119,7 +119,6 @@ private:
 	void			DASH_STATE(const _float& _DT);
 	void			ATTACK_STATE(const _float& _DT);
 	void			Idle_Final_Input(const _float& _DT);
-	void			Gravity(const _float& _DT);
 	void			SetGrahpic();
 	void			Anim(TCHAR FileName[128], float delay, int maxIdx, bool reverse = false);
 
