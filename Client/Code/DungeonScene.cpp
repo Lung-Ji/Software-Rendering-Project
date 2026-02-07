@@ -34,6 +34,9 @@ HRESULT DungeonScene::Ready_UserInterface_Layer(CONST TCHAR* _LTAG) {
 }
 DungeonScene* DungeonScene::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	DungeonScene* LS = new DungeonScene(_GRPDEV);
+
+	SceneManager::GetInstance()->Set_CurrentScene(LS);
+
 	if (FAILED(LS->Ready_Scene())) {
 		MSG_BOX("Cannot Create DungeonScene.");
 		Safe_Release(LS);

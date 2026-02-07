@@ -11,7 +11,7 @@ HRESULT NPC::Ready_GameObject() {
 }
 INT	NPC::Update_GameObject(const _float& _DT) {
 	GameObject::Update_GameObject(_DT);
-	RenderManager::GetInstance()->Add_RenderGroup(RENDER_NONALPHA, this);
+	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 	return 0;
 }
 VOID NPC::LateUpdate_GameObject(const _float& _DT) {
@@ -23,7 +23,7 @@ VOID NPC::Render_GameObject() {
 
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	//Component_Texture->Set_Texture(0);
+	Component_Texture->Set_Texture(0);
 
 	Component_Buffer->Render_Buffer();
 

@@ -61,20 +61,29 @@
     <Filter Include="08. TileManager">
       <UniqueIdentifier>{fb375aba-e013-4696-be93-303247a99c6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="09. LightManager">
-      <UniqueIdentifier>{2b0e7f41-9fef-431b-8ff6-c11ddb585aa1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="09. LightManager\01. Light">
-      <UniqueIdentifier>{7d495ee7-f0b3-4f15-b593-6b9d16fd510d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="08. TileManager\TileImageManager">
       <UniqueIdentifier>{de85b09c-bdf0-41ed-ab1d-3450338f2975}</UniqueIdentifier>
     </Filter>
-    <Filter Include="10. UIManager">
+    <Filter Include="99. Component\05. Collider">
+      <UniqueIdentifier>{9acb0940-4a9c-4647-8d97-6537cc18af61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="10. CollisionManager">
+      <UniqueIdentifier>{5b2479a8-ade8-4ea4-916a-156bb09c66f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="11. UIManager">
       <UniqueIdentifier>{06dba40a-cde8-4d74-a015-c5cfb226400f}</UniqueIdentifier>
     </Filter>
     <Filter Include="11. FontManager">
       <UniqueIdentifier>{45e3c7f3-03b5-4afb-a8f9-8cf66c4cb361}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. ResourceManager">
+      <UniqueIdentifier>{4343f91f-80fb-46dc-8b79-fc3119b9473e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="12. EffectManager">
+      <UniqueIdentifier>{f8acfc71-ce06-4098-b39d-8df3019fb773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99. Component\06. Tile">
+      <UniqueIdentifier>{4e2a987d-50f6-4e59-bd84-9e0016b96795}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -144,20 +153,29 @@
     <ClInclude Include="..\Header\Sprite.h">
       <Filter>99. Component\04. Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Light.h">
-      <Filter>09. LightManager\01. Light</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\LightManager.h">
-      <Filter>09. LightManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\TileManager.h">
       <Filter>08. TileManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\TileImageManager.h">
       <Filter>08. TileManager\TileImageManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Collider.h">
+      <Filter>99. Component\05. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\CollisionManager.h">
+      <Filter>10. CollisionManager</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\UIManager.h">
-      <Filter>10. UIManager</Filter>
+      <Filter>11. UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ResourceManager.h">
+      <Filter>09. ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\TileInfo.h">
+      <Filter>99. Component\06. Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\EffectManager.h ">
+      <Filter>12. EffectManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\FontManager.h">
       <Filter>11. FontManager</Filter>
@@ -218,20 +236,29 @@
     <ClCompile Include="..\Code\Sprite.cpp">
       <Filter>99. Component\04. Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Light.cpp">
-      <Filter>09. LightManager\01. Light</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\LightManager.cpp">
-      <Filter>09. LightManager</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\TileManager.cpp">
       <Filter>08. TileManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\TileImageManager.cpp">
       <Filter>08. TileManager\TileImageManager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Collider.cpp">
+      <Filter>99. Component\05. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CollisionManager.cpp">
+      <Filter>10. CollisionManager</Filter>
+    </ClCompile>
     <ClCompile Include="..\Code\UIManager.cpp">
-      <Filter>10. UIManager</Filter>
+      <Filter>11. UIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ResourceManager.cpp">
+      <Filter>09. ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\EffectManager.cpp">
+      <Filter>12. EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TileInfo.cpp">
+      <Filter>99. Component\06. Tile</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\FontManager.cpp">
       <Filter>11. FontManager</Filter>

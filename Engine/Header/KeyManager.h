@@ -23,12 +23,15 @@ public:
 	_byte			Get_MouseState(MOUSEKEYSTATE _MID)		{ return MouseState.rgbButtons[_MID];		}
 	LONG			Get_MouseMove(MOUSEMOVESTATE _MID)		{ return *(((_long*)&MouseState) + _MID);	}
 
-	KEY_STATE GetKeyState(KEY key) { return KeySet[(int)key].Current_KeyState; };
+	KEY_STATE GetKeyState(KEY key)							{ return KeySet[(int)key].Current_KeyState; };
 
 public:
 	BOOL	KEY_STATE_HOLD(_ubyte _KEY) { return KeyState[_KEY] & 0x80 ? TRUE : FALSE; }
 	BOOL	KEY_STATE_DOWN(_ubyte _KEY);
 	BOOL	KEY_STATE_UP(_ubyte _KEY);
+
+	BOOL	MOUSE_LB_DOWN();
+	BOOL	MOUSE_RB_DOWN();
 
 private:
 	BOOL						 KEY_STATE[256];
@@ -38,7 +41,10 @@ private:
 	LPDIRECTINPUTDEVICE8		 KeyBoard = nullptr;
 	LPDIRECTINPUTDEVICE8		 Mouse	  = nullptr;
 	_byte						 KeyState[256];
+
 	DIMOUSESTATE				 MouseState;
+	BOOL						 MouseClickedR;
+	BOOL						 MouseClickedL;
 
 public:
 	virtual			VOID	Free();

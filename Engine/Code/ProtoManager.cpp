@@ -20,16 +20,13 @@ HRESULT		ProtoManager::Ready_Prototype(LPDIRECT3DDEVICE9 _GRPDEV) {
 	ComponentList.push_back(Transform	::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_TRANSFORM	= 10
 	ComponentList.push_back(Texture		::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_TEXTURE		= 11
 	ComponentList.push_back(SpriteObject::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_SPRITE		= 12
-	ComponentList.push_back(StateMachine::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_FSM			= 13
-	
+	ComponentList.push_back(Collider	::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_COLLIDER	= 13
+	ComponentList.push_back(StateMachine::Create(_GRPDEV));								//COMPONENT_TYPE::COMPONENT_FSM			= 14
+	ComponentList.push_back(TileInfo::Create(_GRPDEV));								    //COMPONENT_TYPE::COMPONENT_TILEINFO	= 15
 	return S_OK;
 }
 Component*	ProtoManager::Clone_Prototype(COMPONENT_TYPE _TYPE) {
 	return ComponentList[(LONG)_TYPE]->Clone();
-}
-HRESULT ProtoManager::Push_ProtoType(LPDIRECT3DDEVICE9 _GRPDEV, Component* _Push) {
-	ComponentList.push_back(_Push);
-	return S_OK;
 }
 VOID		ProtoManager::Free() {
 	for_each(ComponentList.begin(), ComponentList.end(), Safe_Release<Component*>);

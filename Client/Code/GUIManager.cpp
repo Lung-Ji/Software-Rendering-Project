@@ -3,7 +3,7 @@
 
 IMPLEMENT_SINGLETON(GUIManager)
 
-GUIManager::GUIManager() {};
+GUIManager::GUIManager() : CameraWindow(TRUE) {};
 GUIManager::~GUIManager()	{};
 
 VOID GUIManager::Ready_GUIManager() {
@@ -16,7 +16,7 @@ VOID GUIManager::Ready_GUIManager() {
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableSetMousePos;
-    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     ImGuiStyle& Style = ImGui::GetStyle();
 
@@ -37,21 +37,21 @@ VOID GUIManager::Ready_GUIManager() {
         return;
     }
 
-    Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
-        Get_GameObject(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_CAMERA));
+    Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
    
 }
 VOID GUIManager::Update_GUIManager() {
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
 }
 VOID GUIManager::LateUpdate_GUIManager() {
 
 }
 VOID GUIManager::Render_GUIManager() {
     // 카메라 세팅
-    bool CameraWindow = dynamic_cast<CameraObject*>(Camera)->Show_StateWindow();
+    
     if(CameraWindow){
         ImGui::Begin("Camera Setting [F1]", &CameraWindow);
         ImGui::Text("Transform");

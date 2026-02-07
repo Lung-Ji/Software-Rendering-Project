@@ -1,5 +1,5 @@
 #include "RenderManager.h"
-
+#include "TileManager.h"
 IMPLEMENT_SINGLETON(RenderManager)
 
 RenderManager::RenderManager()	{			}
@@ -15,6 +15,7 @@ VOID RenderManager::Render_GameObject(LPDIRECT3DDEVICE9& _GRPDEV) {
 	Render_NonAlpha(_GRPDEV);
 	Render_Alpha(_GRPDEV);
 	Render_UI(_GRPDEV);
+	Render_TILE(_GRPDEV);
 
 	Clear_RenderGroup();
 }
@@ -33,18 +34,41 @@ VOID RenderManager::Render_NonAlpha(LPDIRECT3DDEVICE9& _GRPDEV) {
 		_OBJ->Render_GameObject();
 }
 VOID RenderManager::Render_Alpha(LPDIRECT3DDEVICE9& _GRPDEV) {
+	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	_GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	_GRPDEV->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	_GRPDEV->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
+	RenderGroup[RENDER_ALPHA].sort([](GameObject* DEST, GameObject* SRC)->bool
+		{
+			return DEST->Get_AlphaZValue() > SRC->Get_AlphaZValue();
+		});
 	for (auto& _OBJ : RenderGroup[RENDER_ALPHA])
 		_OBJ->Render_GameObject();
-
+	
 	_GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 }
 VOID RenderManager::Render_UI(LPDIRECT3DDEVICE9& _GRPDEV)	{
 	for (auto& _OBJ : RenderGroup[RENDER_UI])
 		_OBJ->Render_GameObject();
+}
+VOID RenderManager::Render_TILE(LPDIRECT3DDEVICE9& _GRPDEV)
+{
+	
+	_GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	_GRPDEV->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	_GRPDEV->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+
+
+	TileManager::GetInstance()->Render_TileList();
+	for (auto& _OBJ : RenderGroup[RENDER_TILE])
+		_OBJ->Render_GameObject();
+
+	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	_GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	return VOID();
 }
 VOID	RenderManager::Free() {
 	Clear_RenderGroup();

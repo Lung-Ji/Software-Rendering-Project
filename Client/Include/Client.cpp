@@ -21,16 +21,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_CLIENT, szWindowClass, MAX_LOADSTRING);
-//#ifdef _DEBUG
-//    if (::AllocConsole() == TRUE)
-//    {
-//        FILE* nfp[3];
-//        freopen_s(nfp + 0, "CONOUT$", "rb", stdin);
-//        freopen_s(nfp + 1, "CONOUT$", "wb", stdout);
-//        freopen_s(nfp + 2, "CONOUT$", "wb", stderr);
-//        std::ios::sync_with_stdio();
-//    }
-//#endif // _DEBUG
     MyRegisterClass(hInstance);
 
     if (!InitInstance(hInstance, nCmdShow)) return FALSE;
@@ -68,11 +58,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
                 TimeManager::GetInstance()->Count_FrameAndDeltaTime(hWnd, TIMERTYPE::TIMER_FPS);            // FPS & DT 카운트 (+윈도우 타이틀 바 출력)
 
+                GUIManager::GetInstance()->Update_GUIManager();
                 GM->Update_GameManager(TimeManager::GetInstance()->Get_DeltaTime(TIMERTYPE::TIMER_FPS));
                 GM->LateUpdate_GameManager(TimeManager::GetInstance()->Get_DeltaTime(TIMERTYPE::TIMER_FPS));
                 GM->Render_GameManager();
 
-                GUIManager::GetInstance()->Update_GUIManager();
                 GUIManager::GetInstance()->LateUpdate_GUIManager();
                 GUIManager::GetInstance()->Render_GUIManager();
 

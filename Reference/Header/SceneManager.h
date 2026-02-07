@@ -2,6 +2,8 @@
 #include "Base.h"
 #include "Scene.h"
 #include "RenderManager.h"
+#include "CollisionManager.h"
+#include "EffectManager.h"
 
 BEGIN(Engine)
 

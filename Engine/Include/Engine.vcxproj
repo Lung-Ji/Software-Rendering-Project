@@ -44,7 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableUnitySupport>false</EnableUnitySupport>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -145,7 +145,11 @@ call Copy.bat</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\Buffer.h" />
+    <ClInclude Include="..\Header\Collider.h" />
+    <ClInclude Include="..\Header\CollisionManager.h" />
     <ClInclude Include="..\Header\Component.h" />
+    <ClInclude Include="..\Header\EffectManager.h " />
+    <ClInclude Include="..\Header\TileInfo.h" />
     <ClInclude Include="..\Header\Engine_Define.h" />
     <ClInclude Include="..\Header\Engine_Enum.h" />
     <ClInclude Include="..\Header\Engine_Function.h" />
@@ -159,8 +163,7 @@ call Copy.bat</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\KeyManager.h" />
-    <ClInclude Include="..\Header\Light.h" />
-    <ClInclude Include="..\Header\LightManager.h" />
+    <ClInclude Include="..\Header\ResourceManager.h" />
     <ClInclude Include="..\Header\Sprite.h" />
     <ClInclude Include="..\Header\StateMachine.h" />
     <ClInclude Include="..\Header\GameObject.h" />
@@ -183,6 +186,8 @@ call Copy.bat</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Buffer.cpp" />
+    <ClCompile Include="..\Code\Collider.cpp" />
+    <ClCompile Include="..\Code\CollisionManager.cpp" />
     <ClCompile Include="..\Code\Component.cpp" />
     <ClCompile Include="..\Code\Font.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -190,9 +195,10 @@ call Copy.bat</Command>
     <ClCompile Include="..\Code\FontManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Code\EffectManager.cpp" />
+    <ClCompile Include="..\Code\TileInfo.cpp" />
     <ClCompile Include="..\Code\KeyManager.cpp" />
-    <ClCompile Include="..\Code\Light.cpp" />
-    <ClCompile Include="..\Code\LightManager.cpp" />
+    <ClCompile Include="..\Code\ResourceManager.cpp" />
     <ClCompile Include="..\Code\Sprite.cpp" />
     <ClCompile Include="..\Code\StateMachine.cpp" />
     <ClCompile Include="..\Code\GameObject.cpp" />

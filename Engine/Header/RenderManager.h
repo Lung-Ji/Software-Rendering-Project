@@ -23,9 +23,9 @@ private:
 	VOID		Render_NonAlpha(LPDIRECT3DDEVICE9& _GRPDEV);
 	VOID		Render_Alpha(LPDIRECT3DDEVICE9& _GRPDEV);
 	VOID		Render_UI(LPDIRECT3DDEVICE9& _GRPDEV);
-
+	VOID		Render_TILE(LPDIRECT3DDEVICE9& _GRPDEV);
 private:
-	vector<GameObject*>			RenderGroup[RENDERID::RENDER_END];
+	list<GameObject*>			RenderGroup[RENDERID::RENDER_END];
 
 private:
 	virtual VOID	Free();

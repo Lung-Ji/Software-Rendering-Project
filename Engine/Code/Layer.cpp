@@ -15,12 +15,6 @@ VOID		Layer::LateUpdate_Layer(const FLOAT& _DT) {
 	for (auto& GOBJ : GameObjectList)
 		GOBJ->LateUpdate_GameObject(_DT);
 }
-GameObject* Layer::Get_GameObject(GAMEOBJECT_TYPE _OID) {
-	return GameObjectList[(LONG)_OID];
-}
-Component*	Layer::Get_Component(GAMEOBJECT_TYPE _OID, COMPONENT_TYPE _CID) {
-	return GameObjectList[(LONG)_OID]->Get_Component(_CID);
-}
 GameObject* Layer::Get_GameObject(CONST TCHAR* _TAG) {
 	for (auto& OBJ : GameObjectList) {
 		if (OBJ->Get_ObjectTag() == _TAG) 

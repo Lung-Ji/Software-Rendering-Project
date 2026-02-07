@@ -31,11 +31,16 @@
 #include "Camera.h"
 #include "Terrain.h"
 #include "MainUI.h"
+#include "PlayerEffect.h"
+#include "MonsterEffect.h"
 #include "NPC.h"
+
 #include "Monster_State.h"
-#include "Monster.h"
+//#include "Monster.h"
 #include "Monster1.h"
 #include "BossMonster.h"
+#include "Bullet_Standard.h"
+
 #include "Player.h"
 #include "Tile.h"
 #include "CubeTile.h"
@@ -51,6 +56,9 @@
 
 //////////////////////////////////////////// Manager
 #include "GUIManager.h"
+#include "ResourceManager.h"
+#include "CollisionManager.h"
+#include "EffectManager.h"
 #include "KeyManager.h"
 #include "SoundManager.h"
 #include "RenderManager.h"

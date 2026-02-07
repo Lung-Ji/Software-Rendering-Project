@@ -46,7 +46,7 @@ HRESULT Texture::Import_TextureFromFolder(wstring _FolderName)	{
 	wstring STRUNI = _FolderName + L"/*.*";
 	
 	intptr_t Handle = _wfindfirst64(STRUNI.c_str(), &Data);
-	
+
 	IDirect3DBaseTexture9* TEX = nullptr;
 	
 	if (Handle == -1)	return E_FAIL;

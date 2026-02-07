@@ -1,12 +1,13 @@
 #include "GameObject.h"
 
 GameObject::GameObject(LPDIRECT3DDEVICE9 _GRPDEV)
-	: GRPDEV(_GRPDEV)	 ,TAG(L"")		{ GRPDEV->AddRef(); ComponentList.resize((LONG)COMPONENT_TYPE::COMPONENT_END);	}
-GameObject::GameObject(const GameObject& _RHS)	 
-	: GRPDEV(_RHS.GRPDEV),TAG(_RHS.TAG), ComponentList(_RHS.ComponentList)	
+	: GRPDEV(_GRPDEV)	 , ObjectTAG(L""), ObjectDead(FALSE), ObjectTYPE(), AlphaZValue(0.f)
 										{ GRPDEV->AddRef(); ComponentList.resize((LONG)COMPONENT_TYPE::COMPONENT_END);	}
+GameObject::GameObject(const GameObject& _RHS)	 
+	: GRPDEV(_RHS.GRPDEV), ObjectTAG(_RHS.ObjectTAG), ObjectTYPE(_RHS.ObjectTYPE), ComponentList(_RHS.ComponentList), AlphaZValue(_RHS.AlphaZValue)
+	, ObjectDead(_RHS.ObjectDead) { GRPDEV->AddRef(); ComponentList.resize((LONG)COMPONENT_TYPE::COMPONENT_END);	}
 GameObject::GameObject(LPDIRECT3DDEVICE9 _GRPDEV, CONST TCHAR* _TAG)
-	: GRPDEV(_GRPDEV)	 ,TAG(_TAG)		{ GRPDEV->AddRef(); ComponentList.resize((LONG)COMPONENT_TYPE::COMPONENT_END);	}
+	: GRPDEV(_GRPDEV)	 , ObjectTAG(_TAG), ObjectDead(FALSE) { GRPDEV->AddRef(); ComponentList.resize((LONG)COMPONENT_TYPE::COMPONENT_END);	}
 GameObject::~GameObject()				{																				}
 
 HRESULT		GameObject::Ready_GameObject() {
@@ -24,6 +25,17 @@ VOID		GameObject::LateUpdate_GameObject(const FLOAT& _DT) {
 		if (COM == nullptr)	 continue;
 		COM->LateUpdate_Component(_DT);
 	}
+}
+VOID GameObject::AlphaSorting(const D3DXVECTOR3* _Vec) {
+	D3DXMATRIX WorldMat;
+	GRPDEV->GetTransform(D3DTS_VIEW, &WorldMat);
+	D3DXMatrixInverse(&WorldMat, 0, &WorldMat);
+
+	D3DXVECTOR3 CameraPosition;
+	memcpy(&CameraPosition, &WorldMat.m[3][0], sizeof(D3DXVECTOR3));
+	
+	D3DXVECTOR3 DirectionToCam = CameraPosition - *_Vec;
+	AlphaZValue = D3DXVec3Length(&DirectionToCam);
 }
 Component*	GameObject::Get_Component(COMPONENT_TYPE _CID) {
 	return ComponentList[(LONG)_CID] != nullptr ? ComponentList[(LONG)_CID] : nullptr;

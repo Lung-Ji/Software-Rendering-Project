@@ -7,93 +7,90 @@ Monster1::~Monster1() {}
 HRESULT Monster1::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
-	Is_Tracking = false;
-	Tracking_Counter = 0;
-	Lost_Counter = 0;
+	Component_Transform->Get_Info(INFO_LOOK, &vDir);
 
-	Is_Attacking = false;
+	pTarget = nullptr;
+	pTargetPos = nullptr;
+	CurrState = MON1_IDLE;
+	PrevState = CurrState;
 
-	Default_Speed = 300.f;
+	Timer1 = 0.f;
+	Timer2 = 0.f;
+
+	Default_Speed = 1.f;
 	Speed = Default_Speed;
 
 	return S_OK;
 }
-INT	Monster1::Update_GameObject(const _float& _DT) 
+INT	Monster1::Update_GameObject(const _float& _DT)
 {
+	// <플레이어 업데이트 시점>
 	GameObject::Update_GameObject(_DT);
-	_vec3 TargetPos = *dynamic_cast<Transform*>(SceneManager::GetInstance()->Get_GameObject(L"Player")->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_Position();
+	
+	_frameTick += _DT;
 
-	_vec3 Dir = TargetPos - *Component_Transform->Get_Position();
-	//float time = 3.f;
-	//if (플레이어가 밖) {
-	//	time -= _DT;
-	//	if (time < 0) {
-	//		
-	//	}
-	//}
-	if (D3DXVec3Length(&Dir) < TRACKINGDIS)
+	Set_Target(L"Player");
+
+	if (pTarget == nullptr)
 	{
-		if (!Is_Tracking)
-			Tracking_Counter = 0;
-		
-		Lost_Counter = 0;
-		Is_Tracking = true;
-	}
-	else
-	{
-		++Lost_Counter;
+		Change_State(MON1_IDLE);
 	}
 
-	if (Lost_Counter > TRACKINGTIME)
-		Is_Tracking = false;
-
-	if (Is_Tracking)
+	switch (CurrState)
 	{
-		++Tracking_Counter;
-		Speed = Default_Speed;
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&Dir, &Dir), Speed, _DT);
-	}
-	else
-	{
-		if (!Is_Attacking)
-		{
-			Speed = 0;
-		}
-	}
-
-	if (Tracking_Counter > 300)
-	{
-		if (Tracking_Counter < 400)
-		{
-			Is_Attacking = true;
-			Speed = 0;
-		}
-		else if (Tracking_Counter < 500)
-		{
-			Speed = RUSHSPEED;
-		}
-		else
-		{
-			Is_Attacking = false;
-			Speed = Default_Speed;
-			Tracking_Counter = 0;
-		}
+	case MON1_IDLE:
+		State_Idle();
+		break;
+	case MON1_TRACKING:
+		State_Tracking(_DT);
+		break;
+	case MON1_ATTACKING:
+		State_Attacking(_DT);
+		break;
+	case MON1_Hit:
+		break;
+	case MON1_DEAD:
+		break;
+	default:
+		break;
 	}
 
+
+	//_vec3 vLook;
+	//Component_Transform->Get_Info(INFO_LOOK, &vLook);
+	//D3DXVec3Normalize(&vLook, &vLook);
+	//Component_Transform->Move_Pos(&vLook, Speed, _DT);
+
+	D3DXVec3Normalize(&vDir, &vDir);
+	vDir.y = 0.f;
+	Component_Transform->Move_Pos(&vDir, Speed, _DT);
 
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 	return 0;
 }
 VOID Monster1::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
+	if (KEY_DOWN(DIK_0)) { PLAY_MONSTER_EFFECT_ONCE(MONSTER_SKILL::SKILL_1, 0.5f); }
 }
 VOID Monster1::Render_GameObject() {
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	Component_Texture->Set_Texture(L"Monster1.png");
+	//Component_Texture->Set_Texture(L"Monster1.png");
+	TCHAR FileName[128] = L"";
+	//strcat_s(FileName, sizeof(FileName), L"L");
+	wsprintfW(FileName, L"Bat_LF_0%d.png", _frame);
 
+	Component_Texture->Set_Texture(FileName);
+
+	if (_frameTick > 0.1f)
+	{
+		if (++_frame > 6)
+			_frame = 1;
+
+		_frameTick = 0.f;
+	}
 	Component_Buffer->Render_Buffer();
 
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
@@ -103,17 +100,19 @@ HRESULT Monster1::Component_Initialize() {
 	Component_Buffer = ADD_COMPONENT_RECTTEX;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
 
-	Component_Transform->Set_Pos(0.f, 0.f, 1.f);
+	Component_Transform->Set_Pos(10.f, 1.f, 10.f);
 	Component_Transform->Set_Rotation(0.f, 0.f, 0.f);
-	Component_Transform->Set_Scale(2.f, 2.f, 2.f);
+	Component_Transform->Set_Scale(1.f, 1.f, 1.f);
 
 	Component_Texture = ADD_COMPONENT_TEXTURE;
-	Component_FSM = ADD_COMPONENT_FSM;
+	Component_Texture->Import_TextureFromFolder(L"../../Resource/Monster/Bat");
 
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Monster");
-	Component_FSM->FSM_StateInit(MONSTER_IDLE::GetInstance()->Instance());
+	Component_Collider = ADD_COMPONENT_COLLIDER;
+	Component_Collider->Set_CenterPos(Component_Transform);
 
-	//pTarget = SceneManager::GetInstance()->Get_GameObject(L"Player");
+	_vec3 vColliderScale = *Component_Transform->Get_Scale();
+	vColliderScale *= 0.3f;
+	Component_Collider->Set_Scale(vColliderScale.x, 1.f, vColliderScale.z);
 
 	return S_OK;
 }
@@ -128,11 +127,114 @@ Monster1* Monster1::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 }
 VOID Monster1::Free() {
 
-	MONSTER_IDLE::DestroyInstance();
-	MONSTER_ATTACK::DestroyInstance();
-	MONSTER_CHASE::DestroyInstance();
-	MONSTER_DAMAGED::DestroyInstance();
-	MONSTER_DEAD::DestroyInstance();
-
 	GameObject::Free();
+}
+
+VOID Monster1::Set_Target(const TCHAR* _TAG)
+{
+	pTarget = SceneManager::GetInstance()->Get_GameObject(_TAG);
+	if (pTarget != nullptr)
+	{
+		pTargetPos = POS(pTarget);
+	}
+}
+
+VOID Monster1::Change_State(MONSTER1_STATE eState)
+{
+	PrevState = CurrState;
+	CurrState = eState;
+	Speed = 0.f;
+	Timer1 = 0.f;
+	Timer2 = 0.f;
+}
+
+VOID Monster1::State_Idle()
+{
+	Speed = 0.f;
+	Timer2 = 0.f;
+	Timer1 = 0.f;
+
+	if (pTarget != nullptr)
+	{
+		vDir = *POS(pTarget) - *MYPOS;
+		vDir.y = 0;
+		if (D3DXVec3Length(&vDir) < TRACKINGDIS)
+		{
+			Change_State(MON1_TRACKING);
+		}
+	}
+}
+
+VOID Monster1::State_Tracking(const _float& _DT)
+{
+	Speed = Default_Speed;
+	vDir = *POS(pTarget) - *MYPOS;
+	vDir.y = 0;
+	if (D3DXVec3Length(&vDir) < TRACKINGDIS)
+	{
+		Timer1 += _DT;
+		Timer2 = 0.f;
+	}
+	else
+	{
+		Timer2 += _DT;
+	}
+
+	_vec3	vLook;
+	Component_Transform->Get_Info(INFO_LOOK, &vLook);
+
+	D3DXVec3Normalize(&vLook, &vLook);
+	D3DXVec3Normalize(&vDir, &vDir);
+
+	_float fRadian = 0.f;
+	fRadian = acosf(D3DXVec3Dot(&vLook, &vDir));
+	FLOAT fAngle = D3DXToDegree(fRadian);
+	Component_Transform->Rotation(ROT_Y, fRadian);
+	//Component_Transform->Set_Rotation(0.f, fAngle, 0.f);
+
+	if (Timer1 >= TRACKINGMAX)
+	{
+		Change_State(MON1_ATTACKING);
+	}
+
+	if (Timer2 >= TRACKINGMIN)
+	{
+		Change_State(MON1_IDLE);
+	}
+}
+
+VOID Monster1::State_Attacking(const _float& _DT)
+{
+	Timer1 += _DT;
+	if (Timer1 < ATTACKREADY)
+	{
+		Speed = 0;
+	}
+	else if (Timer1 < ATTACKEND)
+	{
+		Speed = Default_Speed * 5;
+		Timer2 += _DT;
+
+		if (Timer2 > 0.2f)
+		{
+			Timer2 = 0.f;
+			GameObject* pBullet = Bullet_Standard::Create(GRPDEV);
+
+			if (nullptr != pBullet)
+			{
+				pBullet->Set_ObjectTag(L"Bullet_Standard");
+				static_cast<Transform*>(pBullet->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Pos(*MYPOS);
+				static_cast<Bullet_Standard*>(pBullet)->Set_Master(this);
+				_vec3 vShootingDir;
+				vShootingDir = *pTargetPos - *MYPOS;
+				static_cast<Bullet_Standard*>(pBullet)->Set_Dir(*D3DXVec3Normalize(&vShootingDir, &vShootingDir));
+				SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_STATIC_OBJECT)
+					->Add_GameObject(pBullet);
+			}
+		}
+	}
+	else
+	{
+		Change_State(MON1_IDLE);
+	}
 }

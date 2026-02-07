@@ -1,7 +1,7 @@
 #include "CubeTile.h"
 #include "../Include/PCH.h"
 
-CubeTile::CubeTile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV),m_pBuffer(nullptr),m_pTransform(nullptr),m_iTileNumber(0), m_eTileSide(TILE_SIDE::TILE_END){}
+CubeTile::CubeTile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV),m_pBuffer(nullptr),m_pTransform(nullptr), m_eTileState(TILE_STATE::STATE_END),m_iTileNumber(0), m_eTileSide(TILE_SIDE::TILE_END){}
 CubeTile::CubeTile(const GameObject& _RHS) : GameObject(_RHS) {}
 CubeTile::~CubeTile() { Free(); }
 

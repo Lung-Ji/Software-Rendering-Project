@@ -2,7 +2,6 @@
 #define Engine_Struct_h__
 
 #include "Engine_Typedef.h"
-
 namespace Engine
 {
 	typedef struct tagVertexColor

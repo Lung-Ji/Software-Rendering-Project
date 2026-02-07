@@ -1,5 +1,4 @@
 #include "SceneManager.h"
-
 IMPLEMENT_SINGLETON(SceneManager)
 
 SceneManager::SceneManager() : CurrentScene(nullptr)	{			}
@@ -9,13 +8,17 @@ HRESULT SceneManager::Ready_SceneManager() {
 	return S_OK;
 }
 INT		SceneManager::Update_SceneManager(const FLOAT& _DT) {
+	EffectManager::GetInstance()->Update_EffectManager(_DT);
 	return CurrentScene->Update_Scene(_DT);
 }
 VOID	SceneManager::LateUpdate_SceneManager(const FLOAT& _DT) {
+	EffectManager::GetInstance()->LateUpdate_EffectManager(_DT);
 	CurrentScene->LateUpdate_Scene(_DT);
 }
 VOID	SceneManager::Render_SceneManager(LPDIRECT3DDEVICE9 _GRPDEV) {
 	RenderManager::GetInstance()->Render_GameObject(_GRPDEV);
+	EffectManager::GetInstance()->Render_EffectManager(_GRPDEV);
+	CollisionManager::GetInstance()->Render_CollisionManager();
 	//CurrentScene->Render_Scene();
 }
 VOID	SceneManager::Free() {

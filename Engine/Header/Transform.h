@@ -38,11 +38,12 @@ public:
 	VOID		Set_Scale(FLOAT _ScaX, FLOAT _ScaY, FLOAT _ScaZ)		{ m_vScale = { _ScaX, _ScaY, _ScaZ };	}
 
 public:
-	_matrix*	Get_World()			{ return &WorldMatrix;			}
+	_matrix*	Get_World()					{	return &WorldMatrix;		}
+	VOID		Set_World(_matrix* _World)	{	WorldMatrix = *_World;		}
 
-	_vec3*		Get_Position()		{ return &m_vInfo[INFO_POS];	}
-	_vec3*		Get_Rotation()		{ return &m_vAngle;				}
-	_vec3*		Get_Scale()			{ return &m_vScale;				}
+	_vec3*		Get_Position()				{ return &m_vInfo[INFO_POS];	}
+	_vec3*		Get_Rotation()				{ return &m_vAngle;				}
+	_vec3*		Get_Scale()					{ return &m_vScale;				}
 
 private:
 	_vec3		m_vInfo[INFO_END];

@@ -8,13 +8,16 @@ Player::~Player()													{}
 HRESULT Player::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
-	_defaultSpeed = 15.f;
-	_speed = _defaultSpeed;
-
-	_isJump = false;
-	_defultJumpSpeed = 50.f;
-	_jumpSpeed = 0.f;
-	_g = 0.5f;
+	_pState				= pState::STATE_IDLE;
+	_eState				= eState::STATE_STANDING;
+	_see				= pSee::SEE_DOWN;
+	_defaultSpeed		= 8.f;
+	_dashSpeed			= 0.f;
+	_dashTime			= 0.f;
+	_speed				= 0.f;
+	_slideTime			= 0.f;
+	_g					= 30.f;
+	_frame				= 1;
 
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
 		Get_GameObject(L"Camera"));
@@ -23,11 +26,10 @@ HRESULT Player::Ready_GameObject() {
 	_vec3 planeDir = { 0.f, 1.f, 0.f };
 	
 	_float angle = acosf(D3DXVec3Dot(D3DXVec3Normalize(&cameraDir, &cameraDir), D3DXVec3Normalize(&planeDir, &planeDir)));
-	angle = angle / D3DX_PI * 180.f;
+	_cameraAngle = angle / D3DX_PI * 180.f;
 
 	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
-	Component_Transform->Rotation(ROT_Y, 45.f);
-	Component_Transform->Rotation(ROT_X, angle);
+	Component_Transform->Rotation(ROT_X, 90.f - _cameraAngle);
 	Component_Transform->Set_Pos({ 5.f, 1.f, 5.f });
 
 	Debug = false;
@@ -38,8 +40,27 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	GameObject::Update_GameObject(_DT);
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
+	SetOnTerrain();
+
+	_frameTick += _DT;
+
 	Gravity(_DT);
-	Key_Input(_DT);
+
+	switch (_pState)
+	{
+	case pState::STATE_IDLE:
+		IDLE_STATE(_DT);
+		break;
+	case pState::STATE_DASH:
+		break;
+	case pState::STATE_ATTACK:
+		break;
+	case pState::STATE_LANDING :
+		break;
+	default:
+		break;
+	}
+	
 
 	return 0;
 }
@@ -51,7 +72,7 @@ VOID Player::Render_GameObject() {
 
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	Component_Texture->Set_Texture(L"���1.jpg");
+	SetGrahpic();
 
 	Component_Buffer->Render_Buffer();
 
@@ -63,90 +84,863 @@ HRESULT Player::Component_Initialize() {
 	Component_Texture	= ADD_COMPONENT_TEXTURE;
 	//Component_FSM		= ADD_COMPONENT_FSM;
 
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Extra/Example");
+	Component_Collider = ADD_COMPONENT_COLLIDER;					// 충돌체 컴포넌트 추가
+	Component_Collider->Set_CenterPos(Component_Transform);			// 충돌체가 오브젝트를 따라 다니도록
+	Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// 충돌체의 범위 조절
+
+	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
+	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
+	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Slide");
+	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Attack");
 
 	return S_OK;
 }
-void Player::Key_Input(const _float& _DT)
+void Player::IDLE_STATE(const _float& _DT)
 {
+	// Idle_Final_Input(_DT);
+
+	if (KEY_DOWN(DIK_F3)) {	//	마우스 커서 고정 여부 TRUE = 고정, FALSE = 고정 해제
+		Debug ? Debug = FALSE : Debug = TRUE;
+	}
 
 	if (!Debug)
 	{
 		_vec3		upDir, rightDir;
-		upDir = { 1.f, 0.f, 1.f };
-		rightDir = { 1.f, 0.f, -1.f };
+		upDir = { 0.f, 0.f, 1.f };
+		rightDir = { 1.f, 0.f, 0.f };
 		D3DXVec3Normalize(&upDir, &upDir);
 		D3DXVec3Normalize(&rightDir, &rightDir);
 
 		//Component_Transform->Get_Info(INFO_LOOK, &vDir);
-
-		if ((KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D)) ||
-			(KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A)) || (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D)))
+		if (_speed == 0.f)
 		{
+			if (_eState != eState::STATE_STANDING)
+			{
+				_eState = eState::STATE_STANDING;
+				//_frame = 1;
+			}
+		}
+
+		bool mouseLB = KeyManager::GetInstance()->Get_MouseState(DIM_LB) & 0x80;
+
+		if (!mouseLB && _frame > 8)
+			_frame = 1;
+
+		if (mouseLB)
+		{
+			POINT point;
+			GetCursorPos(&point);
+			ScreenToClient(hWnd, &point);
+
+			_vec2 playerPos = { WINCX / 2 , WINCY / 2 };
+
+			if (point.x <= playerPos.x && point.y >= playerPos.y)
+				_eState = eState::STATE_ATTACK_LD;
+			else if(point.x > playerPos.x && point.y > playerPos.y)
+				_eState = eState::STATE_ATTACK_RD;
+			else if (point.x < playerPos.x && point.y < playerPos.y)
+				_eState = eState::STATE_ATTACK_LU;
+			else if (point.x >= playerPos.x && point.y <= playerPos.y)
+				_eState = eState::STATE_ATTACK_RU;
+
+		}
+			
+		Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
+
+		if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A))
+		{
+			switch (_eState)
+			{
+			case eState::STATE_ATTACK_LU:
+				_eState = eState::STATE_ATTACK_RUN_LU;
+				break;
+			case eState::STATE_ATTACK_RU:
+				_eState = eState::STATE_ATTACK_RUN_BACK_RU;
+				break;
+			case eState::STATE_ATTACK_LD:
+				_eState = eState::STATE_ATTACK_RUN_LD;
+				break;
+			case eState::STATE_ATTACK_RD:
+				_eState = eState::STATE_ATTACK_RUN_BACK_RD;
+				break;
+			case eState::STATE_RUN_LU:
+				break;
+			default:
+				//_frame = 1;
+				_eState = eState::STATE_RUN_LU;
+				_see = pSee::SEE_LU;
+				break;
+			}
+
 			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
-		}
-		else
-		{
-			_speed = _defaultSpeed;
-		}
 
-		if (KEY_HOLD(DIK_W))
-		{
+			if (mouseLB)
+				_speed *= 0.5f;
+			else
+				_eState = eState::STATE_RUN_LU;
+
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+
+
+		}
+		else if (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_A))
+		{
+			switch (_eState)
+			{
+			case eState::STATE_ATTACK_LU:
+				_eState = eState::STATE_ATTACK_RUN_LU;
+				break;
+			case eState::STATE_ATTACK_RU:
+				_eState = eState::STATE_ATTACK_RUN_BACK_RU;
+				break;
+			case eState::STATE_ATTACK_LD:
+				_eState = eState::STATE_ATTACK_RUN_LD;
+				break;
+			case eState::STATE_ATTACK_RD:
+				_eState = eState::STATE_ATTACK_RUN_BACK_RD;
+				break;
+			case eState::STATE_RUN_LD:
+				break;
+			default:
+				//_frame = 1;
+				_eState = eState::STATE_RUN_LD;
+				_see = pSee::SEE_LD;
+				break;
+			}
+
+			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+
+			if(mouseLB)
+				_speed *= 0.5f;
+			else
+				_eState = eState::STATE_RUN_LD;
+
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+
+		}
+		else if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_D))
+		{
+			switch (_eState)
+			{
+			case eState::STATE_ATTACK_LU:
+				_eState = eState::STATE_ATTACK_RUN_BACK_LU;
+				break;
+			case eState::STATE_ATTACK_RU:
+				_eState = eState::STATE_ATTACK_RUN_RU;
+				break;
+			case eState::STATE_ATTACK_LD:
+				_eState = eState::STATE_ATTACK_RUN_BACK_LD;
+				break;
+			case eState::STATE_ATTACK_RD:
+				_eState = eState::STATE_ATTACK_RUN_RD;
+				break;
+			case eState::STATE_RUN_RU:
+				break;
+			default:
+				//_frame = 1;
+				_eState = eState::STATE_RUN_RU;
+				_see = pSee::SEE_RU;
+			}
+
+			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+
+			if (mouseLB)
+				_speed *= 0.5f;
+			else
+				_eState = eState::STATE_RUN_RU;
+
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+
+		}
+		else if (KEY_HOLD(DIK_S) && KEY_HOLD(DIK_D))
+		{
+			switch (_eState)
+			{
+			case eState::STATE_ATTACK_LU:
+				_eState = eState::STATE_ATTACK_RUN_BACK_LU;
+				break;
+			case eState::STATE_ATTACK_RU:
+				_eState = eState::STATE_ATTACK_RUN_RU;
+				break;
+			case eState::STATE_ATTACK_LD:
+				_eState = eState::STATE_ATTACK_RUN_BACK_LD;
+				break;
+			case eState::STATE_ATTACK_RD:
+				_eState = eState::STATE_ATTACK_RUN_RD;
+				break;
+			case eState::STATE_RUN_RD:
+				break;
+			default:
+				//_frame = 1;
+				_eState = eState::STATE_RUN_RD;
+				_see = pSee::SEE_RD;
+			}
+
+			_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+
+			if (mouseLB)
+				_speed *= 0.5f;
+			else
+				_eState = eState::STATE_RUN_RD;
+
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+
+		}
+		else if (KEY_HOLD(DIK_W))
+		{
+			switch (_eState)
+			{
+			case eState::STATE_ATTACK_LU:
+				_eState = eState::STATE_ATTACK_RUN_LU;
+				break;
+			case eState::STATE_ATTACK_RU:
+				_eState = eState::STATE_ATTACK_RUN_RU;
+				break;
+			case eState::STATE_ATTACK_LD:
+				_eState = eState::STATE_ATTACK_RUN_BACK_LD;
+				break;
+			case eState::STATE_ATTACK_RD:
+				_eState = eState::STATE_ATTACK_RUN_BACK_RD;
+				break;
+			case eState::STATE_RUN_UP:
+				break;
+			default:
+				//_frame = 1;
+				_eState = eState::STATE_RUN_UP;
+				_see = pSee::SEE_UP;
+				break;
+			}
+
+			_speed = _defaultSpeed;
+			if (mouseLB)
+				_speed *= 0.5f;
+			else
+				_eState = eState::STATE_RUN_UP;
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+
 		}
 
-		if (KEY_HOLD(DIK_S))
+		else if (KEY_HOLD(DIK_S))
 		{
+			switch (_eState)
+			{
+			case eState::STATE_ATTACK_LU:
+				_eState = eState::STATE_ATTACK_RUN_BACK_LU;
+				break;
+			case eState::STATE_ATTACK_RU:
+				_eState = eState::STATE_ATTACK_RUN_BACK_RU;
+				break;
+			case eState::STATE_ATTACK_LD:
+				_eState = eState::STATE_ATTACK_RUN_LD;
+				break;
+			case eState::STATE_ATTACK_RD:
+				_eState = eState::STATE_ATTACK_RUN_RD;
+				break;
+			case eState::STATE_RUN_DOWN:
+				break;
+			default:
+				//_frame = 1;
+				_eState = eState::STATE_RUN_DOWN;
+				_see = pSee::SEE_DOWN;
+			}
+
+			_speed = _defaultSpeed;
+			if (mouseLB)
+				_speed *= 0.5f;
+			else
+				_eState = eState::STATE_RUN_DOWN;
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
 		}
 
-		if (KEY_HOLD(DIK_A))
+		else if (KEY_HOLD(DIK_A))
 		{
-			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
-		}
+			switch (_eState)
+			{
+			case eState::STATE_ATTACK_LU:
+				_eState = eState::STATE_ATTACK_RUN_LU;
+				break;
+			case eState::STATE_ATTACK_RU:
+				_eState = eState::STATE_ATTACK_RUN_BACK_RU;
+				break;
+			case eState::STATE_ATTACK_LD:
+				_eState = eState::STATE_ATTACK_RUN_LD;
+				break;
+			case eState::STATE_ATTACK_RD:
+				_eState = eState::STATE_ATTACK_RUN_BACK_RD;
+				break;
+			case eState::STATE_RUN_LEFT:
+				break;
+			default:
+				_eState = eState::STATE_RUN_LEFT;
+				_see = pSee::SEE_LEFT;
+			}
 
-		if (KEY_HOLD(DIK_D))
+			_speed = _defaultSpeed;
+			if (mouseLB)
+				_speed *= 0.5f;
+			else
+				_eState = eState::STATE_RUN_LEFT;
+			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+
+		}
+		else if (KEY_HOLD(DIK_D))
 		{
+			switch (_eState)
+			{
+			case eState::STATE_ATTACK_LU:
+				_eState = eState::STATE_ATTACK_RUN_BACK_LU;
+				break;
+			case eState::STATE_ATTACK_RU:
+				_eState = eState::STATE_ATTACK_RUN_RU;
+				break;
+			case eState::STATE_ATTACK_LD:
+				_eState = eState::STATE_ATTACK_RUN_BACK_LD;
+				break;
+			case eState::STATE_ATTACK_RD:
+				_eState = eState::STATE_ATTACK_RUN_RD;
+				break;
+			case eState::STATE_RUN_RIGHT:
+				break;
+			default:
+				//_frame = 1;
+				_eState = eState::STATE_RUN_RIGHT;
+				_see = pSee::SEE_RIGHT;
+			}
+
+			_speed = _defaultSpeed;
+			if (mouseLB)
+				_speed *= 0.5f;
+			else
+				_eState = eState::STATE_RUN_RIGHT;
 			Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
 		}
+		
+		else
+		{
+			if (_speed > 0.f)
+			{
+				if (_slideTime < 0.001f && _speed <= _defaultSpeed * 0.5) {
+					_speed = 0.f; _slideTime = 0.f;
+				}
+
+				_slideTime += _DT;
+				_speed -= _DT * _g;
+				if (_speed < 0.f){
+					_speed = 0.f;
+					_slideTime = 0.f;
+				}
+					
+				float tempSpeed = _speed;
+				switch (_see)
+				{
+				case pSee::SEE_LEFT :
+					_eState = eState::STATE_STANDING;
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+					break;
+				case pSee::SEE_RIGHT:
+					_eState = eState::STATE_STANDING;
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+					break;
+				case pSee::SEE_UP:
+					_eState = eState::STATE_STANDING;
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+					break;
+				case pSee::SEE_DOWN:
+					_eState = eState::STATE_STANDING;
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
+					break;
+				case pSee::SEE_LU:
+					_eState = eState::STATE_STANDING;
+					tempSpeed = tempSpeed * cos(D3DX_PI * 0.25f);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -tempSpeed, _DT);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), tempSpeed, _DT);
+					break;
+				case pSee::SEE_RU:
+					_eState = eState::STATE_STANDING;
+					tempSpeed = tempSpeed * cos(D3DX_PI * 0.25f);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), tempSpeed, _DT);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), tempSpeed, _DT);
+					break;
+				case pSee::SEE_LD:
+					_eState = eState::STATE_STANDING;
+					tempSpeed = tempSpeed * cos(D3DX_PI * 0.25f);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -tempSpeed, _DT);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -tempSpeed, _DT);
+					break;
+				case pSee::SEE_RD:
+					_eState = eState::STATE_STANDING;
+					tempSpeed = tempSpeed * cos(D3DX_PI * 0.25f);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), tempSpeed, _DT);
+					Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -tempSpeed, _DT);
+					break;
+				default:
+					_speed = 0.f;
+					break;
+				}
+			}
+		}
+
 		//if (KEY_DOWN(DIK_C) && !_isJump)
 		//{
 		//	_isJump = true;
 		//	_jumpSpeed = _defaultSpeed;
 		//}
+	// 광윤 - KeyInput이란 함수에 넣었었는데 Merge하니까 다른 곳으로 옮겨졌어요,////////////////////
+		if (KEY_DOWN(DIK_1)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_1, 0.5f); }
+		if (KEY_DOWN(DIK_2)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_2, 0.5f); }
+		if (KEY_DOWN(DIK_3)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_3, 0.5f); }
 	}
-	
+	if (MOUSE_LBUTTON)
+	{
+		_vec3	vPickPos = RayOnTerrain();
+		_vec3	vDir = vPickPos - *Component_Transform->Get_Position();
 
+		//Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), 10.f, _DT);
+		// vDir = (플레이어 -> 피킹 위치) 방향
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////
+}
 
-	if (KEY_DOWN(DIK_P)) {	//	���콺 Ŀ�� ���� ���� TRUE = ����, FALSE = ���� ����
-		Debug ? Debug = FALSE : Debug = TRUE;
+void Player::DASH_STATE(const _float& _DT)
+{
+	_vec3		upDir, rightDir;
+	upDir = { 0.f, 0.f, 1.f };
+	rightDir = { 1.f, 0.f, 0.f };
+	D3DXVec3Normalize(&upDir, &upDir);
+	D3DXVec3Normalize(&rightDir, &rightDir);
+
+	if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A)) {
+		_eState = eState::STATE_DASH_LU;
+		_see = pSee::SEE_LU;
+
+		_speed = _defaultSpeed * cos(D3DX_PI * 0.25f);
+
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+	}
+	else if (KEY_HOLD(DIK_A))
+	{
+		_eState = eState::STATE_DASH_LEFT;
+		_see = pSee::SEE_LEFT;
+		_speed = _defaultSpeed;
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), -_speed, _DT);
+	}
+	else if (KEY_HOLD(DIK_D))
+	{
+		_eState = eState::STATE_DASH_RIGHT;
+		_see = pSee::SEE_RIGHT;
+		_speed = _defaultSpeed;
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+	}
+	else if (KEY_HOLD(DIK_U))
+	{
+		_eState = eState::STATE_DASH_UP;
+		_see = pSee::SEE_UP;
+		_speed = _defaultSpeed;
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), _speed, _DT);
+	}
+	else if (KEY_HOLD(DIK_S))
+	{
+		_eState = eState::STATE_DASH_DOWN;
+		_see = pSee::SEE_DOWN;
+		_speed = _defaultSpeed;
+		Component_Transform->Move_Pos(D3DXVec3Normalize(&upDir, &upDir), -_speed, _DT);
 	}
 
+	switch (_eState)
+	{
+
+	}
+	if (_dashSpeed <= 0)
+		_pState = pState::STATE_IDLE;
+}
+
+void Player::ATTACK_STATE(const _float& _DT)
+{
+}
+
+void Player::Idle_Final_Input(const _float& _DT)
+{
+	if (KEY_DOWN(DIK_LSHIFT)) {
+		_pState = pState::STATE_DASH;
+		_frame = 1;
+
+	}
 }
 
 void Player::Gravity(const _float& _DT)
 {
-	_vec3 pos;
-	Component_Transform->Get_Info(INFO_POS, &pos);
-	float tempy = pos.y;
+	//_vec3 pos;
+	//Component_Transform->Get_Info(INFO_POS, &pos);
+	//float tempy = pos.y;
 
-	if (pos.y > 1.f || _isJump)
+	//if (pos.y > 1.f || _isJump)
+	//{
+	//	_jumpSpeed -= _g;
+	//	tempy += _jumpSpeed * _DT;
+	//	_vec3		vDir;
+	//	Component_Transform->Get_Info(INFO_UP, &vDir);
+
+	//	Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _jumpSpeed, _DT);
+	//}
+
+	//if (tempy < 1.f)
+	//{
+	//	_isJump = false;
+	//	_jumpSpeed = 0.f;
+
+	//	Component_Transform->Set_Pos({ pos.x, 1.f, pos.z });
+	//}
+}
+void Player::SetGrahpic()
+{
+	TCHAR FileName[128] = L"";
+
+	_vec3 size = { 0.44f, 1.f, 1.f };
+	size *= 1.2f;
+
+	switch (_eState)
 	{
-		_jumpSpeed -= _g;
-		tempy += _jumpSpeed * _DT;
-		_vec3		vDir;
-		Component_Transform->Get_Info(INFO_UP, &vDir);
+	case eState::STATE_STANDING :
+		switch (_see)
+		{
+		case pSee::SEE_DOWN :
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Player_Stand_Down%d.png", _frame);
+			}
+			else {
+				if (_frame > 4) _frame = 1;
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_Down_Slide%d.png", _frame);
+			}
+			break;
+		case pSee::SEE_UP:
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Player_Stand_UP%d.png", _frame);
+			}
+			else {
+				if (_frame > 4) _frame = 1;
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_Up_Slide%d.png", _frame);
+			}
+			break;
+		case pSee::SEE_RIGHT:
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"StandRS0%d.png", _frame);
+			}
+			else {
+				if (_frame > 4) _frame = 1;
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_Right_Slide%d.png", _frame);
+			}
+			break;
+		case pSee::SEE_LEFT:
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Player_Stand_Left%d.png", _frame);
+			}
+			else{
+				if (_frame > 4) _frame = 1;
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_Left_Slide%d.png", _frame);
+			}
+			break;
+		case pSee::SEE_LU:
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Player_Stand_LT%d.png", _frame);
+			}
+			else {
+				if (_frame > 4) _frame = 1;
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_LU_Slide%d.png", _frame);
+			}
+			break;
+		case pSee::SEE_RU:
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Player_Stand_RT%d.png", _frame);
+			}
+			else {
+				if (_frame > 4) _frame = 1;
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_RU_Slide%d.png", _frame);
+			}
+			break;
+		case pSee::SEE_LD:
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Stand_LB0%d.png", _frame);
+			}
+			else {
+				if (_frame > 4) _frame = 1;
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_LD_Slide%d.png", _frame);
+			}
+			break;
+		case pSee::SEE_RD:
+			if (_speed <= 0) {
+				if (_frame > 8) _frame = 1;
+				wsprintfW(FileName, L"Stand_RB0%d.png", _frame);
+			}
+			else {
+				if (_frame > 4) _frame = 1;
+				if (_slideTime < 0.1f) _frame = 1;
+				wsprintfW(FileName, L"Player_RD_Slide%d.png", _frame);
+			}
+			break;
+		}
+		if (_speed <= 0)
+			Anim(FileName, 0.1f, 8);
+		else
+			Anim(FileName, 0.1f, 4);
+		
+		break;
+	case eState::STATE_RUN_UP:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Run_UP%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_RUN_DOWN:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Run_Down%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_RUN_LEFT:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Run_LEFT%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	case eState::STATE_RUN_LU:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Run_LU%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
 
-		Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), _jumpSpeed, _DT);
+	case eState::STATE_RUN_LD:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Run_LD%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+
+	case eState::STATE_RUN_RIGHT:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Run_Right%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+
+	case eState::STATE_RUN_RU:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"RTRun0%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+
+	case eState::STATE_RUN_RD:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Run_RD%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+
+	case eState::STATE_ATTACK_LU:
+		wsprintfW(FileName, L"Player_Attack_Stand_LU%d.png", _frame);
+		Anim(FileName, 0.1f, 10);
+		break;
+
+	case eState::STATE_ATTACK_LD:
+		wsprintfW(FileName, L"Player_Attack_Stand_LD%d.png", _frame);
+		Anim(FileName, 0.1f, 10);
+		break;
+	case eState::STATE_ATTACK_RU:
+		wsprintfW(FileName, L"Player_Attack_Stand_RU%d.png", _frame);
+		Anim(FileName, 0.1f, 10);
+		break;
+
+	case eState::STATE_ATTACK_RD:
+		wsprintfW(FileName, L"Player_Attack_Stand_RD%d.png", _frame);
+		Anim(FileName, 0.1f, 10);
+		break;
+	case eState::STATE_ATTACK_RUN_LU:
+		wsprintfW(FileName, L"Player_Attack_LU%d.png", _frame);
+		Anim(FileName, 0.1f, 10);
+		break;
+	case eState::STATE_ATTACK_RUN_LD:
+		wsprintfW(FileName, L"Player_Attack_LD%d.png", _frame);
+		Anim(FileName, 0.1f, 10);
+		break;
+	case eState::STATE_ATTACK_RUN_RU:
+		wsprintfW(FileName, L"Player_Attack_RU%d.png", _frame);
+		Anim(FileName, 0.1f, 10);
+		break;
+	case eState::STATE_ATTACK_RUN_RD:
+		wsprintfW(FileName, L"Player_Attack_RD%d.png", _frame);
+		Anim(FileName, 0.1f, 10);
+		break;
+	case eState::STATE_ATTACK_RUN_BACK_LU:
+		wsprintfW(FileName, L"Player_Attack_LU%d.png", _frame);
+		Anim(FileName, 0.1f, 10, true);
+		break;
+	case eState::STATE_ATTACK_RUN_BACK_LD:
+		wsprintfW(FileName, L"Player_Attack_LD%d.png", _frame);
+		Anim(FileName, 0.1f, 10, true);
+		break;
+	case eState::STATE_ATTACK_RUN_BACK_RU:
+		wsprintfW(FileName, L"Player_Attack_RU%d.png", _frame);
+		Anim(FileName, 0.1f, 10, true);
+		break;
+	case eState::STATE_ATTACK_RUN_BACK_RD:
+		if (_frame > 10) _frame = 1;
+		wsprintfW(FileName, L"Player_Attack_RD%d.png", _frame);
+		Anim(FileName, 0.1f, 10, true);
+		break;
+	default:
+		if (_frame > 8) _frame = 1;
+		wsprintfW(FileName, L"Player_Stand_Down%d.png", _frame);
+		Anim(FileName, 0.1f, 8);
+		break;
+	}
+}
+void Player::Anim(TCHAR FileName[128], float delay, int maxIdx, bool reverse)
+{
+	Component_Texture->Set_Texture(FileName);
+
+	if (!reverse)
+	{
+		if (_frameTick > delay)
+		{
+			if (++_frame > maxIdx)
+				_frame = 1;
+
+			_frameTick = 0.f;
+		}
+	}
+	else
+	{
+		if (_frameTick > delay)
+		{
+			if (--_frame < 1)
+				_frame = maxIdx;
+
+			_frameTick = 0.f;
+		}
 	}
 
-	if (tempy < 1.f)
-	{
-		_isJump = false;
-		_jumpSpeed = 0.f;
+}
+D3DXVECTOR3 Player::MousePicker_NonTarget(HWND _hWnd, Buffer* _TerrainBuffer, Transform* _TerrainTransform) {
 
-		Component_Transform->Set_Pos({ pos.x, 1.f, pos.z });
+	POINT MousePoint {0, 0};
+	GetCursorPos(&MousePoint);
+	ScreenToClient(_hWnd, &MousePoint);
+
+	D3DVIEWPORT9		ViewPort;
+	ZeroMemory(&ViewPort, sizeof(D3DVIEWPORT9));
+	GRPDEV->GetViewport(&ViewPort);
+
+	_vec3		MousePosition;
+
+	MousePosition.x = MousePoint.x /  (ViewPort.Width * 0.5f)  - 1.f;
+	MousePosition.y = MousePoint.y / -(ViewPort.Height * 0.5f) + 1.f;
+	MousePosition.z = 0.f;
+
+	D3DXMATRIX	WorldMat, ProjectionMat, ViewMat;
+
+	GRPDEV->GetTransform(D3DTS_PROJECTION, &ProjectionMat);
+	D3DXMatrixInverse(&ProjectionMat, 0, &ProjectionMat);
+	D3DXVec3TransformCoord(&MousePosition, &MousePosition, &ProjectionMat);
+
+	GRPDEV->GetTransform(D3DTS_VIEW, &ViewMat);
+	D3DXMatrixInverse(&ViewMat, 0, &ViewMat);
+
+	_vec3	RayPosition = { 0.f, 0.f, 0.f };//*Component_Transform->Get_Position();
+	_vec3	RayDirection = MousePosition - RayPosition;
+
+	D3DXVec3TransformCoord(&RayPosition, &RayPosition, &ViewMat);
+	D3DXVec3TransformNormal(&RayDirection, &RayDirection, &ViewMat);
+
+	WorldMat = *(_TerrainTransform->Get_World());
+	D3DXMatrixInverse(&WorldMat, 0, &WorldMat);
+
+	D3DXVec3TransformCoord(&RayPosition, &RayPosition, &WorldMat);
+	D3DXVec3TransformNormal(&RayDirection, &RayDirection, &WorldMat);
+
+	const _vec3* TerrainVertexPos = _TerrainBuffer->Get_BufferPos(0);
+
+	ULONG	VertexNumb[3]{};
+	FLOAT	U(0.f), V(0.f), Distance(0.f);
+
+	for (ULONG Z = 0; Z < VTXCNTZ - 1; ++Z) {
+		for (ULONG X = 0; X < VTXCNTX - 1; ++X) {
+			ULONG INDEX = Z * VTXCNTX + X;
+
+			// ������ ��
+			VertexNumb[0] = INDEX + VTXCNTX;
+			VertexNumb[1] = INDEX + VTXCNTX + 1;
+			VertexNumb[2] = INDEX + 1;
+
+			// V1 + U(V2 - V1) + V(V3 - V1)
+
+			if (D3DXIntersectTri(&TerrainVertexPos[VertexNumb[1]], &TerrainVertexPos[VertexNumb[0]], &TerrainVertexPos[VertexNumb[2]],
+								&RayPosition, &RayDirection, &U, &V, &Distance))
+			{
+				return _vec3(TerrainVertexPos[VertexNumb[1]].x + U * (TerrainVertexPos[VertexNumb[0]].x - TerrainVertexPos[VertexNumb[1]].x),
+					0.f,
+					TerrainVertexPos[VertexNumb[1]].z + V * (TerrainVertexPos[VertexNumb[2]].z - TerrainVertexPos[VertexNumb[1]].z));
+			}
+
+
+
+			// ���� �Ʒ�
+			VertexNumb[0] = INDEX + VTXCNTX;
+			VertexNumb[1] = INDEX + 1;
+			VertexNumb[2] = INDEX;
+
+			// V1 + U(V2 - V1) + V(V3 - V1)
+
+			if (D3DXIntersectTri(&TerrainVertexPos[VertexNumb[2]],
+				&TerrainVertexPos[VertexNumb[1]],
+				&TerrainVertexPos[VertexNumb[0]],
+				&RayPosition, &RayDirection,
+				&U, &V, &Distance))
+			{	
+				return _vec3(TerrainVertexPos[VertexNumb[2]].x + U * (TerrainVertexPos[VertexNumb[1]].x - TerrainVertexPos[VertexNumb[2]].x),
+					0.f,
+					TerrainVertexPos[VertexNumb[2]].z + V * (TerrainVertexPos[VertexNumb[0]].z - TerrainVertexPos[VertexNumb[2]].z));
+			}
+
+		}
 	}
+
+	return _vec3(0.f, 0.f, 0.f);
+}
+D3DXVECTOR3 Player::RayOnTerrain() {
+	Buffer* TerrainBuffer = dynamic_cast<Buffer*>(SceneManager::GetInstance()->Get_GameObject(L"Terrain")
+		->Get_Component(COMPONENT_TYPE::COMPONENT_TERRAIN));
+
+	if (TerrainBuffer == nullptr) return D3DXVECTOR3(0.f, 0.f, 0.f);
+
+	Transform* TerrainTransform = dynamic_cast<Transform*>(SceneManager::GetInstance()->Get_GameObject(L"Terrain")
+		->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM));
+
+	if (TerrainTransform == nullptr) return D3DXVECTOR3(0.f, 0.f, 0.f);
+
+	return MousePicker_NonTarget(hWnd, TerrainBuffer, TerrainTransform);
+}
+D3DXVECTOR3 Player::SetOnTerrain() {
+	_vec3*	Position;
+	Position = Component_Transform->Get_Position();
+
+	Buffer* TerrainBuffer = dynamic_cast<Buffer*>(SceneManager::GetInstance()->Get_GameObject(L"Terrain")
+		->Get_Component(COMPONENT_TYPE::COMPONENT_TERRAIN));
+
+	if (TerrainBuffer == nullptr) return D3DXVECTOR3(0.f, 0.f, 0.f);
+
+	return D3DXVECTOR3(Position->x, 1.f, Position->z);
 }
 Player* Player::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	Player* PLAYER = new Player(_GRPDEV);

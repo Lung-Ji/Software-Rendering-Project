@@ -6,7 +6,6 @@ UITest::~UITest() {}
 
 HRESULT	UITest::Ready_Scene() {
 	ProtoManager::GetInstance()->Ready_Prototype(GRPDEV);
-	ProtoManager::GetInstance()->Push_ProtoType(GRPDEV, StateMachine::Create(GRPDEV));
 	if (FAILED(Ready_Enviroment_Layer(L"Enviroment_Layer")))	return E_FAIL;
 	if (FAILED(Ready_GameLogic_Layer(L"GameLogic_Layer")))		return E_FAIL;
 	KeyManager::GetInstance()->Ready_KeyManager(hInst, hWnd);

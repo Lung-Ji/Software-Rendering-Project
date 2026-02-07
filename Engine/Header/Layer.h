@@ -18,11 +18,10 @@ public:
 	virtual VOID		LateUpdate_Layer(CONST FLOAT& _DT);
 	//virtual VOID		Render_Layer();
 
-	GameObject*			Get_GameObject(GAMEOBJECT_TYPE _OID);
-	Component*			Get_Component(GAMEOBJECT_TYPE _OID, COMPONENT_TYPE _CID);
+	vector<GameObject*>* Get_GameObjectList() { return &GameObjectList; }
 
 private:
-	vector<GameObject*>		GameObjectList;
+	vector<GameObject*>	GameObjectList;
 
 public:
 	static	Layer*		Create();

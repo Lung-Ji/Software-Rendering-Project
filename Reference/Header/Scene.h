@@ -17,10 +17,20 @@ public:
 
 public:
 	Layer*		Get_Layer(LAYER_TYPE _LID);
-	GameObject* Get_GameObject(LAYER_TYPE _LID, GAMEOBJECT_TYPE _OTYPE);
-	Component*	Get_Component(LAYER_TYPE _LID, GAMEOBJECT_TYPE _OTYPE, COMPONENT_TYPE _CID);
 
 	GameObject* Get_GameObject(CONST TCHAR* _TAG);
+
+	template <typename T>
+	HRESULT		Add_GameObjectToScene(LAYER_TYPE _LTYPE, GAMEOBJECT_TYPE _GTYPE, CONST TCHAR* _TAG = L"") {
+		GameObject* GOBJ = T::Create(GRPDEV);
+		GOBJ->Set_ObjectTag(_TAG);
+		GOBJ->Set_ObjectType(_GTYPE);
+
+		if (nullptr == GOBJ)										return E_FAIL;
+		if (FAILED(LayerList[(LONG)_LTYPE]->Add_GameObject(GOBJ)))	return E_FAIL;
+		return S_OK;
+	}
+
 protected:
 	vector<Layer*>				LayerList;
 	LPDIRECT3DDEVICE9			GRPDEV;

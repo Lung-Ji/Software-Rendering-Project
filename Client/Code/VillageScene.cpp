@@ -34,6 +34,9 @@ HRESULT VillageScene::Ready_UserInterface_Layer(CONST TCHAR* _LTAG) {
 }
 VillageScene* VillageScene::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	VillageScene* LS = new VillageScene(_GRPDEV);
+
+	SceneManager::GetInstance()->Set_CurrentScene(LS);
+
 	if (FAILED(LS->Ready_Scene())) {
 		MSG_BOX("Cannot Create VillageScene.");
 		Safe_Release(LS);
