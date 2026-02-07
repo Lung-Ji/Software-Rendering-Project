@@ -5,6 +5,7 @@ UIManager::~UIManager() {}
 
 HRESULT UIManager::Ready_UIObject(UIManager* _Sprite)
 {
+  return S_OK;
 }
 
 UIManager* UIManager::Create(LPDIRECT3DDEVICE9 _GRPDEV,CONST _tchar* _uiName ,CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT,
@@ -20,7 +21,7 @@ HRESULT UIManager::Import_UISprite(UIType _uitype, CONST TCHAR* _PATH, UINT _WID
   vecList.push_back({ _uitype, {SpriteINFO(_PATH,_WIDTH,_HEIGHT,_POSX,_POSY,_VIS,_OPACITY)} });
 
   D3DXCreateTextureFromFileExW(GRPDEV,
-    vecList.back().second.back().PATH,
+    vecList.back().second.back().PATH.c_str(),
     vecList.back().second.back().WIDTH,
     vecList.back().second.back().HEIGHT,
     1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL,

@@ -3,7 +3,7 @@
 #include "Sprite.h"
 
 BEGIN(Engine)
-class UISprite :  public SpriteObject
+class UISprite :  public Component
 {
 private:
   explicit UISprite();

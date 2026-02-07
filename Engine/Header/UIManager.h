@@ -26,9 +26,9 @@ public:
 public:
 	HRESULT		Ready_UI();
 	INT				Update_UI();
+
 	// 스프라이트 출력 함수
 	VOID			Render_UI(UIType _uitype, CONST TCHAR* _UINAME);
-
 	// 스프라이트 추가 함수
 	HRESULT		Import_UISprite(UIType _uitype, CONST TCHAR* _PATH, UINT _WIDTH,
 		UINT _HEIGHT, FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY);
@@ -46,9 +46,10 @@ private:
 
 	// 스프라이트 관련 BOOL 변수
 	BOOL		isActive;
-	//map<UIType, map<CONST _tchar*, SpriteINFO>> UIList;
-	//map<const _tchar*,SpriteINFO>UIList;
+	// 벡터 내에서 특정 타입의 UI만 출력해줄 수 있게 하는 벡터 컨테이너
+	// UIType에 따른 특정 UI만 출력하게 해놓았음.
 	vector<pair<UIType,vector<SpriteINFO>>> vecList;
+
 private:
 	virtual VOID Free();
 

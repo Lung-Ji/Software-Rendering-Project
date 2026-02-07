@@ -15,6 +15,7 @@ struct ENGINE_DLL SpriteINFO {
 		POS{ _POSX, _POSY, 0.f }, OPACITY(_OPACITY), TEXTURE(nullptr), Visible(VIS){
 	}
 };
+
 class ENGINE_DLL SpriteObject: public Component {
 private:
 	explicit SpriteObject();

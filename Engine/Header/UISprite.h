@@ -1,23 +1,8 @@
 #pragma once
 #include "Component.h"
+#include "Sprite.h"
 
 BEGIN(Engine)
-
-struct ENGINE_DLL SpriteINFO {
-	wstring					PATH;
-	UINT					WIDTH, HEIGHT;
-	D3DXVECTOR3				POS;
-	INT						OPACITY;
-	LPDIRECT3DTEXTURE9		TEXTURE;
-	BOOL								Visible;
-
-	SpriteINFO(CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT,
-		FLOAT _POSX, FLOAT _POSY, BOOL VIS, INT _OPACITY = 255)
-		: PATH(_PATH), WIDTH(_WIDTH), HEIGHT(_HEIGHT),
-		POS{ _POSX, _POSY, 0.f }, OPACITY(_OPACITY), TEXTURE(nullptr), Visible(VIS) {
-	}
-};
-
 class UISprite :  public Component
 {
 private:
