@@ -73,6 +73,9 @@
     <Filter Include="11. UIManager">
       <UniqueIdentifier>{06dba40a-cde8-4d74-a015-c5cfb226400f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="11. FontManager">
+      <UniqueIdentifier>{45e3c7f3-03b5-4afb-a8f9-8cf66c4cb361}</UniqueIdentifier>
+    </Filter>
     <Filter Include="09. ResourceManager">
       <UniqueIdentifier>{4343f91f-80fb-46dc-8b79-fc3119b9473e}</UniqueIdentifier>
     </Filter>
@@ -174,6 +177,15 @@
     <ClInclude Include="..\Header\EffectManager.h ">
       <Filter>12. EffectManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\FontManager.h">
+      <Filter>11. FontManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Font.h">
+      <Filter>11. FontManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\UISprite.h">
+      <Filter>10. UIManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GraphicDevice.cpp">
@@ -247,6 +259,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\TileInfo.cpp">
       <Filter>99. Component\06. Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FontManager.cpp">
+      <Filter>11. FontManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Font.cpp">
+      <Filter>11. FontManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UISprite.cpp">
+      <Filter>10. UIManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

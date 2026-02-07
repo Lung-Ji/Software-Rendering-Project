@@ -28,6 +28,14 @@ VOID StartScene::LateUpdate_Scene(CONST FLOAT& _DT) {
 }
 VOID StartScene::Render_Scene() {
 
+	//GOBJ = Tile::Create(GRPDEV);
+	//GOBJ->Set_ObjectTag(L"Tile");
+	//
+	//if (nullptr == GOBJ)					return E_FAIL;
+	//if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
+	
+	return S_OK;
+
 }
 HRESULT StartScene::Ready_Enviroment_Layer() {
 	Add_GameObjectToScene<Terrain>			(LAYER_TYPE::LAYER_STATIC_OBJECT , GAMEOBJECT_TYPE::OBJECT_TERRAIN, L"Terrain"		);
