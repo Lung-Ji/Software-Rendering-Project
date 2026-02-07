@@ -237,7 +237,10 @@
     <ClInclude Include="..\Header\MonsterEffect.h">
       <Filter>03. GameObject\06. Effect\02. MonsterEffect</Filter>
     </ClInclude>
-    </ItemGroup>
+    <ClInclude Include="..\Header\Monster_State.h">
+      <Filter>03. GameObject\02. Monster</Filter>
+    </ClInclude>
+  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
       <Filter>01. GameManager</Filter>
@@ -337,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Bullet_Standard.cpp">
       <Filter>03. GameObject\07. ProJectile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster_State.cpp">
+      <Filter>03. GameObject\02. Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
