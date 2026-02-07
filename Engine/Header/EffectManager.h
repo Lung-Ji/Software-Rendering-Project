@@ -17,7 +17,6 @@ public:
 	VOID		Render_EffectManager(LPDIRECT3DDEVICE9 _GRPDEV);
 public:
 	HRESULT		Append_Effect(EFFECT_OWNER _Owner, GameObject* _Effect);
-	HRESULT		Remove_Effect(EFFECT_OWNER _Owner, GameObject* _Effect);
 
 private:
 	list<GameObject*>	Container_PlayerEffect;

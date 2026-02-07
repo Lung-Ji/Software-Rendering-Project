@@ -1,11 +1,11 @@
 #pragma once
 #include "GameObject.h"
 
-class Effect : public GameObject {
+class PlayerEffect : public GameObject {
 private:
-	explicit Effect(LPDIRECT3DDEVICE9 _GRPDEV);
-	explicit Effect(CONST GameObject& _RHS);
-	virtual ~Effect();
+	explicit PlayerEffect(LPDIRECT3DDEVICE9 _GRPDEV);
+	explicit PlayerEffect(CONST GameObject& _RHS);
+	virtual ~PlayerEffect();
 
 public:
 	virtual			HRESULT		Ready_GameObject() { return S_OK; }
@@ -17,12 +17,10 @@ public:
 	virtual BOOL		OnCollisionStay (GameObject* _Other);
 	virtual BOOL		OnCollisionExit (GameObject* _Other);
 
-	BOOL				Get_Alive() { return Sustainablility; }
-
 public:
-	HRESULT				Ready_Effect(PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime);
-	HRESULT				Make_TextureList(wstring _FileName);
-	static	Effect*		Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime);
+	HRESULT						Ready_Effect(PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime);
+	HRESULT						Make_TextureList(wstring _FileName);
+	static	PlayerEffect*		Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime);
 private:
 	HRESULT				Component_Initialize();
 	virtual	VOID		Free();
@@ -35,7 +33,6 @@ private:
 	FLOAT			FrameTick;
 	FLOAT			PlayTime;
 	BOOL			Repeatable;
-	BOOL			Sustainablility;
 	
 	Buffer*			Component_Buffer;
 	Transform*		Component_Transform;
