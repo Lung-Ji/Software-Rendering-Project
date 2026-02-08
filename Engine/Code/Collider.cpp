@@ -13,6 +13,9 @@ HRESULT		Collider::Ready_Component() {
 	return S_OK;
 }
 INT			Collider::Update_Component(CONST FLOAT& _DT) {
+	if (nullptr == ColliderPos)
+		return 0;
+
 	CenterPos = *ColliderPos->Get_Position();
 	
 	MinPoint = { CenterPos.x - Scale.x, CenterPos.y - Scale.y, CenterPos.z - Scale.z };

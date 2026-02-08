@@ -79,9 +79,6 @@
     <Filter Include="02. Scene\99. UITest">
       <UniqueIdentifier>{3d87992a-1f5e-4047-b98a-ef2dc5d8e336}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. UI\02. Font">
-      <UniqueIdentifier>{f7012392-cc5f-455f-87de-da63f8d84670}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. GameObject\06. Effect">
       <UniqueIdentifier>{ac5a840f-6ffe-4f26-9c83-a1aa4ca23c92}</UniqueIdentifier>
     </Filter>
@@ -97,23 +94,38 @@
     <Filter Include="03. GameObject\05. Tile">
       <UniqueIdentifier>{3f5d8e79-69ba-4afe-ab89-37fd086d4597}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. GameObject\07. ProJectile">
-      <UniqueIdentifier>{439bbeef-a25b-49de-a227-87dae46c6b96}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. GameObject\06. Effect\01. PlayerEffect">
       <UniqueIdentifier>{c06fa3c8-29a5-4f3f-8a94-48e018a67418}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. GameObject\06. Effect\02. MonsterEffect">
       <UniqueIdentifier>{34704031-17da-4c00-892b-afee47c0af80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. GameObject\06. Effect\03. EnvEffect">
-      <UniqueIdentifier>{67951d9e-7d40-478f-8302-55c93ba9b870}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. GameObject\06. Effect\04. UIEffect">
       <UniqueIdentifier>{3d0f4b54-c5a7-4a58-8a72-32c6f6dc846f}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. GameObject\01. Player\00. Weapon">
       <UniqueIdentifier>{e6e37be2-21d9-4bae-9501-44337c752b3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\02. Monster\99. MonsterTest">
+      <UniqueIdentifier>{4e415e69-9a81-4ad9-95cf-47daa628d3d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\02. Monster\99. TrashBin">
+      <UniqueIdentifier>{8009587a-36a0-44e0-99f4-c5a054d85024}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\02. Monster\01. Boss\01. Docheol">
+      <UniqueIdentifier>{85fcb151-c452-4026-b6ae-991bcb23747e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\02. Monster\02. Monster1\01. Bat">
+      <UniqueIdentifier>{47a98307-749c-40cc-a1ff-9d9504e380c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\03. Button">
+      <UniqueIdentifier>{7f00d095-4fd7-44b9-9f88-5a2f0d44ae50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\07. ProJectile">
+      <UniqueIdentifier>{439bbeef-a25b-49de-a227-87dae46c6b96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\06. Effect\03. EnvEffect">
+      <UniqueIdentifier>{67951d9e-7d40-478f-8302-55c93ba9b870}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -201,15 +213,6 @@
     <ClInclude Include="CXZTile.h">
       <Filter>03. GameObject\05. Tile</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Monster.h">
-      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
-    </ClInclude>
-    <ClInclude Include="BossMonster.h">
-      <Filter>03. GameObject\02. Monster\01. Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\Monster1.h">
-      <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\MainMenuButton.h">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClInclude>
@@ -245,6 +248,33 @@
     </ClInclude>
     <ClInclude Include="..\Header\Bow.h">
       <Filter>03. GameObject\01. Player\00. Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MonsterTest.h">
+      <Filter>03. GameObject\02. Monster\99. MonsterTest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\UIEffect.h">
+      <Filter>03. GameObject\06. Effect\04. UIEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster_State.h">
+      <Filter>03. GameObject\02. Monster\99. TrashBin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster1.h">
+      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMonster.h">
+      <Filter>03. GameObject\02. Monster\99. TrashBin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Docheol.h">
+      <Filter>03. GameObject\02. Monster\01. Boss\01. Docheol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Bat.h">
+      <Filter>03. GameObject\02. Monster\02. Monster1\01. Bat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Monster.h">
+      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\TileDestoryEffect.h">
+      <Filter>03. GameObject\05. Tile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -314,15 +344,6 @@
     <ClCompile Include="CXZTile.cpp">
       <Filter>03. GameObject\05. Tile</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Monster.cpp">
-      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
-    </ClCompile>
-    <ClCompile Include="BossMonster.cpp">
-      <Filter>03. GameObject\02. Monster\01. Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Monster1.cpp">
-      <Filter>03. GameObject\02. Monster\02. Monster1</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\MainMenuButton.cpp">
       <Filter>04. UI\01. Sprite\MainMenu</Filter>
     </ClCompile>
@@ -350,6 +371,9 @@
     <ClCompile Include="..\Code\Monster_State.cpp">
       <Filter>03. GameObject\02. Monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\MonsterEffect.cpp">
+      <Filter>03. GameObject\06. Effect\02. MonsterEffect</Filter>
+    </ClCompile>
     <ClCompile Include="..\Code\PlayerEffect.cpp">
       <Filter>03. GameObject\06. Effect\01. PlayerEffect</Filter>
     </ClCompile>
@@ -358,6 +382,33 @@
     </ClCompile>
     <ClCompile Include="..\Code\Bow.cpp">
       <Filter>03. GameObject\01. Player\00. Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MonsterTest.cpp">
+      <Filter>03. GameObject\02. Monster\99. MonsterTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UIEffect.cpp">
+      <Filter>03. GameObject\06. Effect\04. UIEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster_State.cpp">
+      <Filter>03. GameObject\02. Monster\99. TrashBin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster1.cpp">
+      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMonster.cpp">
+      <Filter>03. GameObject\02. Monster\99. TrashBin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Docheol.cpp">
+      <Filter>03. GameObject\02. Monster\01. Boss\01. Docheol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Bat.cpp">
+      <Filter>03. GameObject\02. Monster\02. Monster1\01. Bat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Monster.cpp">
+      <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\TileDestoryEffect.cpp">
+      <Filter>03. GameObject\05. Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

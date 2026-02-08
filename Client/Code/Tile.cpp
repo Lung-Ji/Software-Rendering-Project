@@ -3,8 +3,8 @@
 #include <iostream>
 #include <fstream>
 const _tchar* m_pTileName[128];
-Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_pTileState(nullptr),m_bTileCheck(true), m_pTexture(nullptr),m_pTileFront(nullptr),m_pTileLeft(nullptr),m_pTileRight(nullptr)
-, m_eTileState(TILE_STATE::STATE_END),m_pTileBack(nullptr), m_fHeight(0.f), m_pTransform(nullptr), m_pBuffer(nullptr), m_pTileName(nullptr), m_bMouseClick(false), m_eMode(TILEMODE_CHANGE::MODE_END),m_eTile(Engine::TILE_SIDE::TILE_END)
+Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) :m_vScalePivot({ 0,0,0 }),m_vNextPos({ 0,0,0, }), GameObject(_GRPDEV), m_pTileState(nullptr), m_bTileCheck(true), m_pTileFront(nullptr), m_pTileLeft(nullptr), m_pTileRight(nullptr)
+, m_eTileState(TILE_STATE::STATE_END), m_vTilePos(0,0,0), m_vPosPivot(0,0,0),m_vRotationPivot(0,0,0),m_eStage(TILE_STAGE::STAGE_END),m_pTileBack(nullptr), m_fHeight(0.f), m_pTransform(nullptr), m_pBuffer(nullptr), m_pTileName(nullptr), m_bMouseClick(false), m_eMode(TILEMODE_CHANGE::MODE_END),m_eTile(Engine::TILE_SIDE::TILE_END)
 {
 	m_vOriginal = {};
 }
@@ -18,13 +18,11 @@ HRESULT Tile::Component_Initialize() {
 	m_pTileBack = ADD_COMPONENT_TILEBACK;
 	m_pTileFront = ADD_COMPONENT_TILEFRONT;
 	m_pTransform = ADD_COMPONENT_TRANSFORM;
-	m_pTexture = ADD_COMPONENT_TEXTURE;
 
-	m_pTexture->Import_TextureFromFolder(L"../../Tile/Stage1");
-	m_pTexture->Import_TextureFromFolder(L"../../Tile/AnimationObject");
 	m_vecName[TILE_STATE::STATE_NORMAL].push_back(L"../../Tile/Stage1");
 	m_vecName[TILE_STATE::STATE_ANIMATION].push_back(L"../../Tile/AnimationObject");
-  
+	m_vecName[TILE_STATE::STATE_DESTORY].push_back(L"../../Tile/DestroyObject");
+	m_vecName[TILE_STATE::STATE_POTAL].push_back(L"../../Tile/Stage1/Potal");
 	return S_OK;
 }
 HRESULT Tile::Ready_GameObject() {
@@ -33,13 +31,14 @@ HRESULT Tile::Ready_GameObject() {
 	
 	Load_Image(L"../../Tile/Stage1", TILE_STATE::STATE_NORMAL);
 	Load_Image(L"../../Tile/AnimationObject", TILE_STATE::STATE_ANIMATION);
-
+	Load_Image(L"../../Tile/DestroyObject", TILE_STATE::STATE_DESTORY);
+	Load_Image(L"../../Tile/Stage1/Potal", TILE_STATE::STATE_POTAL);
 	for (size_t i = 0; i < TILE_STATE::STATE_END; ++i)
 	{
 		for (auto& iter : m_vecImage[i])
 		{
-			iter.vSize.x / 128;			// 오류 뜨는데 한 번 확인해주세요
-			iter.vSize.y / 128;
+			iter.vSize.x /= 200;			
+			iter.vSize.y /= 200;
 		}
 	}
 	return S_OK;
@@ -48,8 +47,6 @@ INT	Tile::Update_GameObject(const _float& _DT) {
 
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_TILE, this);
 	return GameObject::Update_GameObject(_DT);
-
-
 }
 VOID Tile::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
@@ -74,9 +71,9 @@ VOID Tile::Render_GameObject()
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
 	
 	if (m_eMode == TILEMODE_CHANGE::MODE_END)
-		m_pTexture->Set_Texture(nullptr);
+		GRPDEV->SetTexture(0, nullptr);
 	else
-		m_pTexture->Set_Texture(m_pTileName);
+		GRPDEV->SetTexture(0,ResourceManager::GetInstance()->Find_Texture(m_pTileName));
 
 	switch (m_eTile)
 	{
@@ -93,7 +90,9 @@ VOID Tile::Render_GameObject()
 		m_pBuffer->Render_Buffer();
 		break;
 	}
+	GRPDEV->SetTexture(0, nullptr);
 }
+
 void Tile::Mode_Change()
 {
 	if (KeyManager::GetInstance()->Get_KeyState(DIK_F9)) m_eMode = TILEMODE_CHANGE::MODE_END;
@@ -101,6 +100,7 @@ void Tile::Mode_Change()
 void Tile::Imgui()
 {
 	ImGui::SetNextWindowSize({ 600,600 });
+
 	ImGui::Begin("Editor",NULL,ImGuiWindowFlags_MenuBar);
 		if (ImGui::BeginMenuBar())
 		{
@@ -117,7 +117,6 @@ void Tile::Imgui()
 		}
 		Imgui_Setting();
 
-
 		ImGui::End();
 
 		ImGui::Begin("Mode Changer", NULL, ImGuiWindowFlags_MenuBar);
@@ -132,51 +131,120 @@ void Tile::Imgui_Setting()
 	_vec3 vScale = *m_pTransform->Get_Scale();
 	_vec3 vRotation = *m_pTransform->Get_Rotation();
 	_vec3 vPos = {};
-	_float fMin(0.0f), fMax(100), fHeightMin(0.f), fHeightMax(10.f);
-	_float fRotation(-180.f), fRotationMax(180);
+	_float fMin(0.0f), fMax(100),vMouseMin(0),vMouseMax(0), fHeightMin(0.f), fHeightMax(10.f), fPosMin(0.f), fPosMax(200.f);
+	_float fRotationMin(-180.f), fRotationMax(180);
 	_vec3 vSca = { 1.f,1.f,1.f };
 	_vec3 vRot = { 0.f,0.f,0.f };
-	
-	if (TILE_SIDE::TILE_OTHER != m_eTile) vRotation.x = 65.f;
+	_int iCnt(0.f);
+	_int eid(0);
+	for (size_t i = 0; i < STATE_END ;++i)
+	{
+		for (auto iter : m_vecImage[i])
+		{
+
+			if (m_pTileName != nullptr && !_tcscmp(m_pTileName, iter.wstr->c_str()))
+			{
+				vScale.x = iter.vSize.x;
+				vScale.y = iter.vSize.y;
+			}
+		}
+	}
+	if (TILE_SIDE::TILE_OTHER != m_eTile) vRotation.x = 45.f;
 	else vRotation.x = 0;
 	if (!ImGui::CollapsingHeader("Setting"))
 		return;
 	else
 	{
+
+		vScale = vScale + m_vScalePivot;
 		ImGui::Text("Scale"); //텍스트 
-		ImGui::SameLine(50.f, 0.f);//텍스트 오른쪽에
-		ImGui::SliderFloat3("##1", vScale, fMin, fMax); //scale 출력 ##하면 글자 다음으로 출력됨
+		ImGui::SameLine(50.f, 0.f);//텍스트 오른쪽에 //scale 출력 ##하면 글자 다음으로 출력됨
+		ImGui::SliderFloat3("##1", vScale, fMin, fMax);
+		Imgui_PivotButton("Scale", &vScale);
 		m_pTransform->Set_Scale(vScale);
 
 
+		vRotation = vRotation + m_vRotationPivot;
 		ImGui::Text("Rotation");
 		ImGui::SameLine(100.f, 0.f);
-		ImGui::SliderFloat3("##2", vRotation, fRotation, fRotationMax);
+		ImGui::SliderFloat3("##2", vRotation, fRotationMin, fRotationMax);
+		Imgui_PivotButton("Rot", &vRotation);
 		m_pTransform->Set_Rotation(vRotation);
-
-		//ImGui::Text("vPos");
-		//ImGui::SameLine(100.f, 0.f);
-
-		//ImGui::SliderFloat3("##3", m_vOriginal, fHeightMin, fHeightMax);
-		//if (ImGui::Button("Up"))
-		//{
 	
+	
+	    //////////////////TILE/////////////////////////
+		{
+			ImGui::Text("TilePos");
+			ImGui::SameLine(150.f, 0.f);		
+			ImGui::SliderFloat3("##3", m_vTilePos, vMouseMin, vMouseMax);
+			ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+			if (ImGui::Button("Y FloatPos+"))
+			{
+				m_vPosPivot.y = m_vPosPivot.y + 0.1f;
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::SameLine(300.f, 0.f);
+			ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+			if (ImGui::Button("Y FloatPos-"))
+			{
+				m_vPosPivot.y -= 0.1f;
+				if (m_vPosPivot.y < 0)
+					m_vPosPivot.y = 0;
+			}
+			ImGui::PopStyleColor(3);
+
+
+			ImGui::SameLine(450.f, 0.f);
+			ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+			if (ImGui::Button("Y INTPos+"))
+			{
+				m_vPosPivot.y += 1;
+			}
+			ImGui::PopStyleColor(3);
+			ImGui::SameLine(600, 0.f);
+			ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+			if (ImGui::Button("Y INTPos-"))
+			{
+				m_vPosPivot.y -= 1;
+				if (m_vPosPivot.y < 0)
+					m_vPosPivot.y = 0;
+			}
+			ImGui::PopStyleColor(3);
+		}
+		
+		///////////////////POTAL//////////////////////////
+			ImGui::Text("PotalPos");
+			ImGui::SameLine(100.f, 0.f);
+			ImGui::SliderFloat3("##4", m_vNextPos, fPosMin, fPosMax);
+			Imgui_PivotButton("Potal", &m_vNextPos);
+
 		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-		//마우스 올라갔을때 버튼색
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-		//클릭했을 때 버튼 색
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
 		if (ImGui::Button("Reset Option"))
 		{
 			m_pTransform->Set_Scale(vSca);
 			m_pTransform->Set_Rotation(vRot);
+			m_vPosPivot = { 0,0,0 };
+			m_vNextPos = {0,0,0};
+			m_vRotationPivot = { 0,0,0 };
+			m_vScalePivot = { 1,1,1 };
 		}
 		ImGui::PopStyleColor(3);
 		
-		Imgui_Image("Stage1_Tile",TILE_STATE::STATE_NORMAL);
-		Imgui_Image("Stage1_AinmationObject", TILE_STATE::STATE_ANIMATION);
+		Imgui_Image("Stage_Tile",TILE_STATE::STATE_NORMAL);
+		Imgui_Image("Stage_AinmationObject", TILE_STATE::STATE_ANIMATION);
+		Imgui_Image("Stage_DestoryObj", TILE_STATE::STATE_DESTORY);
+		Imgui_Image("Stage_Potal", TILE_STATE::STATE_POTAL);
 	}
-
 }
 void Tile::Imgui_Image(const char* tName, TILE_STATE eid)
 {
@@ -188,20 +256,17 @@ void Tile::Imgui_Image(const char* tName, TILE_STATE eid)
 	for (int i = 0; i < m_vecImage[eid].size(); i++)
 	{
 		_vec2 size = m_vecImage[eid][i].vSize;
-		char scat[256] = "##";
+		char scat[256] = "##1";
 		strncat_s(scat, (char*)m_vecImage[eid][i].wstr, sizeof(char) * 256);
 
 		ImGui::PushID(i); //버튼 중복 방지용
 
 		if (ImGui::ImageButton(scat,
-			m_pTexture->Find_Texture((m_vecImage[eid][i].wstr)->c_str()),
-			ImVec2(size.x * 0.1f, size.y * 0.1f), ImVec2(0.f, 0.f), ImVec2(1.f, 1.f)
+			ResourceManager::GetInstance()->Find_Texture((m_vecImage[eid][i].wstr)->c_str()),
+			ImVec2(size.x *128, size.y*128), ImVec2(0.f, 0.f), ImVec2(1.f, 1.f)
 			, ImVec4(0, 0, 0, 0))) //이미지 클릭 관련해서 true false 반환
 		{
 			m_pTileName = m_vecImage[eid][i].wstr->c_str();
-			m_eTileState = eid;
-			m_pPathName = m_vecName[eid].front();
-			
 		}
 		ImGui::PopID();
 		nCount++;
@@ -215,84 +280,36 @@ void Tile::Imgui_ModeChanger()
 {
 	_bool bSetTexture = false;
 	_int  iChoice(0);
-	static const char* cTile[] = { "TILE_FRONT","TILE_RIGHT","TILE_LEFT"};
-	static const char* cTileStater[] = { "NORMAL", "COLLISION", "TRIGGER" };;
+	static const char* cTile[] = { "TILE_FRONT","TILE_RIGHT","TILE_LEFT","TILE_OTHER"};
+	static const char* cTileStater[] = { "NORMAL", "COLLISION", "TRIGGER","ANIMATION","DESTORY","POTAL","END"};
+	static const char* cTileMode[] = { "TILE","CUBE","OBJECT","END" };
+	static const char* cTileStage[] = { "STAGE1", "STAGE2", "STAGE3", "STAGE4", "STAGE5","STAGE6","STAGE7","STAGE8", "STAGE9" ,"STAGE10","BOSSSTAGE" };
 	static const char* cSelect_Tile = nullptr;
 	static const char* cSelect_State = nullptr;
+	static const char* cSelect_Stage = nullptr;
+	static const char* cSelect_Mode = nullptr;
+
 	if (!ImGui::CollapsingHeader("TILEMode"))
 		return;
 	else
 	{
 		//////////////////MODE_END////////////////////////
 		{
-			ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-			//마우스 올라갔을때 버튼색
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-			//클릭했을 때 버튼 색
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-
-			if (ImGui::Button("Mode_END"))
-			{
-				m_eMode = TILEMODE_CHANGE::MODE_END;
-				m_eTile = TILE_SIDE::TILE_END;
-			}
-			ImGui::PopStyleColor(3);
-		}
-
-		//////////////////MODE_TILE////////////////////////
-		{
-
-			ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-			//마우스 올라갔을때 버튼색
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-			//클릭했을 때 버튼 색
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-			if (ImGui::Button("Mode_TileDefault"))
-			{
-				m_eMode = TILEMODE_CHANGE::MODE_TILE;
-				m_eTile = TILE_SIDE::TILE_OTHER;
-			}
-			ImGui::PopStyleColor(3);
-		}
-
-		//////////////////MODE_CUBE////////////////////////
-		{
-			ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-			//마우스 올라갔을때 버튼색
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-			//클릭했을 때 버튼 색
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-			if (ImGui::Button("Mode_CUBE"))
-				m_eMode = TILEMODE_CHANGE::MODE_CUBE;
-			ImGui::PopStyleColor(3);
-		}
-
-		//////////////////MODE_OBJECT//////////////////////
-		{
-			ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-			//마우스 올라갔을때 버튼색
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-			//클릭했을 때 버튼 색
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-			ImGui::Button("Mode_Object");
-			ImGui::PopStyleColor(3);
-
-			ImGui::Text("TileMode_TIle");
+			ImGui::Text("TileMode");
 			ImGui::SameLine(140.0f, 0.f);
 
-			if (ImGui::BeginCombo("##Choice", cSelect_Tile))
+			if (ImGui::BeginCombo("##Mode", cSelect_Mode))
 			{
-				for (_int i = 0; i < IM_ARRAYSIZE(cTile); i++)
+				for (_int i = 0; i < IM_ARRAYSIZE(cTileMode); i++)
 				{
-					_bool bSelect = (cSelect_Tile == cTile[i]);
-					if (ImGui::Selectable(cTile[i], bSelect))
+					_bool bSelect = (cSelect_Mode == cTileMode[i]);
+					if (ImGui::Selectable(cTileMode[i], bSelect))
 					{
-						cSelect_Tile = cTile[i];
-						if (cSelect_Tile == cTile[0]) m_eTile = TILE_SIDE::TILE_FRONT;
-						else if (cSelect_Tile == cTile[1]) m_eTile = TILE_SIDE::TILE_RIGHT;
-						else if (cSelect_Tile == cTile[2]) m_eTile = TILE_SIDE::TILE_LEFT;
-
-						m_eMode = TILEMODE_CHANGE::MODE_OBJECT;
+						cSelect_Mode = cTileMode[i];
+						if		(!strcmp(cSelect_Mode, cTileMode[0])) m_eMode = TILEMODE_CHANGE::MODE_TILE;
+						else if (!strcmp(cSelect_Mode, cTileMode[1])) m_eMode = TILEMODE_CHANGE::MODE_CUBE;
+						else if (!strcmp(cSelect_Mode, cTileMode[2])) m_eMode = TILEMODE_CHANGE::MODE_OBJECT;
+						else if (!strcmp(cSelect_Mode, cTileMode[3])) m_eMode = TILEMODE_CHANGE::MODE_END;
 					}
 					if (bSelect)
 						ImGui::SetItemDefaultFocus();
@@ -301,7 +318,64 @@ void Tile::Imgui_ModeChanger()
 				ImGui::EndCombo();
 			}
 		}
+		//////////////////TILE_SIDE//////////////////////
+		{
 
+			ImGui::Text("TILE_STATE");
+			ImGui::SameLine(140.0f, 0.f);
+
+			if (ImGui::BeginCombo("##Choe", cSelect_Tile))
+			{
+				for (_int i = 0; i < IM_ARRAYSIZE(cTile); i++)
+				{
+					_bool bSelect = (cSelect_Tile == cTile[i]);
+					if (ImGui::Selectable(cTile[i], bSelect))
+					{
+						cSelect_Tile = cTile[i];
+						if	    (!strcmp(cSelect_Tile, cTile[0])) m_eTile = TILE_SIDE::TILE_FRONT;
+						else if (!strcmp(cSelect_Tile, cTile[1])) m_eTile = TILE_SIDE::TILE_RIGHT;
+						else if (!strcmp(cSelect_Tile, cTile[2])) m_eTile = TILE_SIDE::TILE_LEFT;
+						else if (!strcmp(cSelect_Tile, cTile[3])) m_eTile = TILE_SIDE::TILE_OTHER;
+					}
+					if (bSelect)
+						ImGui::SetItemDefaultFocus();
+
+				}
+				ImGui::EndCombo();
+			}
+		}
+		//////////////////MODE_STAGE//////////////////////
+		{
+			ImGui::Text("TILEMODE_STAGE");
+			ImGui::SameLine(140.0f, 0.f);
+
+			if (ImGui::BeginCombo("##Choice", cSelect_Stage))
+			{
+				for (_int i = 0; i < IM_ARRAYSIZE(cTileStage); i++)
+				{
+					_bool bSelect = (cSelect_Stage == cTileStage[i]);
+					if (ImGui::Selectable(cTileStage[i], bSelect))
+					{
+						cSelect_Stage = cTileStage[i];
+						if      (!strcmp(cSelect_Stage, cTileStage[0]))	m_eStage = TILE_STAGE::TILE_STAGE1;
+						else if (!strcmp(cSelect_Stage, cTileStage[1])) m_eStage = TILE_STAGE::TILE_STAGE2;
+						else if (!strcmp(cSelect_Stage, cTileStage[2])) m_eStage = TILE_STAGE::TILE_STAGE3;
+						else if (!strcmp(cSelect_Stage, cTileStage[3])) m_eStage = TILE_STAGE::TILE_STAGE4;
+						else if (!strcmp(cSelect_Stage, cTileStage[4])) m_eStage = TILE_STAGE::TILE_STAGE5;
+						else if (!strcmp(cSelect_Stage, cTileStage[5])) m_eStage = TILE_STAGE::TILE_STAGE6;
+						else if (!strcmp(cSelect_Stage, cTileStage[6])) m_eStage = TILE_STAGE::TILE_STAGE7;
+						else if (!strcmp(cSelect_Stage, cTileStage[7])) m_eStage = TILE_STAGE::TILE_STAGE8;
+						else if (!strcmp(cSelect_Stage, cTileStage[8])) m_eStage = TILE_STAGE::TILE_STAGE9;
+						else if (!strcmp(cSelect_Stage, cTileStage[9])) m_eStage = TILE_STAGE::TILE_STAGE10;
+						else if (!strcmp(cSelect_Stage, cTileStage[10])) m_eStage = TILE_STAGE::TILE_BOSS;
+					}
+					if (bSelect)
+						ImGui::SetItemDefaultFocus();
+
+				}
+				ImGui::EndCombo();
+			}
+		}
 		//////////////////TILE_STATE///////////////////////
 		{
 			ImGui::Text("TileState");
@@ -315,10 +389,12 @@ void Tile::Imgui_ModeChanger()
 					if (ImGui::Selectable(cTileStater[i], bSelect))
 					{
 						cSelect_State = cTileStater[i];
-						if (cSelect_State == cTileStater[0])       m_eTileState = TILE_STATE::STATE_NORMAL;
-						else if (cSelect_State == cTileStater[1])  m_eTileState = TILE_STATE::STATE_COLLISION;
-						else if (cSelect_State == cTileStater[2])  m_eTileState = TILE_STATE::STATE_TRIGGER;
-						
+						if      (!strcmp(cSelect_State, cTileStater[0]))  m_eTileState = TILE_STATE::STATE_NORMAL;
+						else if (!strcmp(cSelect_State, cTileStater[1]))  m_eTileState = TILE_STATE::STATE_COLLISION;
+						else if (!strcmp(cSelect_State, cTileStater[2]))  m_eTileState = TILE_STATE::STATE_TRIGGER;
+						else if (!strcmp(cSelect_State, cTileStater[3]))  m_eTileState = TILE_STATE::STATE_ANIMATION;
+						else if (!strcmp(cSelect_State, cTileStater[4]))  m_eTileState = TILE_STATE::STATE_DESTORY;	
+						else if (!strcmp(cSelect_State, cTileStater[5]))  m_eTileState = TILE_STATE::STATE_POTAL;
 					}
 					if (bSelect)
 						ImGui::SetItemDefaultFocus();
@@ -327,6 +403,117 @@ void Tile::Imgui_ModeChanger()
 			}
 		}
 	}
+}
+void Tile::Imgui_PivotButton(const char pName[32], _vec3* vPivot)
+{
+	
+	char tXP[32] = "X", tYP[32] = "Y", tZP[32] = "Z", tXM[32] = "X", tYM[32] = "Y", tZM[32] = "Z",
+		   tP[32]  = "+", tM[32] = "-";
+	strcat_s(tXP, 32, pName); strcat_s(tXP, 32, tP); strcat_s(tXM, 32, pName); strcat_s(tXM, 32, tM);
+	strcat_s(tYP, 32, pName); strcat_s(tYP, 32, tP); strcat_s(tYM, 32, pName); strcat_s(tYM, 32, tM);
+	strcat_s(tZP, 32, pName); strcat_s(tZP, 32, tP); strcat_s(tZM, 32, pName); strcat_s(tZM, 32, tM);
+
+	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+	if (ImGui::Button(tXP))
+	{
+		vPivot->x += 1;
+	}
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine(70.f, 0.f);
+
+	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+	if (ImGui::Button(tXM))
+	{
+		vPivot->x -= 1;
+		if (vPivot->x < 0)
+			vPivot->x = 1;
+	}
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine(140.f, 0.f);
+
+	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+	if (ImGui::Button(tYP))
+	{
+		vPivot->y += 1;
+		if (vPivot->y < 0)
+			vPivot->y = 1;
+	}
+
+	ImGui::PopStyleColor(3);
+	ImGui::SameLine(210.f, 0.f);
+
+	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+	if (ImGui::Button(tYM))
+	{
+		vPivot->y -= 1;
+		if (vPivot->y < 0)
+			vPivot->y = 1;
+	}
+
+	ImGui::PopStyleColor(3);
+	ImGui::SameLine(280.f, 0.f);
+	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+	if (ImGui::Button(tZP))
+	{
+		vPivot->z += 1;
+		if (vPivot->z < 0)
+			vPivot->z = 1;
+	}
+
+	ImGui::PopStyleColor(3);
+
+	ImGui::SameLine(350.f, 0.f);
+
+	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+	if (ImGui::Button(tZM))
+	{
+		vPivot->z -= 1;
+		if (vPivot->z < 0)
+			vPivot->z = 1;
+	}
+	ImGui::PopStyleColor(3);
+
+}
+void Tile::Set_AnimationCount(_int* icnt)
+{
+	//누가 아이디어좀;;
+	//_tcscmp
+	if (     !_tcscmp(m_pTileName, L"Object_InfectionPillar01_Hp100_%d.png")
+		   ||!_tcscmp(m_pTileName, L"Object_InfectionWall1_Hp100_%d.png")
+		   ||!_tcscmp(m_pTileName, L"Object_InfectionWall2_Hp100_%d.png") 
+		   ||!_tcscmp(m_pTileName, L"Object_InfectionWall3_Hp100_%d.png")
+		   ||!_tcscmp(m_pTileName, L"Object_InfectionWall4_Hp100_%d.png")
+		   ||!_tcscmp(m_pTileName, L"Object_Pillar01_Hp100_%d.png")
+		   ||!_tcscmp(m_pTileName, L"Object_Pillar02_Hp100_%d.png") 
+		   ||!_tcscmp(m_pTileName, L"Object_StoneWell_Hp100_%d.png")
+		   ||!_tcscmp(m_pTileName, L"Object_StoneWell2_Hp100_%d.png")) *icnt = 3;
+
+	else if (!_tcscmp(m_pTileName, L"Object_InfectionTower_Hp100_%d.png")
+		  || !_tcscmp(m_pTileName, L"Object_Pillar04_Hp100_%d.png"))*icnt = 4;
+
+	else if (!_tcscmp(m_pTileName, L"spr_bush_01_%d.png")
+		  || !_tcscmp(m_pTileName, L"spr_bush_02_%d.png")
+		  || !_tcscmp(m_pTileName, L"spr_bush_03_%d.png")
+		  || !_tcscmp(m_pTileName, L"spr_bush_04_%d.png")
+		  || !_tcscmp(m_pTileName, L"spr_bush_05_%d.png")) *icnt = 7;
+
+	else if (!_tcscmp(m_pTileName, L"Spr_Deco_BushFlower01_0%d.png") 
+		  || !_tcscmp(m_pTileName, L"Spr_Deco_BushFlower02_0%d.png")) *icnt = 8;
+
 }
 HRESULT Tile::Load_Image(const _tchar* pName, TILE_STATE eid)
 {
@@ -360,8 +547,8 @@ HRESULT Tile::Load_Image(const _tchar* pName, TILE_STATE eid)
 		imf.vSize.x = (_float)(sizeBuf[0] << 24 | sizeBuf[1] << 16 |
 			sizeBuf[2] << 8 | sizeBuf[3]);
 
-		imf.vSize.y = (_float)(sizeBuf[0] << 24 | sizeBuf[1] << 16 |
-			sizeBuf[2] << 8 | sizeBuf[3]);
+		imf.vSize.y = (_float)(sizeBuf[4] << 24 | sizeBuf[5] << 16 |
+			sizeBuf[6] << 8 | sizeBuf[7]);
 
 		m_vecImage[eid].push_back(imf);
 		Result = _wfindnext64(Handle, &Data);
@@ -373,59 +560,74 @@ HRESULT Tile::Load_Image(const _tchar* pName, TILE_STATE eid)
 HRESULT Tile::LoadFile()
 {
 	HANDLE	hFile = CreateFile(L"../../Data/Tile.dat", // 파일 이름이 포함된 경로
-		GENERIC_READ,		// 파일 접근 모드(GENERIC_WRITE : 쓰기, GENERIC_READ : 읽기)
-		NULL,				// 공유 방식(파일이 열려 있는 상태에서 다른 프로세스가 오픈 할 때 허가하는 것에 대해 설정, 지정하지 않을 경우 NULL)
-		NULL,				// 보안 속성(기본값인 경우 NULL)
-		OPEN_EXISTING,		// 파일이 없을 경우 파일을 생성하여 저장(OPEN_EXISTING : 파일이 있을 경우에만 로드)
-		FILE_ATTRIBUTE_NORMAL,	// 파일 속성(아무런 속성이 없는 일반 파일)
-		NULL);				// 생성될 파일의 속성ㅇ르 제공할 템플릿 파일
-
-	if (hFile == INVALID_HANDLE_VALUE)
-	{
-		MSG_BOX("로드 실패");
-		return E_FAIL;
-	}
-
-	DWORD	dwByte(0);		// eof 역할
-	_int             iTilenum = 0;
-	TILE_SIDE        eTileSide = TILE_SIDE::TILE_END;
-	TILE_STATE       eTileState = TILE_STATE::STATE_END;
-	TILEMODE_CHANGE  eTileMode = TILEMODE_CHANGE::MODE_END;
-	_tchar cTileName[128] = {};
-	_vec3		     Info = {};
-	_vec3			 Scale = {};
-	_vec3			 Rotation = {};
-	_tchar cPathName[128] = {};
-	TileManager::GetInstance()->Render_TileList();
-	while (true)
-	{
-		ReadFile(hFile, &Info,		 sizeof(_vec3),			  &dwByte, NULL);
-		ReadFile(hFile, &iTilenum,   sizeof(_int),			  &dwByte, NULL);
-		ReadFile(hFile, &eTileSide,  sizeof(TILE_SIDE),		  &dwByte, NULL);
-		ReadFile(hFile, &eTileState, sizeof(TILE_STATE),	  &dwByte, NULL);
-		ReadFile(hFile, &eTileMode,  sizeof(TILEMODE_CHANGE), &dwByte, NULL);
-		ReadFile(hFile, &cTileName,  sizeof(_tchar) * 128,	  &dwByte, NULL);
-		ReadFile(hFile, &Scale,		 sizeof(_vec3),			  &dwByte, NULL);
-		ReadFile(hFile, &Rotation,   sizeof(_vec3),			  &dwByte, NULL);
-		ReadFile(hFile, &cPathName, sizeof(_tchar) * 128,     &dwByte, NULL);
-
-		if (0 == dwByte)
-			break;
-
-		GameObject* GOBJ = nullptr;
-		GRPDEV->AddRef();
-		GOBJ = CXZTile::Create(GRPDEV, eTileSide);
-		GOBJ->Set_ObjectTag(L"CXZTile");
-
-		dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAll(cPathName, cTileName, eTileSide, eTileState, eTileMode, iTilenum);
-		dynamic_cast<Transform*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(Scale);
-		dynamic_cast<Transform*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Rotation(Rotation);
-		dynamic_cast<Transform*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Pos(Info);
-		TileManager::GetInstance()->Load_TilePush(GOBJ, eTileMode);
-	}
-
-	MSG_BOX("로드 성공");
-	CloseHandle(hFile);
+			GENERIC_READ,		// 파일 접근 모드(GENERIC_WRITE : 쓰기, GENERIC_READ : 읽기)
+			NULL,				// 공유 방식(파일이 열려 있는 상태에서 다른 프로세스가 오픈 할 때 허가하는 것에 대해 설정, 지정하지 않을 경우 NULL)
+			NULL,				// 보안 속성(기본값인 경우 NULL)
+			OPEN_EXISTING,		// 파일이 없을 경우 파일을 생성하여 저장(OPEN_EXISTING : 파일이 있을 경우에만 로드)
+			FILE_ATTRIBUTE_NORMAL,	// 파일 속성(아무런 속성이 없는 일반 파일)
+			NULL);				// 생성될 파일의 속성ㅇ르 제공할 템플릿 파일
+	
+		if (hFile == INVALID_HANDLE_VALUE)
+		{
+			MSG_BOX("로드 실패");
+			return E_FAIL;
+		}
+	
+		DWORD	dwByte(0);		// eof 역할
+		_int             iTilenum = 0;
+		TILE_SIDE        eTileSide = TILE_SIDE::TILE_END;
+		TILE_STATE       eTileState = TILE_STATE::STATE_END;
+		TILEMODE_CHANGE  eTileMode = TILEMODE_CHANGE::MODE_END;
+		TILE_STAGE	     eTileStage = TILE_STAGE::STAGE_END;
+		_tchar			 cTileName[128] = {};
+		_vec3		     Info = {};
+		_vec3			 Scale = {};
+		_vec3			 Rotation = {};
+		_tchar			 cPathName[128] = {};
+		_int		     iTileTextureCnt = 0;
+		_vec3			 vNextPos = {};
+		TileManager::GetInstance()->Render_TileList();
+		while (true)
+		{
+			ReadFile(hFile, &Info,			  sizeof(_vec3),		   &dwByte, NULL);
+			ReadFile(hFile, &iTilenum,		  sizeof(_int),			   &dwByte, NULL);
+			ReadFile(hFile, &eTileSide,		  sizeof(TILE_SIDE),	   &dwByte, NULL);
+			ReadFile(hFile, &eTileState,	  sizeof(TILE_STATE),	   &dwByte, NULL);
+			ReadFile(hFile, &eTileMode,		  sizeof(TILEMODE_CHANGE), &dwByte, NULL);
+			ReadFile(hFile, &cTileName,		  sizeof(_tchar) * 128,    &dwByte, NULL);
+			ReadFile(hFile, &Scale,			  sizeof(_vec3),	       &dwByte, NULL);
+			ReadFile(hFile, &Rotation,	      sizeof(_vec3),	       &dwByte, NULL);
+			ReadFile(hFile, &eTileStage,	  sizeof(TILE_STAGE),	   &dwByte, NULL);
+			ReadFile(hFile, &iTileTextureCnt, sizeof(_int),			   &dwByte, NULL);
+			ReadFile(hFile, &vNextPos,		  sizeof(_vec3),		   &dwByte, NULL);
+	
+			
+	
+			GameObject* GOBJ = nullptr;
+			GRPDEV->AddRef();
+			GOBJ = CXZTile::Create(GRPDEV, eTileSide, eTileState);
+			GOBJ->Set_ObjectTag(L"CXZTile");
+	
+			if (eTileState == TILE_STATE::STATE_DESTORY || eTileState == TILE_STATE::STATE_ANIMATION)
+				dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAnimaiton(cTileName, iTileTextureCnt, eTileSide, eTileState, eTileMode, iTilenum, vNextPos);
+			else
+			{
+				dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAll(nullptr, cTileName, eTileSide, eTileState, eTileMode, iTilenum, vNextPos);
+				dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))
+					->Set_TextureID(ResourceManager::GetInstance()->Find_Texture(dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileTextureName().c_str()));
+			}
+			
+			dynamic_cast<Transform*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(Scale);
+			dynamic_cast<Transform*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Rotation(Rotation);
+			dynamic_cast<Transform*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Pos(Info);
+			TileManager::GetInstance()->Load_TilePush(GOBJ, eTileStage, eTileMode);
+		
+			if (0 == dwByte)
+				break;
+		}
+	
+		MSG_BOX("로드 성공");
+		CloseHandle(hFile);
 	return S_OK;
 }
 _bool Tile::Check_Bottom(_vec3* vOrigin)
@@ -438,7 +640,7 @@ _bool Tile::Check_Bottom(_vec3* vOrigin)
 	Component* pTransform = SceneManager::GetInstance()->Get_GameObject(L"Terrain")->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TERRAIN);
 	Buffer* pBuffer = dynamic_cast<Buffer*>(pTransform);
 
-	for (auto& iter : TileManager::GetInstance()->Get_TileList(m_eMode))
+	for (auto& iter : TileManager::GetInstance()->Get_TileList(m_eStage,m_eMode))
 	{	
 		switch (m_eMode)
 		{
@@ -494,7 +696,6 @@ _bool Tile::Check_Bottom(_vec3* vOrigin)
 }
 void Tile::Check_TilePoint()
 {
-	//응애
 	_matrix proj, vWorldInvese, matView, InversView;
 	D3DVIEWPORT9 vp;
 	_vec3 vPlayerPos, vRight, vLook, vOrigin, vDirection, vMousePos;
@@ -549,9 +750,9 @@ void Tile::Check_TilePoint()
 	_int    iCheckZero(0);
 	//설치 되어있는 블럭 충돌 비교
 	{
-		if (m_eMode != TILEMODE_CHANGE::MODE_END)
+		if (m_eMode != TILEMODE_CHANGE::MODE_END && m_eStage != TILE_STAGE::STAGE_END)
 		{
-			for (auto iter : TileManager::GetInstance()->Get_TileList(m_eMode))
+			for (auto iter : TileManager::GetInstance()->Get_TileList(m_eStage,m_eMode))
 			{
 				//흠
 				dynamic_cast<Transform*>(iter->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_Info(INFO_POS, &vPos);
@@ -571,8 +772,6 @@ void Tile::Check_TilePoint()
 					if (ftCheck > ft)
 					{
 						//Check_Distance(vMouseCheck); //5방향 평면 비교 잠시 폐기
-
-						//m_eTile = TILE_SIDE::TILE_OTHER;
 						vMouseBlockCheck = vMouseCheck;
 						ftCheck = ft;
 					}
@@ -595,25 +794,28 @@ void Tile::Check_TilePoint()
 			m_bTileCheck = false;
 		}
 		else m_bMouseClick = true;
+		m_vMousePos = vMouseCheck; // 마우스위치 확인용
+		vMouseCheck = vMouseCheck + m_vPosPivot;
+		m_vTilePos  = vMouseCheck;
 		m_pTransform->Set_Pos(vMouseCheck.x, vMouseCheck.y, vMouseCheck.z);
 	   //좌클릭시 블럭 설치
 
-		if (m_bTileCheck && m_pTileName != nullptr)
+		if (m_bTileCheck && m_pTileName != nullptr && m_eStage != TILE_STAGE::STAGE_END)
 		{
-			if (KeyManager::GetInstance()->Get_MouseState(DIM_LB) & 0x80 && m_bMouseClick)
+			if (MOUSE_LBUTTON && m_bMouseClick)
 			{
 				////정육면체말고 다른 타일 깔고싶으면 클래스 만들어서 바꾸면됨
 				GameObject* pTile = nullptr;
 				switch (m_eMode)
 				{
 				case TILEMODE_CHANGE::MODE_TILE:
-					pTile = CXZTile::Create(GRPDEV,m_eTile);
+					pTile = CXZTile::Create(GRPDEV,m_eTile,m_eTileState);
 					break;
 				case TILEMODE_CHANGE::MODE_CUBE:
 					pTile = CubeTile::Create(GRPDEV);
 					break;
 				case TILEMODE_CHANGE::MODE_OBJECT:
-					pTile = CXZTile::Create(GRPDEV, m_eTile);
+					pTile = CXZTile::Create(GRPDEV, m_eTile, m_eTileState);
 					break;
 				}
 				if (pTile != nullptr)
@@ -622,34 +824,34 @@ void Tile::Check_TilePoint()
 					switch (m_eMode)
 					{
 					case TILEMODE_CHANGE::MODE_TILE:
-						if (m_eTileState == STATE_ANIMATION)
+						if (m_eTileState == STATE_ANIMATION || m_eTileState == STATE_DESTORY)
 						{
-							wstring path;
-							wstring pa = m_vecName[TILE_STATE::STATE_ANIMATION].front();
-							if (wcscmp(m_pTileName, L"Spr_Deco_BushFlower01_0.png") == 0)
-								m_pTileName = L"Spr_Deco_BushFlower01_0%d.png";
-							if (wcscmp(m_pTileName, L"Spr_Deco_BushFlower02_0.png") == 0)
-								m_pTileName = L"Spr_Deco_BushFlower02_0%d.png";
-							path = pa + L"/Anmation/" + m_pTileName;
-							dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAnimaiton(path.c_str(), 6, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x);
-						}else dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAll(m_pPathName, m_pTileName, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x);
-						
+							_int i(0);
+							Set_AnimationCount(&i);
+							  dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAnimaiton(m_pTileName, i, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x, m_vNextPos);
+						}
+						else
+						{
+							dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAll(m_pPathName, m_pTileName, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x, m_vNextPos);
+							dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))
+								->Set_TextureID(ResourceManager::GetInstance()->Find_Texture(dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileTextureName().c_str()));
+						}
 						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(*m_pTransform->Get_Scale());
 						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Rotation(*m_pTransform->Get_Rotation());
-						TileManager::GetInstance()->Add_Tile(pTile, vMouseCheck, m_eMode, m_eTile);
+						TileManager::GetInstance()->Add_Tile(pTile, vMouseCheck, m_eStage, m_eMode, m_eTile, m_vPosPivot);
 						
 						break;
 					case TILEMODE_CHANGE::MODE_CUBE:
 						dynamic_cast<CubeTile*>(pTile)->Set_TileNumber((_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x);
 						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(*m_pTransform->Get_Scale());
 						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Rotation(*m_pTransform->Get_Rotation());
-						TileManager::GetInstance()->Add_Tile(pTile, vMouseCheck, m_eMode);
+						TileManager::GetInstance()->Add_Tile(pTile, vMouseCheck, m_eStage, m_eMode);
 						break;
 
 					case TILEMODE_CHANGE::MODE_OBJECT:
 						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(*m_pTransform->Get_Scale());
 						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Rotation(*m_pTransform->Get_Rotation());
-						TileManager::GetInstance()->Add_Tile(pTile, vMouseCheck, m_eMode, m_eTile);
+						TileManager::GetInstance()->Add_Tile(pTile, vMouseCheck, m_eStage, m_eMode, m_eTile);
 						break;
 
 					}	
@@ -659,7 +861,7 @@ void Tile::Check_TilePoint()
 			m_bMouseClick = false;
 		}
 		//우클릭 삭제
-		if (m_eMode != TILEMODE_CHANGE::MODE_END && KeyManager::GetInstance()->Get_MouseState(DIM_RB) & 0x80 && m_bMouseClick)
+		if (m_eMode != TILEMODE_CHANGE::MODE_END && MOUSE_RBUTTON && !m_bMouseClick)
 		{
 			TileManager::GetInstance()->Delete_Tile(vMouseCheck, vOrigin, vDirection);
 			m_bMouseClick = false;
@@ -668,7 +870,6 @@ void Tile::Check_TilePoint()
 		m_pTransform->Set_Pos(vMouseCheck.x, vMouseCheck.y + 1.f + (pTransform->Get_Scale()->y) * 0.15, vMouseCheck.z);
 		m_bTileCheck= true;
 }
-
 void Tile::Check_Distance(_vec3 vMouse)
 {
 	_float fRight, fLeft, fFront, fBack, fx, fz,fLength;
@@ -697,7 +898,6 @@ void Tile::Check_Distance(_vec3 vMouse)
 	 else if (Src == fBack)
 		 m_eTile = TILE_SIDE::TILE_BACK;
 }
-
 Tile* Tile::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	Tile* pTile = new Tile(_GRPDEV);
 
@@ -713,7 +913,6 @@ VOID Tile::Free() {
 	{
 		for (auto& iter : m_vecImage[i])
 			Safe_Delete(iter.wstr);
-
 	}
 	
 	GameObject::Free();

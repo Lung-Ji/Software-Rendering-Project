@@ -19,7 +19,6 @@ private:
 private:
 	Buffer*		Component_Buffer;
 	Transform*	Component_Transform;
-	Texture*	Component_Texture;
 	Collider*	Component_Collider;
 
 public:
@@ -41,4 +40,7 @@ private:
 	_float		m_fSpeed;
 	_uint		_frame;
 	_float		_frameTick;
+
+public:
+		VOID BillBoard();
 };

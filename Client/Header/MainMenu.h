@@ -15,12 +15,12 @@ public:
 
 public:
 	HRESULT Component_Initialize();
-
 	static	MainMenu* Create(LPDIRECT3DDEVICE9 _GRPDEV);
 
 private:
 	SpriteObject* Component_Sprite;
-
+	Texture*		  Component_Texture;
+	
 private:
 	virtual	VOID		Free();
 };
