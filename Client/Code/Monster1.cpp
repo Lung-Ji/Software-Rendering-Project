@@ -1,3 +1,4 @@
+
 #include "../Include/PCH.h"
 
 Monster1::Monster1(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV) {}
@@ -24,7 +25,7 @@ HRESULT Monster1::Ready_GameObject() {
 }
 INT	Monster1::Update_GameObject(const _float& _DT)
 {
-	// <ÇÃ·¹ÀÌ¾î ¾÷µ¥ÀÌÆ® ½ÃÁ¡>
+	// <Ã‡ÃƒÂ·Â¹Ã€ÃŒÂ¾Ã® Â¾Ã·ÂµÂ¥Ã€ÃŒÃ†Â® Â½ÃƒÃÂ¡>
 	GameObject::Update_GameObject(_DT);
 	
 	_frameTick += _DT;
@@ -70,7 +71,6 @@ INT	Monster1::Update_GameObject(const _float& _DT)
 }
 VOID Monster1::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
-	if (KEY_DOWN(DIK_0)) { PLAY_MONSTER_EFFECT_ONCE(MONSTER_SKILL::SKILL_1, 0.5f); }
 }
 VOID Monster1::Render_GameObject() {
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);

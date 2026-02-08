@@ -18,8 +18,10 @@ INT	Bullet_Standard::Update_GameObject(const _float& _DT) {
 VOID Bullet_Standard::LateUpdate_GameObject(const _float& _DT) {
 	
 	GameObject::LateUpdate_GameObject(_DT);
-
+	_vec3 ColliderScale = *Component_Transform->Get_Scale();
+	Component_Collider->Set_Scale(ColliderScale.x, 1.f, ColliderScale.z);
 	Component_Transform->Move_Pos(&m_vDir, m_fSpeed, _DT);
+	BillBoard();
 }
 VOID Bullet_Standard::Render_GameObject() {
 
@@ -28,8 +30,7 @@ VOID Bullet_Standard::Render_GameObject() {
 
 	TCHAR FileName[128] = L"";
 	wsprintfW(FileName, L"Standard%d.png", _frame);
-
-	Component_Texture->Set_Texture(FileName);
+	GRPDEV->SetTexture(0, ResourceManager::GetInstance()->Find_Texture(FileName));
 
 	if (_frameTick > 0.1f)
 	{
@@ -52,10 +53,7 @@ HRESULT Bullet_Standard::Component_Initialize() {
 
 	Component_Transform->Set_Pos(1.f, 1.f, 1.f);
 	Component_Transform->Set_Rotation(0.f, 0.f, 0.f);
-	Component_Transform->Set_Scale(1.f, 1.f, 1.f);
-
-	Component_Texture = ADD_COMPONENT_TEXTURE;
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Monster/Bullet");
+	Component_Transform->Set_Scale(0.1f, 0.1f, 0.1f);
 
 	Component_Collider = ADD_COMPONENT_COLLIDER;
 	Component_Collider->Set_CenterPos(Component_Transform);
@@ -77,4 +75,34 @@ Bullet_Standard* Bullet_Standard::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 }
 VOID Bullet_Standard::Free() {
 	GameObject::Free();
+}
+
+VOID Bullet_Standard::BillBoard()
+{
+	_matrix		matBill, matWorld, matView;
+
+	matWorld = *Component_Transform->Get_World();
+	GRPDEV->GetTransform(D3DTS_VIEW, &matView);
+
+	D3DXMatrixIdentity(&matBill);
+
+	//X축
+	matBill._11 = matView._11;
+	matBill._12 = matView._12;
+	matBill._13 = matView._13;
+	//Y축
+	matBill._21 = matView._21;
+	matBill._22 = matView._22;
+	matBill._23 = matView._23;
+	//Z축
+	matBill._31 = matView._31;
+	matBill._32 = matView._32;
+	matBill._33 = matView._33;
+
+	D3DXMatrixInverse(&matBill, 0, &matBill);
+
+	// 주의 할 것
+	matWorld = matBill * matWorld;
+
+	Component_Transform->Set_World(&matWorld);
 }

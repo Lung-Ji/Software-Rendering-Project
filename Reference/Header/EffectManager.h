@@ -3,6 +3,9 @@
 #include "Engine_Define.h"
 #include "GameObject.h"
 
+class UIEffect;
+
+
 BEGIN(Engine)
 class ENGINE_DLL EffectManager : public Base {
 	DECLARE_SINGLETON(EffectManager)
@@ -17,8 +20,9 @@ public:
 	VOID		Render_EffectManager(LPDIRECT3DDEVICE9 _GRPDEV);
 
 public:
-	HRESULT		Append_Effect(EFFECT_OWNER _Owner, GameObject* _Effect);
-
+	HRESULT				Append_Effect(EFFECT_OWNER _Owner, GameObject* _Effect);
+	GameObject*			Get_Effect(EFFECT_OWNER _Owner, wstring	_TAG);
+	list<GameObject*>*	Get_EffectLst(EFFECT_OWNER _Owner);
 private:
 	list<GameObject*>	Container_PlayerEffect;
 	list<GameObject*>	Container_MonsterEffect;

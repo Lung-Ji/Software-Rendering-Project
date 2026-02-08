@@ -40,7 +40,11 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	GameObject::Update_GameObject(_DT);
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
-	SetOnTerrain();
+	if (KEY_DOWN(DIK_Y)) {
+		Set_ObjectDead(TRUE);
+	}
+
+	SetOnTerrain(); 
 
 	_frameTick += _DT;
 

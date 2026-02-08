@@ -33,12 +33,19 @@
 #include "MainUI.h"
 #include "PlayerEffect.h"
 #include "MonsterEffect.h"
+#include "UIEffect.h"
 #include "NPC.h"
 
-#include "Monster_State.h"
-//#include "Monster.h"
-#include "Monster1.h"
-#include "BossMonster.h"
+//#include "Monster_State.h"
+//#include "Monster1.h"
+//#include "BossMonster.h"
+
+#include "Monster.h"
+#include "MonsterTest.h"
+
+#include "Bat.h"
+#include "Docheol.h"
+
 #include "Bullet_Standard.h"
 
 #include "Player.h"
@@ -51,6 +58,7 @@
 //////////////////////////////////////////// Scene List
 
 #include "StartScene.h"
+#include "DebugScene.h"
 #include "VillageScene.h"
 #include "DungeonScene.h"
 #include "UITest.h"
@@ -60,6 +68,7 @@
 #include "ResourceManager.h"
 #include "CollisionManager.h"
 #include "EffectManager.h"
+#include "UIManager.h"
 #include "KeyManager.h"
 #include "SoundManager.h"
 #include "RenderManager.h"

@@ -2,31 +2,9 @@
 
 Texture::Texture()													{}
 Texture::Texture(LPDIRECT3DDEVICE9 _GRPDEV) : Component(_GRPDEV)	{}
-Texture::Texture(const Texture& _RHS)		: Component(_RHS)		{
-
-	TextureList = _RHS.TextureList;
-	//for (INT SIZE = 0; SIZE < ListSize; ++SIZE) {
-	//	//TextureList[SIZE]->AddRef();
-	//}
-}
+Texture::Texture(const Texture& _RHS) : Component(_RHS)				{ TextureList = _RHS.TextureList; }
 Texture::~Texture()													{}
 
-HRESULT Texture::Ready_Texture(TEXTUREID _TID, CONST TCHAR* _PATH, CONST UINT& _COUNT)	{
-	//TextureList.reserve(_COUNT);
-	IDirect3DBaseTexture9* TEX = nullptr;
-
-	for (UINT i = 0; i < _COUNT; ++i){
-		TCHAR FileRoute[128] = L"";
-		wsprintf(FileRoute, _PATH, i);
-
-		if (_TID == TEX_NORMAL	&& FAILED(D3DXCreateTextureFromFile(GRPDEV, FileRoute, (LPDIRECT3DTEXTURE9*)&TEX)))			return E_FAIL; 
-		if (_TID == TEX_CUBE	&& FAILED(D3DXCreateCubeTextureFromFile(GRPDEV, FileRoute, (LPDIRECT3DCUBETEXTURE9*)&TEX)))	return E_FAIL;
-
-		//TextureList.push_back(TEX);
-	}
-
-	return S_OK;
-}
 VOID Texture::Set_Texture(CONST TCHAR* _FileName)	{
 	auto iter = find_if(TextureList.begin(), TextureList.end(), CTag_Finder(_FileName));
 	if (iter == TextureList.end())	return;

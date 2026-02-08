@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Component.h"
-#include "GameObject.h"
-#include "UISprite.h"
+#include "Base.h"
+#include "Engine_Define.h"
 
 BEGIN(Engine)
 
-// UI ¿ÀºêÁ§Æ®µéÀÇ enum°ªÀ» ¼³Á¤, °¢°¢ÀÇ ºĞ·ù¿¡ µû¶ó ±¸ºĞ °¡´ÉÄÉ ÇÔ.
+// UI ì˜¤ë¸Œì íŠ¸ë“¤ì˜ enumê°’ì„ ì„¤ì •, ê°ê°ì˜ ë¶„ë¥˜ì— ë”°ë¼ êµ¬ë¶„ ê°€ëŠ¥ì¼€ í•¨.
 enum UIType {
 	Inventory,
 	Object,
@@ -14,22 +13,39 @@ enum UIType {
 };
 
 class ENGINE_DLL UIManager : public Component {
-	DECLARE_SINGLETON(UIManager)
 
+	DECLARE_SINGLETON(UIManager)
 private:
 	explicit UIManager();
 	virtual ~UIManager();
 
 public:
+	HRESULT			Ready_UIManager(LPDIRECT3DDEVICE9 _GRPDEV);
+	INT				Update_UIManager(CONST FLOAT& _DT);
+	VOID			LateUpdate_UIManager(CONST FLOAT& _DT);
+	VOID			Render_UIManager(LPDIRECT3DDEVICE9 _GRPDEV);
+
+	HRESULT			PathFinder(LPDIRECT3DDEVICE9 _GRPDEV, wstring _MasterFolder);
+	HRESULT			Append_Sprite(wstring PATH, UINT WIDTH, UINT HEIGHT);
+
+private:
+	ID3DXSprite*							Sprite;
+	vector<wstring*>						KEY_Array;
+	map<wstring, LPDIRECT3DTEXTURE9>		TextureList;
+
+private:
+	
+private:
+	virtual VOID	Free();
 	HRESULT Ready_UIObject(UIManager* _Component_Sprite );
 	
 public:
 	HRESULT		Ready_UI();
 	INT				Update_UI();
 
-	// ½ºÇÁ¶óÀÌÆ® Ãâ·Â ÇÔ¼ö
+	// ìŠ¤í”„ë¼ì´íŠ¸ ì¶œë ¥ í•¨ìˆ˜
 	VOID			Render_UI(UIType _uitype, CONST TCHAR* _UINAME);
-	// ½ºÇÁ¶óÀÌÆ® Ãß°¡ ÇÔ¼ö
+	// ìŠ¤í”„ë¼ì´íŠ¸ ì¶”ê°€ í•¨ìˆ˜
 	HRESULT		Import_UISprite(UIType _uitype, CONST TCHAR* _PATH, UINT _WIDTH,
 		UINT _HEIGHT, FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY);
 
@@ -37,17 +53,17 @@ public:
 	static  UIManager* Create(LPDIRECT3DDEVICE9 _GRPDEV,CONST TCHAR* _uiName,CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT,
   FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY);
 
-	// ½ºÇÁ¶óÀÌÆ® Ãâ·Â ÁßÀÎÁö ¾Æ´ÑÁö ÆÇº°ÇÏ´Â BOOL Å¸ÀÔ isActiveÀÇ °ÔÅÍ / ¼¼ÅÍ
+	// ìŠ¤í”„ë¼ì´íŠ¸ ì¶œë ¥ ì¤‘ì¸ì§€ ì•„ë‹Œì§€ íŒë³„í•˜ëŠ” BOOL íƒ€ì… isActiveì˜ ê²Œí„° / ì„¸í„°
 	BOOL		Get_Active() { return isActive; }
 	VOID		Set_Active(BOOL _isActive) { isActive = _isActive; }
 
 private: 
 	ID3DXSprite* Sprite;
 
-	// ½ºÇÁ¶óÀÌÆ® °ü·Ã BOOL º¯¼ö
+	// ìŠ¤í”„ë¼ì´íŠ¸ ê´€ë ¨ BOOL ë³€ìˆ˜
 	BOOL		isActive;
-	// º¤ÅÍ ³»¿¡¼­ Æ¯Á¤ Å¸ÀÔÀÇ UI¸¸ Ãâ·ÂÇØÁÙ ¼ö ÀÖ°Ô ÇÏ´Â º¤ÅÍ ÄÁÅ×ÀÌ³Ê
-	// UIType¿¡ µû¸¥ Æ¯Á¤ UI¸¸ Ãâ·ÂÇÏ°Ô ÇØ³õ¾ÒÀ½.
+	// ë²¡í„° ë‚´ì—ì„œ íŠ¹ì • íƒ€ì…ì˜ UIë§Œ ì¶œë ¥í•´ì¤„ ìˆ˜ ìˆê²Œ í•˜ëŠ” ë²¡í„° ì»¨í…Œì´ë„ˆ
+	// UITypeì— ë”°ë¥¸ íŠ¹ì • UIë§Œ ì¶œë ¥í•˜ê²Œ í•´ë†“ì•˜ìŒ.
 	vector<pair<UIType,vector<SpriteINFO>>> vecList;
 
 private:

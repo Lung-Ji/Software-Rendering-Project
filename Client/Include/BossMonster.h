@@ -20,10 +20,8 @@ private:
 private:
 	Buffer*			Component_Buffer;
 	Transform*		Component_Transform;
-	Texture*		Component_Texture;
-	StateMachine*	Component_FSM;
 
-	GameObject*		Player;
+	GameObject*		m_pTarget;
 
 public:
 	static BossMonster* Create(LPDIRECT3DDEVICE9 _GRPDEV);

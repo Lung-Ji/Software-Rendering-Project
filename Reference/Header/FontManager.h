@@ -1,10 +1,10 @@
-//#pragma once
-//#include "Component.h"
-//
-//BEGIN(Engine)
-//class ENGINE_DLL FontManager : public Component
-//{
-//  DECLARE_SINGLETON(FontManager)
+#pragma once
+#include "Component.h"
+
+BEGIN(Engine)
+class ENGINE_DLL FontManager : public Component
+{
+  DECLARE_SINGLETON(FontManager)
 //private:
 //  explicit FontManager();
 //  explicit FontManager(LPDIRECT3DDEVICE9 _GRPDEV);
@@ -19,7 +19,7 @@
 //
 //private:
 //  virtual VOID Free();
-//};
-//
-//END
-//
+};
+
+END
+

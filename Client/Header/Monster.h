@@ -1,31 +1,19 @@
-#pragma once
-#include "GameObject.h"
+#include"GameObject.h"
 
-class Monster : public GameObject {
-private:
-	explicit Monster(LPDIRECT3DDEVICE9 _GRPDEV);
-	explicit Monster(CONST GameObject& _RHS);
-	virtual ~Monster();
+#pragma region Macros
+#define POS(GAMEOBJECT)			static_cast<Transform*>(GAMEOBJECT->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_Position()
+#define ROTATION(GAMEOBJECT)	static_cast<Transform*>(GAMEOBJECT->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_Rotation()
+#define MYPOS					Component_Transform->Get_Position()
+#pragma endregion
 
+class Monster
+{
 public:
-	virtual			HRESULT		Ready_GameObject();
-	virtual			INT			Update_GameObject(CONST FLOAT& _DT);
-	virtual			VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
-	virtual			VOID		Render_GameObject();
+	explicit Monster() {}
+	virtual ~Monster() {}
 
-private:
-	HRESULT			Component_Initialize();
+	static GameObject*	Set_Target(CONST TCHAR* _TAG, GameObject* GameObj = nullptr);
 
-private:
-	Buffer*			Component_Buffer;
-	Transform*		Component_Transform;
-	Texture*		Component_Texture;
-	StateMachine*	Component_FSM;
 
-	GameObject*		Player;
 
-public:
-	static Monster* Create(LPDIRECT3DDEVICE9 _GRPDEV);
-private:
-	virtual VOID Free();
 };
