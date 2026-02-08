@@ -22,8 +22,6 @@ VOID BossMonster::Render_GameObject() {
 
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	Component_Texture->Set_Texture(L"Monster.png");
-
 	Component_Buffer->Render_Buffer();
 
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
@@ -35,13 +33,7 @@ HRESULT BossMonster::Component_Initialize() {
 
 	Component_Transform->Set_Pos(0.f, 0.f, 1.f);
 	Component_Transform->Set_Rotation(0.f, 0.f, 0.f);
-	Component_Transform->Set_Scale(2.f, 2.f, 2.f);
-
-	Component_Texture = ADD_COMPONENT_TEXTURE;
-	Component_FSM =		ADD_COMPONENT_FSM;
-
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Monster");
-	Component_FSM->FSM_StateInit(MONSTER_IDLE::GetInstance()->Instance());
+	Component_Transform->Set_Scale(1.f, 1.f, 1.f);
 	
 	return S_OK;
 }
@@ -55,12 +47,6 @@ BossMonster* BossMonster::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	return MST;
 }
 VOID BossMonster::Free() {
-
-	MONSTER_IDLE::DestroyInstance();
-	MONSTER_ATTACK::DestroyInstance();
-	MONSTER_CHASE::DestroyInstance();
-	MONSTER_DAMAGED::DestroyInstance();
-	MONSTER_DEAD::DestroyInstance();
 
 	GameObject::Free();
 }

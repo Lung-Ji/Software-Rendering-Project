@@ -99,12 +99,12 @@ HRESULT Bat::Component_Initialize() {
 
 	Component_Transform->Set_Pos(10.f, 1.f, 10.f);
 	Component_Transform->Set_Rotation(0.f, 0.f, 0.f);
-	Component_Transform->Set_Scale(TESTMONIMGX / 200.f, 1.f, TESTMONIMGY / 300.f);
+	Component_Transform->Set_Scale(0.5f, 0.5f, 0.2f);
 
 	Component_Collider = ADD_COMPONENT_COLLIDER;
 	Component_Collider->Set_CenterPos(Component_Transform);
 
-	Component_Collider->Set_Scale(0.3f, 0.3f, 0.3f);
+	Component_Collider->Set_Scale(0.2f, 0.2f, 0.2f);
 
 	return S_OK;
 }
