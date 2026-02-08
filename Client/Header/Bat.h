@@ -1,22 +1,15 @@
 #pragma once
 #include "GameObject.h"
 
-#pragma region Macros
-#define POS(GAMEOBJECT)			static_cast<Transform*>(GAMEOBJECT->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_Position()
-#define ROTATION(GAMEOBJECT)	static_cast<Transform*>(GAMEOBJECT->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_Rotation()
-#define MYPOS					Component_Transform->Get_Position()
-
-#pragma endregion
-
 #define BatIMGX 287.f
 #define BatIMGY 173.f
 
-#define TRACKINGDIS 10.f
-#define TRACKINGMAX 3.f
-#define TRACKINGMIN 2.f
-#define ATTACKREADY 1.f
-#define ATTACKEND	2.f
-#define RUSHSPEED	2.f
+#define BATTRACKINGDIS 5.f
+#define BATTRACKINGMAX 3.f
+#define BATTRACKINGMIN 2.f
+#define BATATTACKREADY 1.f
+#define BATATTACKEND	2.f
+#define BATRUSHSPEED	2.f
 
 enum BAT_STATE { BAT_IDLE, BAT_TRACKING, BAT_ATTACKING, BAT_Hit, BAT_DEAD };
 

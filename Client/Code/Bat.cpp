@@ -150,7 +150,7 @@ VOID Bat::State_Idle()
 	{
 		vDir = *POS(pTarget) - *MYPOS;
 		vDir.y = 0;
-		if (D3DXVec3Length(&vDir) < TRACKINGDIS)
+		if (D3DXVec3Length(&vDir) < BATTRACKINGDIS)
 		{
 			Change_State(BAT_TRACKING);
 		}
@@ -162,7 +162,7 @@ VOID Bat::State_Tracking(const _float& _DT)
 	Speed = Default_Speed;
 	vDir = *POS(pTarget) - *MYPOS;
 	vDir.y = 0;
-	if (D3DXVec3Length(&vDir) < TRACKINGDIS)
+	if (D3DXVec3Length(&vDir) < BATTRACKINGDIS)
 	{
 		Timer1 += _DT;
 		Timer2 = 0.f;
@@ -172,12 +172,12 @@ VOID Bat::State_Tracking(const _float& _DT)
 		Timer2 += _DT;
 	}
 
-	if (Timer1 >= TRACKINGMAX)
+	if (Timer1 >= BATTRACKINGMAX)
 	{
 		Change_State(BAT_ATTACKING);
 	}
 
-	if (Timer2 >= TRACKINGMIN)
+	if (Timer2 >= BATTRACKINGMIN)
 	{
 		Change_State(BAT_IDLE);
 	}
@@ -186,11 +186,11 @@ VOID Bat::State_Tracking(const _float& _DT)
 VOID Bat::State_Attacking(const _float& _DT)
 {
 	Timer1 += _DT;
-	if (Timer1 < ATTACKREADY)
+	if (Timer1 < BATATTACKREADY)
 	{
 		Speed = 0;
 	}
-	else if (Timer1 < ATTACKEND)
+	else if (Timer1 < BATATTACKEND)
 	{
 		Speed = Default_Speed * 5;
 		Timer2 += _DT;
