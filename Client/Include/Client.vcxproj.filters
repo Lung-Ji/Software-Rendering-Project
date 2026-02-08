@@ -79,9 +79,6 @@
     <Filter Include="02. Scene\99. UITest">
       <UniqueIdentifier>{3d87992a-1f5e-4047-b98a-ef2dc5d8e336}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. UI\02. Font">
-      <UniqueIdentifier>{f7012392-cc5f-455f-87de-da63f8d84670}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. GameObject\06. Effect">
       <UniqueIdentifier>{ac5a840f-6ffe-4f26-9c83-a1aa4ca23c92}</UniqueIdentifier>
     </Filter>

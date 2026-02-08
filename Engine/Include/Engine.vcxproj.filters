@@ -85,6 +85,9 @@
     <Filter Include="99. Component\06. Tile">
       <UniqueIdentifier>{4e2a987d-50f6-4e59-bd84-9e0016b96795}</UniqueIdentifier>
     </Filter>
+    <Filter Include="99. Component\07. Font">
+      <UniqueIdentifier>{1b683c38-f84a-441e-9b76-42c8c2fd8f98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GraphicDevice.h">
@@ -180,11 +183,9 @@
     <ClInclude Include="..\Header\FontManager.h">
       <Filter>11. FontManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\UISprite.h" />
     <ClInclude Include="..\Header\Font.h">
-      <Filter>11. FontManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\UISprite.h">
-      <Filter>10. UIManager</Filter>
+      <Filter>99. Component\07. Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -263,11 +264,9 @@
     <ClCompile Include="..\Code\FontManager.cpp">
       <Filter>11. FontManager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\UISprite.cpp" />
     <ClCompile Include="..\Code\Font.cpp">
-      <Filter>11. FontManager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\UISprite.cpp">
-      <Filter>10. UIManager</Filter>
+      <Filter>99. Component\07. Font</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

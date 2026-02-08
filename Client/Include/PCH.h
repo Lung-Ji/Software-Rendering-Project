@@ -67,6 +67,7 @@
 #include "TimeManager.h"
 #include "GameManager.h"
 #include "TileManager.h"
+#include "UIManager.h"
 //////////////////////////////////////////// Global Variable
 
 extern HWND			hWnd;

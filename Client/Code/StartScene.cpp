@@ -34,7 +34,6 @@ VOID StartScene::Render_Scene() {
 	//if (nullptr == GOBJ)					return E_FAIL;
 	//if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
 	
-	return S_OK;
 
 }
 HRESULT StartScene::Ready_Enviroment_Layer() {
