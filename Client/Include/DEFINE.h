@@ -41,6 +41,7 @@
 #define ADD_COMPONENT_TILERIGHT			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILERIGHT));
 #define ADD_COMPONENT_TILEBACK			dynamic_cast<Buffer*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILEBACK));
 #define ADD_COMPONENT_TILEINFO			dynamic_cast<TileInfo*>(Add_Component(COMPONENT_TYPE::COMPONENT_TILEINFO));
+#define ADD_COMPONENT_UISPRITE			dynamic_cast<UISprite*>(Add_Component(COMPONENT_TYPE::COMPONENT_UISPRITE));
 
 ////////////////////////////////////////////////////////////////////////////////////
 

@@ -1,8 +1,11 @@
 #include "UIManager.h"
 
+IMPLEMENT_SINGLETON(UIManager)
+
 UIManager::UIManager() : Sprite(nullptr), isActive(false) {}
 UIManager::~UIManager() {}
 
+HRESULT UIManager::Ready_UIObject(LPDIRECT3DDEVICE9 _GRPDEV)
 
 UIManager:: UIManager()	{			}
 UIManager::~UIManager() {	Free();	}
@@ -74,22 +77,23 @@ HRESULT UIManager::Append_Sprite(wstring PATH, UINT WIDTH, UINT HEIGHT) {
 }
 HRESULT UIManager::Ready_UIObject(UIManager* _Sprite)
 {
+  D3DXCreateSprite(_GRPDEV , &Sprite);
   return S_OK;
 }
 
-UIManager* UIManager::Create(LPDIRECT3DDEVICE9 _GRPDEV,CONST _tchar* _uiName ,CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT,
-  FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY)
+UIManager* UIManager::Create(LPDIRECT3DDEVICE9 _GRPDEV,CONST TCHAR* _uiName,CONST TCHAR* _PATH, UINT _WIDTH, 
+  UINT _HEIGHT,  FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY)
 {
   
   return 0;
 } 
 
-HRESULT UIManager::Import_UISprite(UIType _uitype, CONST TCHAR* _PATH, UINT _WIDTH,
+HRESULT UIManager::Import_UISprite(LPDIRECT3DDEVICE9 _GRPDEV, UIType _uitype, CONST TCHAR* _PATH, UINT _WIDTH,
   UINT _HEIGHT, FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY)
 {
   vecList.push_back({ _uitype, {SpriteINFO(_PATH,_WIDTH,_HEIGHT,_POSX,_POSY,_VIS,_OPACITY)} });
 
-  D3DXCreateTextureFromFileExW(GRPDEV,
+  D3DXCreateTextureFromFileExW(_GRPDEV,
     vecList.back().second.back().PATH.c_str(),
     vecList.back().second.back().WIDTH,
     vecList.back().second.back().HEIGHT,
@@ -99,11 +103,11 @@ HRESULT UIManager::Import_UISprite(UIType _uitype, CONST TCHAR* _PATH, UINT _WID
   return S_OK;
 }
 
-VOID UIManager::Render_UI(UIType _uitype, CONST TCHAR* _UINAME) 
+VOID UIManager::Render_UI(LPDIRECT3DDEVICE9 _GRPDEV, UIType _uitype)
 {
-  GRPDEV->SetRenderState(D3DRS_ZENABLE, FALSE);
+  _GRPDEV->SetRenderState(D3DRS_ZENABLE, FALSE);
   Sprite->Begin(D3DXSPRITE_ALPHABLEND);
-  if(isActive)
+  if(!isActive)
   {
     for (auto& pair : vecList)
     {
@@ -111,17 +115,15 @@ VOID UIManager::Render_UI(UIType _uitype, CONST TCHAR* _UINAME)
       {
         for (auto& sprite : pair.second)
           Sprite->Draw(sprite.TEXTURE, NULL, NULL, &sprite.POS, D3DCOLOR_ARGB(sprite.OPACITY, 255, 255, 255));
-        return;
       }
       else
       {
         MSG_BOX("Not exist UIType");
-        return;
       }
     }
   }
   Sprite->End();
-  GRPDEV->SetRenderState(D3DRS_ZENABLE, TRUE);
+  _GRPDEV->SetRenderState(D3DRS_ZENABLE, TRUE);
 }
 
 
@@ -132,7 +134,6 @@ VOID UIManager::Free() {
 	}
 	TextureList.clear();
 }
-
 VOID UIManager::Free()
 {
 }

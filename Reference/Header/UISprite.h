@@ -21,8 +21,14 @@ public:
 		FLOAT _POSX, FLOAT _POSY, BOOL VIS, INT _OPACITY);
 
   virtual Component* Clone();
+
+	BOOL		Get_Visible()								 { return m_Visible; }
+	VOID		Set_Visible(BOOL _isVisible) { m_Visible = _isVisible; }
+	
 private:
   ID3DXSprite* Sprite;
+	BOOL				m_Visible;
+	SpriteObject* c_Sprite;
 
 private:
 	virtual VOID Free();

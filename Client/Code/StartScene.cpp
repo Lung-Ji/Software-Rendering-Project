@@ -7,7 +7,7 @@ StartScene::~StartScene() {}
 HRESULT	StartScene::Ready_Scene() {
 	Scene::Ready_Scene();
 	ProtoManager::GetInstance()->Ready_Prototype(GRPDEV);
-
+	UIManager::GetInstance()->Ready_UIObject(GRPDEV);
 	if (FAILED( Ready_Enviroment_Layer()	))		return E_FAIL;
 	if (FAILED( Ready_GameLogic_Layer()		))		return E_FAIL;
 	if (FAILED( Ready_UserInterface_Layer()	))		return E_FAIL;
@@ -33,8 +33,6 @@ VOID StartScene::Render_Scene() {
 	//
 	//if (nullptr == GOBJ)					return E_FAIL;
 	//if (FAILED(LYR->Add_GameObject(GOBJ)))	return E_FAIL;
-	
-	//return S_OK;
 
 }
 HRESULT StartScene::Ready_Enviroment_Layer() {

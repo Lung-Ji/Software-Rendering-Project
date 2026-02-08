@@ -25,8 +25,8 @@ HRESULT MainMenuButton::Component_Initialize() {
 
 	Component_Sprite = ADD_COMPONENT_SPRITE;
 
-	//Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/KEY_E_Black.png", 50, 50, 700, 600, TRUE);
-	
+	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/KEY_E_Black.png", 50, 50, 700, 600, TRUE);
+
 	return S_OK;
 }
 MainMenuButton* MainMenuButton::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
