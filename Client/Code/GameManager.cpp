@@ -7,7 +7,7 @@ GameManager::~GameManager() { Free(); }
 HRESULT GameManager::Ready_GameManager() {
 	if (FAILED(Ready_DefaultSetting()))					return E_FAIL;
 	if (FAILED(Ready_SceneSetting()))					return E_FAIL;
-	ResourceManager::GetInstance()->GlobalImport_Texture(GRPDEV, L"../../Resource");
+	ResourceManager::GetInstance()->GlobalImport_Texture(GRPDEV, L"../../Resource/UI");
 	return S_OK;
 }
 VOID	GameManager::Update_GameManager(CONST FLOAT& _DT) {
@@ -50,7 +50,7 @@ HRESULT GameManager::Ready_DefaultSetting() {
 }
 HRESULT GameManager::Ready_SceneSetting() {
 
-	Scene* StartScene = StartScene::Create(GRPDEV);
+	Scene* StartScene = DebugScene::Create(GRPDEV);
 	
 	if (StartScene == nullptr)	return E_FAIL;
 	if (FAILED(SceneManager::GetInstance()->Scene_Transition(StartScene))) {
@@ -85,6 +85,7 @@ VOID		 GameManager::Free() {
 	GUIManager		::DestroyInstance();
 	TileManager		::DestroyInstance();
 	ResourceManager	::DestroyInstance();
+	UIManager		::DestroyInstance();
 	EffectManager	::DestroyInstance();
 	DEVCLASS		->DestroyInstance();
 }

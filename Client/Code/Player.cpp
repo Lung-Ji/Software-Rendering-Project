@@ -40,7 +40,7 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	GameObject::Update_GameObject(_DT);
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
-	SetOnTerrain();
+	//SetOnTerrain(); - 광윤 디버깅
 
 	_frameTick += _DT;
 
@@ -72,9 +72,9 @@ VOID Player::Render_GameObject() {
 
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	SetGrahpic();
+	//SetGrahpic();
 
-	Component_Buffer->Render_Buffer();
+	//Component_Buffer->Render_Buffer();
 
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
@@ -88,11 +88,11 @@ HRESULT Player::Component_Initialize() {
 	Component_Collider->Set_CenterPos(Component_Transform);			// 충돌체가 오브젝트를 따라 다니도록
 	Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// 충돌체의 범위 조절
 
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Slide");
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Attack");
-
+	//Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
+	//Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
+	//Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Slide");
+	//Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Attack");
+	//- 광윤 디버깅
 	return S_OK;
 }
 void Player::IDLE_STATE(const _float& _DT)
@@ -494,14 +494,15 @@ void Player::IDLE_STATE(const _float& _DT)
 		if (KEY_DOWN(DIK_2)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_2, 0.5f); }
 		if (KEY_DOWN(DIK_3)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_3, 0.5f); }
 	}
-	if (MOUSE_LBUTTON)
-	{
-		_vec3	vPickPos = RayOnTerrain();
-		_vec3	vDir = vPickPos - *Component_Transform->Get_Position();
-
-		//Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), 10.f, _DT);
-		// vDir = (플레이어 -> 피킹 위치) 방향
-	}
+	//if (MOUSE_LBUTTON)
+	//{
+	//	_vec3	vPickPos = RayOnTerrain();
+	//	_vec3	vDir = vPickPos - *Component_Transform->Get_Position();
+	//
+	//	//Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), 10.f, _DT);
+	//	// vDir = (플레이어 -> 피킹 위치) 방향
+	//}
+	// - 광윤 디버깅
 	///////////////////////////////////////////////////////////////////////////////////////////////
 }
 

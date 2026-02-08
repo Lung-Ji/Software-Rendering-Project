@@ -18,14 +18,15 @@ VOID SpriteObject::Render_Sprite() {
 	GRPDEV->SetRenderState(D3DRS_ZENABLE, FALSE);
 	Sprite->Begin(D3DXSPRITE_ALPHABLEND);
 
-	for (auto& SPR : TextureList) 
+	for (auto& SPR : TextureList) {
 		Sprite->Draw(SPR.TEXTURE, NULL, NULL, &SPR.POS, D3DCOLOR_ARGB(SPR.OPACITY, 255, 255, 255));
-	
+	}
+
 	Sprite->End();
 	GRPDEV->SetRenderState(D3DRS_ZENABLE, TRUE);
 }
 
-HRESULT SpriteObject::Import_Sprite(CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT, FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY) {
+HRESULT SpriteObject::Import_Sprite(CONST TCHAR* _PATH, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY) {
 	TextureList.push_back(SpriteINFO(_PATH, _WIDTH, _HEIGHT, _POSX, _POSY, _VIS, _OPACITY));
 
 	D3DXCreateTextureFromFileExW(GRPDEV, TextureList.back().PATH.c_str(), TextureList.back().WIDTH, TextureList.back().HEIGHT, 

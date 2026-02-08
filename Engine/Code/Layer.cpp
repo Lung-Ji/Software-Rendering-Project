@@ -23,6 +23,7 @@ GameObject* Layer::Get_GameObject(CONST TCHAR* _TAG) {
 	return nullptr;
 }
 HRESULT		Layer::Add_GameObject(GameObject* _GOBJ) {
+	if (_GOBJ == nullptr) return E_FAIL;
 	GameObjectList.push_back(_GOBJ);
 	return S_OK;
 }
