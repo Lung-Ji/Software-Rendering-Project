@@ -1,4 +1,5 @@
 #include "Layer.h"
+#include "CollisionManager.h"
 
 Layer::Layer() {}
 Layer::~Layer() {}
@@ -7,13 +8,15 @@ HRESULT		Layer::Ready_Layer() {
 	return S_OK;
 }
 INT			Layer::Update_Layer(const FLOAT& _DT) {
-	int ObjectResult = 0;
-	for (auto& GOBJ : GameObjectList) {
-		if (GOBJ->Get_ObjectDead() == FALSE) {
-			ObjectResult = GOBJ->Update_GameObject(_DT);
+	for (auto iter = GameObjectList.begin(); iter != GameObjectList.end();) {
+		int ObjectResult = (*iter)->Update_GameObject(_DT);
+		if ((*iter)->Get_ObjectDead() == TRUE || ObjectResult == -1) {
+			CollisionManager::GetInstance()->Delete_ColliderObject((*iter));
+			Safe_Release((*iter));
+			iter = GameObjectList.erase(iter);
+			continue;
 		}
-		if(ObjectResult == -1)
-			Safe_Release(GOBJ);
+		else { ++iter; }
 	}
 	return 0;
 }
@@ -22,6 +25,17 @@ VOID		Layer::LateUpdate_Layer(const FLOAT& _DT) {
 		if (!GOBJ->Get_ObjectDead())
 			GOBJ->LateUpdate_GameObject(_DT);
 	}
+}
+HRESULT Layer::Delete_Object(GameObject* _OBJ) {
+	for (auto iter = GameObjectList.begin(); iter != GameObjectList.end();) {
+		if (*iter == _OBJ) {
+			Safe_Release(*iter);
+			iter = GameObjectList.erase(iter);
+			return S_OK;
+		}
+		else { ++iter; }
+	}
+	return E_FAIL;
 }
 GameObject* Layer::Get_GameObject(CONST TCHAR* _TAG) {
 	for (auto& OBJ : GameObjectList) {

@@ -1,4 +1,5 @@
 #include "../Include/PCH.h"
+#include "Docheol.h"
 
 Docheol::Docheol(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV), m_pTarget(nullptr) {}
 Docheol::Docheol(const GameObject& _RHS)	: GameObject(_RHS), m_pTarget(nullptr)	{}
@@ -14,8 +15,8 @@ INT	Docheol::Update_GameObject(const _float& _DT)
 
 	if (m_pTarget == nullptr)
 	{
-		Monster::Set_Target(L"Player", m_pTarget);
-	}
+		//Monster::Set_Target(L"Player", m_pTarget);
+	} // 오류나서 주석 처리했습니다 고쳐주세요~ 
 
 	_frameTick += _DT;
 	switch (m_eCurrStatus)

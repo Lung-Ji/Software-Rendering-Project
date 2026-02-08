@@ -29,10 +29,11 @@ VOID CollisionManager::Render_CollisionManager() {
 
 BOOL CollisionManager::AABB_Collision() {
 	for (auto& SOBJ : SceneObjectList) {
+		if (SOBJ->Get_ObjectDead() || SOBJ == nullptr)	continue;
 		Collider* SRC = dynamic_cast<Collider*>(SOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_COLLIDER));
 		if (SRC == nullptr) continue;
 		for (auto& DOBJ : SceneObjectList) {
-			if (SOBJ == DOBJ)	continue;
+			if (SOBJ->Get_ObjectDead() || SOBJ == nullptr || SOBJ == DOBJ)	continue;
 			Collider* DEST = dynamic_cast<Collider*>(DOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_COLLIDER));
 			if (DEST == nullptr) continue;
 			if ((SRC->Get_MaxPoint().x >= DEST->Get_MinPoint().x) && (DEST->Get_MaxPoint().x >= SRC->Get_MinPoint().x) &&
@@ -58,7 +59,7 @@ BOOL CollisionManager::AABB_Collision() {
 
 VOID CollisionManager::Get_AllObjectOfScene() {
 	Layer* SceneLayer = SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT);
-	vector<GameObject*>* GOList = SceneLayer->Get_GameObjectList();
+	list<GameObject*>* GOList = SceneLayer->Get_GameObjectList();
 
 	for (auto& GOBJ : *GOList) {
 		if(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_COLLIDER) != nullptr)
@@ -74,6 +75,17 @@ VOID CollisionManager::Get_AllObjectOfScene() {
 	}
 
 
+}
+
+VOID CollisionManager::Delete_ColliderObject(GameObject* _OBJ) {
+	for (auto iter = SceneObjectList.begin(); iter != SceneObjectList.end();) {
+		if (*iter == _OBJ) {
+			Safe_Release((*iter));
+			iter = SceneObjectList.erase(iter);
+			continue;
+		}
+		else { ++iter; }
+	}
 }
 
 VOID CollisionManager::Free() {

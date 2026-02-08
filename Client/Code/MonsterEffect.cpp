@@ -5,14 +5,14 @@ MonsterEffect::MonsterEffect(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV),	T
 MonsterEffect::MonsterEffect(CONST GameObject& _RHS)	: GameObject(_RHS),		TextureIndex(0), FrameTick(0.f)		{}
 MonsterEffect::~MonsterEffect()																						{}
 
-HRESULT MonsterEffect::Ready_Effect(MONSTER_SKILL _SKILLTYPE, Transform* _MonsterPOS, BOOL _Repeatable, FLOAT _PlayTime) {
+HRESULT MonsterEffect::Ready_Effect(MONSTER_SKILL _SKILLTYPE, _vec3* _MonsterPOS, BOOL _Repeatable, FLOAT _PlayTime) {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
 	if (_SKILLTYPE == MONSTER_SKILL::SKILL_1) { Make_TextureList(L"Spr_Effect_ExplosionNormal02_"); }
 	else if (_SKILLTYPE == MONSTER_SKILL::SKILL_2) { Make_TextureList(L"Spr_Ui_Effect_BossClear_lraCharge_"); }
 	else if (_SKILLTYPE == MONSTER_SKILL::SKILL_3) { Make_TextureList(L"Spr_Ui_Stage01_TureMapEffect_"); }
 
-	Component_Transform->Set_Pos(*_MonsterPOS->Get_Position());		// 기본 위치 : 플레이어 중심 
+	Component_Transform->Set_Pos(*_MonsterPOS);
 	Repeatable = _Repeatable;
 
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
@@ -118,7 +118,7 @@ HRESULT			MonsterEffect::Component_Initialize() {
 
 	return S_OK;
 }
-MonsterEffect*	MonsterEffect::Create(LPDIRECT3DDEVICE9 _GRPDEV, MONSTER_SKILL _SKILLTYPE, Transform* _MonsterPOS, BOOL _Repeatable, FLOAT _PlayTime) {
+MonsterEffect*	MonsterEffect::Create(LPDIRECT3DDEVICE9 _GRPDEV, MONSTER_SKILL _SKILLTYPE, _vec3* _MonsterPOS, BOOL _Repeatable, FLOAT _PlayTime) {
 	MonsterEffect* EFT = new MonsterEffect(_GRPDEV);
 	if (FAILED(EFT->Ready_Effect(_SKILLTYPE, _MonsterPOS, _Repeatable, _PlayTime))) {
 		MSG_BOX("Cannot Create Effect.");

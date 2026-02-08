@@ -50,35 +50,7 @@ VOID GUIManager::LateUpdate_GUIManager() {
 
 }
 VOID GUIManager::Render_GUIManager() {
-    // 카메라 세팅
-    
-    if(CameraWindow){
-        ImGui::Begin("Camera Setting [F1]", &CameraWindow);
-        ImGui::Text("Transform");
 
-        _vec3* EyeVec = Camera->Get_EyeVec();
-        FLOAT EYEVEC[3] = { EyeVec->x, EyeVec->y, EyeVec->z };
-        ImGui::InputFloat3("Eye", EYEVEC);
-        Camera->Set_EyeVec({ EYEVEC[0], EYEVEC[1] , EYEVEC[2] });
-
-        _vec3* AtVec = Camera->Get_AtVec();
-        FLOAT ATVEC[3] = { AtVec->x, AtVec->y, AtVec->z };
-        ImGui::InputFloat3("At", ATVEC);
-        //Camera->Set_EyeVec({ ATVEC[0], ATVEC[1] , ATVEC[2] });
-
-        FLOAT Speed = *Camera->Get_Speed();
-        ImGui::InputFloat("CamSpeed", &Speed);
-        dynamic_cast<CameraObject*>(Camera)->Set_Speed(Speed);
-
-        //ImGui::Separator();
-
-        //ImGui::SliderFloat("FOV", Camera->Get_FOV(), D3DXToRadian(30.f), D3DXToRadian(90.f));
-        //ImGui::SameLine();
-        //ImGui::Button("Reset") ? Camera->Set_FOV(D3DXToRadian(60.f)) : FALSE;
-        ImGui::Separator();
-
-        ImGui::End();
-    }
     
     ImGui::EndFrame();
     ImGui::Render();

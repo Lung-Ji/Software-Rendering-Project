@@ -5,14 +5,14 @@ PlayerEffect:: PlayerEffect(LPDIRECT3DDEVICE9 _GRPDEV)	: GameObject(_GRPDEV), Te
 PlayerEffect:: PlayerEffect(CONST GameObject& _RHS)		: GameObject(_RHS), TextureIndex(0), FrameTick(0.f) {}
 PlayerEffect::~PlayerEffect(){}
 
-HRESULT PlayerEffect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
+HRESULT PlayerEffect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
 	if		(_SKILLTYPE == PLAYER_SKILL::SKILL_1)	{ Make_TextureList(L"Spr_Effect_ExplosionNormal02_");		}
 	else if (_SKILLTYPE == PLAYER_SKILL::SKILL_2)	{ Make_TextureList(L"Spr_Ui_Effect_BossClear_lraCharge_");	}
 	else if (_SKILLTYPE == PLAYER_SKILL::SKILL_3)	{ Make_TextureList(L"Spr_Ui_Stage01_TureMapEffect_");		}
 
-	Component_Transform->Set_Pos(*_PlayerPOS->Get_Position());		// 기본 위치 : 플레이어 중심 
+	Component_Transform->Set_Pos(*_PlayerPOS);		// 기본 위치 : 플레이어 중심 
 	Repeatable = _Repeatable;
 
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
@@ -54,28 +54,6 @@ INT  PlayerEffect::Update_GameObject(CONST FLOAT& _DT) {
 }
 VOID PlayerEffect::LateUpdate_GameObject(CONST FLOAT& _DT) {
 	if (ObjectDead)	return ;
-	//_matrix		BillboardMat, WorldMat, ViewMat;
-	//
-	//WorldMat = *Component_Transform->Get_World();
-	//GRPDEV->GetTransform(D3DTS_VIEW, &ViewMat);
-	//
-	//D3DXMatrixIdentity(&BillboardMat);
-	//
-	//BillboardMat._11 = ViewMat._11;
-	//BillboardMat._13 = ViewMat._13;
-	//BillboardMat._31 = ViewMat._31;
-	//BillboardMat._33 = ViewMat._33;
-	//
-	//D3DXMatrixInverse(&BillboardMat, 0, &BillboardMat);
-	//
-	//WorldMat = BillboardMat * WorldMat;
-	//
-	//Component_Transform->Set_World(&WorldMat);
-	//
-	//_vec3		vPos;
-	//Component_Transform->Get_Info(INFO_POS, &vPos);
-	//
-	//AlphaSorting(&vPos);
 	if (FrameTick > PlayTime / ENDFRAME) {
 		if (TextureIndex++ >= ENDFRAME - 2) {	
 			if (Repeatable) { TextureIndex = 0;}
@@ -101,10 +79,10 @@ VOID PlayerEffect::Render_GameObject() {
 }
 BOOL PlayerEffect::OnCollisionEnter(GameObject* _Other) {
 	return TRUE;
-}	 
+}
 BOOL PlayerEffect::OnCollisionStay(GameObject* _Other) {
 	return TRUE;
-}	 
+}
 BOOL PlayerEffect::OnCollisionExit(GameObject* _Other) {
 	return TRUE;
 }
@@ -120,7 +98,7 @@ HRESULT	PlayerEffect::Component_Initialize() {
 
 	return S_OK;
 }
-PlayerEffect* PlayerEffect::Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
+PlayerEffect* PlayerEffect::Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
 	PlayerEffect* EFT = new PlayerEffect(_GRPDEV);
 	if (FAILED(EFT->Ready_Effect(_SKILLTYPE, _PlayerPOS, _Repeatable, _PlayTime))) {
 		MSG_BOX("Cannot Create Effect.");

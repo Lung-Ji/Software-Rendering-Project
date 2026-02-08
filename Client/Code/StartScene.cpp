@@ -7,7 +7,7 @@ StartScene::~StartScene() {}
 HRESULT	StartScene::Ready_Scene() {
 	Scene::Ready_Scene();
 	ProtoManager::GetInstance()->Ready_Prototype(GRPDEV);
-	UIManager::GetInstance()->Ready_UIObject(GRPDEV);
+	UIManager::GetInstance()->Ready_UIManager(GRPDEV);
 	if (FAILED( Ready_Enviroment_Layer()	))		return E_FAIL;
 	if (FAILED( Ready_GameLogic_Layer()		))		return E_FAIL;
 	if (FAILED( Ready_UserInterface_Layer()	))		return E_FAIL;

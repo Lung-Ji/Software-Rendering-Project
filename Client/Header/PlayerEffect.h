@@ -18,9 +18,9 @@ public:
 	virtual BOOL		OnCollisionExit (GameObject* _Other);
 
 public:
-	HRESULT						Ready_Effect(PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime);
+	HRESULT						Ready_Effect(PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime);
 	HRESULT						Make_TextureList(wstring _FileName);
-	static	PlayerEffect*		Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, Transform* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime);
+	static	PlayerEffect*		Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime);
 private:
 	HRESULT				Component_Initialize();
 	virtual	VOID		Free();
