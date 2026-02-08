@@ -25,7 +25,7 @@ HRESULT MainMenuLogo::Component_Initialize() {
 
 	Component_Sprite = ADD_COMPONENT_SPRITE;
 
-	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spr_Tilte_Illustration.png", 1280, 720, 0, 0, 100, TRUE);
+	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spr_Tilte_Illustration.png", L"Title", 1280, 720, 0, 0, 100, TRUE);
 	
 	return S_OK;
 }

@@ -20,7 +20,7 @@ HRESULT ResourceManager::PathFinder(IDirect3DDevice9* _GRPDEV, wstring _MasterFo
 	intptr_t Handle = _wfindfirst64(STRUNI.c_str(), &Data);
 	if (Handle == -1)	return E_FAIL;
 
-	IDirect3DBaseTexture9* TEX = nullptr;
+	IDirect3DTexture9* TEX = nullptr;
 
 	if (Handle == -1)	return E_FAIL;
 	while (Result != -1) {
@@ -32,7 +32,6 @@ HRESULT ResourceManager::PathFinder(IDirect3DDevice9* _GRPDEV, wstring _MasterFo
 		}
 		wstring WideRootPath = _MasterFolder + L"/" + Data.name;
 		
-
 		if (Data.attrib & FILE_ATTRIBUTE_DIRECTORY) {
 			PathFinder(_GRPDEV, WideRootPath);
 		}
@@ -50,7 +49,7 @@ HRESULT ResourceManager::PathFinder(IDirect3DDevice9* _GRPDEV, wstring _MasterFo
 	return S_OK;
 }
 
-IDirect3DBaseTexture9* ResourceManager::Find_Texture(const TCHAR* _FileName) {
+IDirect3DTexture9* ResourceManager::Find_Texture(const TCHAR* _FileName) {
 	auto iter = find_if(TextureList.begin(), TextureList.end(), CTag_Finder(_FileName));
 	if (iter == TextureList.end())	return nullptr;
 	return iter->second;

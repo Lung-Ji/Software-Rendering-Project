@@ -24,7 +24,7 @@ VOID	MainMenu::Render_GameObject() {
 HRESULT MainMenu::Component_Initialize() {
 	Component_Sprite = ADD_COMPONENT_SPRITE;
 
-	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spr_Tilte_logo.png", 100, 100, 400, 250, 100, TRUE);
+	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spr_Tilte_logo.png", L"Title", 100, 100, 400, 250, 100, TRUE);
 
 	return S_OK;
 }

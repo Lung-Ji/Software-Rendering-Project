@@ -17,14 +17,14 @@ public:
 
 	FLOAT				Get_AlphaZValue() { return AlphaZValue; }
 
-	VOID				Set_ObjectTag(CONST TCHAR* _OBJTAG)			{	ObjectTAG = _OBJTAG; }
+	VOID				Set_ObjectTag(CONST TCHAR* _OBJTAG)			{ ObjectTAG = _OBJTAG;	 }
 	wstring				Get_ObjectTag()								{	return ObjectTAG;	 }
 
 	VOID				Set_ObjectType(GAMEOBJECT_TYPE _OBJTYPE)	{ ObjectTYPE = _OBJTYPE; }
 	GAMEOBJECT_TYPE		Get_ObjectType()							{	return ObjectTYPE;	 }
 
-	VOID				Set_ObjectDead(BOOL _DEAD) { ObjectDead = _DEAD; }
-	BOOL				Get_ObjectDead() { return ObjectDead; }
+	VOID				Set_ObjectDead(BOOL _DEAD)					{ ObjectDead = _DEAD;	 }
+	BOOL				Get_ObjectDead()							{	return ObjectDead;	 }
 
 public:
 	virtual	HRESULT		Ready_GameObject();

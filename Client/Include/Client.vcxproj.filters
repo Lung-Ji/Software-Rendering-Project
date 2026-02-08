@@ -97,17 +97,11 @@
     <Filter Include="03. GameObject\05. Tile">
       <UniqueIdentifier>{3f5d8e79-69ba-4afe-ab89-37fd086d4597}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. GameObject\07. ProJectile">
-      <UniqueIdentifier>{439bbeef-a25b-49de-a227-87dae46c6b96}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. GameObject\06. Effect\01. PlayerEffect">
       <UniqueIdentifier>{c06fa3c8-29a5-4f3f-8a94-48e018a67418}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. GameObject\06. Effect\02. MonsterEffect">
       <UniqueIdentifier>{34704031-17da-4c00-892b-afee47c0af80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03. GameObject\06. Effect\03. EnvEffect">
-      <UniqueIdentifier>{67951d9e-7d40-478f-8302-55c93ba9b870}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. GameObject\06. Effect\04. UIEffect">
       <UniqueIdentifier>{3d0f4b54-c5a7-4a58-8a72-32c6f6dc846f}</UniqueIdentifier>
@@ -123,6 +117,15 @@
     </Filter>
     <Filter Include="03. GameObject\02. Monster\02. Monster1\01. Bat">
       <UniqueIdentifier>{47a98307-749c-40cc-a1ff-9d9504e380c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\03. Button">
+      <UniqueIdentifier>{7f00d095-4fd7-44b9-9f88-5a2f0d44ae50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\07. ProJectile">
+      <UniqueIdentifier>{439bbeef-a25b-49de-a227-87dae46c6b96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\06. Effect\03. EnvEffect">
+      <UniqueIdentifier>{67951d9e-7d40-478f-8302-55c93ba9b870}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +246,9 @@
     <ClInclude Include="..\Header\MonsterTest.h">
       <Filter>03. GameObject\02. Monster\99. MonsterTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\UIEffect.h">
+      <Filter>03. GameObject\06. Effect\04. UIEffect</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\Monster_State.h">
       <Filter>03. GameObject\02. Monster\99. TrashBin</Filter>
     </ClInclude>
@@ -361,6 +367,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\MonsterTest.cpp">
       <Filter>03. GameObject\02. Monster\99. MonsterTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\UIEffect.cpp">
+      <Filter>03. GameObject\06. Effect\04. UIEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Monster_State.cpp">
       <Filter>03. GameObject\02. Monster\99. TrashBin</Filter>

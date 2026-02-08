@@ -26,12 +26,16 @@ VOID RenderManager::Clear_RenderGroup()	{
 	}
 }
 VOID RenderManager::Render_Priority(LPDIRECT3DDEVICE9& _GRPDEV) {
-	for (auto& _OBJ : RenderGroup[RENDER_PRIORITY])
-		_OBJ->Render_GameObject();
+	for (auto& _OBJ : RenderGroup[RENDER_PRIORITY]) {
+		if(_OBJ->Get_ObjectDead() == FALSE)
+			_OBJ->Render_GameObject();
+	}
 }
 VOID RenderManager::Render_NonAlpha(LPDIRECT3DDEVICE9& _GRPDEV) {
-	for (auto& _OBJ : RenderGroup[RENDER_NONALPHA])
-		_OBJ->Render_GameObject();
+	for (auto& _OBJ : RenderGroup[RENDER_NONALPHA]) {
+		if (_OBJ->Get_ObjectDead() == FALSE)
+			_OBJ->Render_GameObject();
+	}
 }
 VOID RenderManager::Render_Alpha(LPDIRECT3DDEVICE9& _GRPDEV) {
 	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
@@ -43,15 +47,20 @@ VOID RenderManager::Render_Alpha(LPDIRECT3DDEVICE9& _GRPDEV) {
 		{
 			return DEST->Get_AlphaZValue() > SRC->Get_AlphaZValue();
 		});
-	for (auto& _OBJ : RenderGroup[RENDER_ALPHA])
-		_OBJ->Render_GameObject();
+	for (auto& _OBJ : RenderGroup[RENDER_ALPHA]) {
+		if(_OBJ->Get_ObjectDead() == FALSE)
+			_OBJ->Render_GameObject();
+	}
+		
 	
 	_GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 }
 VOID RenderManager::Render_UI(LPDIRECT3DDEVICE9& _GRPDEV)	{
-	for (auto& _OBJ : RenderGroup[RENDER_UI])
-		_OBJ->Render_GameObject();
+	for (auto& _OBJ : RenderGroup[RENDER_UI]){
+		if (_OBJ->Get_ObjectDead() == FALSE)
+			_OBJ->Render_GameObject();
+	}
 }
 VOID RenderManager::Render_TILE(LPDIRECT3DDEVICE9& _GRPDEV)
 {
@@ -63,8 +72,10 @@ VOID RenderManager::Render_TILE(LPDIRECT3DDEVICE9& _GRPDEV)
 
 
 	TileManager::GetInstance()->Render_TileList();
-	for (auto& _OBJ : RenderGroup[RENDER_TILE])
-		_OBJ->Render_GameObject();
+	for (auto& _OBJ : RenderGroup[RENDER_TILE]){
+		if (_OBJ->Get_ObjectDead() == FALSE)
+			_OBJ->Render_GameObject();
+	}
 
 	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	_GRPDEV->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
