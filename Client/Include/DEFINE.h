@@ -45,12 +45,20 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////// EFFECT /////////////////////////////////////////				
-#define PLAY_PLAYER_EFFECT(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,		\
-	PlayerEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, TRUE, PLAYTIME));						// 이펙트 반복 실행
+#define PLAY_PLAYER_EFFECT(SKILL_TYPE, PLAYTIME)		EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,	\
+	PlayerEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, TRUE, PLAYTIME));						// 플레이어 : 이펙트 반복 실행
 #define PLAY_PLAYER_EFFECT_ONCE(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,	\
-	PlayerEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, FALSE, PLAYTIME));					// 이펙트 최초 한번 실행
-#define PLAY_MONSTER_EFFECT(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::MONSTER,		\
-	MonsterEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, TRUE, PLAYTIME));						// 이펙트 반복 실행
+	PlayerEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, FALSE, PLAYTIME));					// 플레이어 : 이펙트 최초 한번 실행
+
+#define PLAY_MONSTER_EFFECT(SKILL_TYPE, PLAYTIME)		EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::MONSTER,	\
+	MonsterEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, TRUE, PLAYTIME));					// 몬스터 : 이펙트 반복 실행
 #define PLAY_MONSTER_EFFECT_ONCE(SKILL_TYPE, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::MONSTER,	\
-	MonsterEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, FALSE, PLAYTIME));					// 이펙트 최초 한번 실행
+	MonsterEffect::Create(GRPDEV, SKILL_TYPE, Component_Transform, FALSE, PLAYTIME));					// 몬스터 : 이펙트 최초 한번 실행
+
+#define PLAY_UI_EFFECT(SKILL_TYPE, _TAG, _X, _Y, _SX, _SY, PLAYTIME, OPAC)			EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::UI,	\
+	UIEffect::Create(GRPDEV, _TAG, SKILL_TYPE, {_X, _Y, 0.f}, {_SX, _SY, 0.f}, OPAC, TRUE, PLAYTIME));		// 몬스터 : 이펙트 반복 실행
+#define PLAY_UI_EFFECT_ONCE(SKILL_TYPE, _TAG, _X, _Y, _SX, _SY, PLAYTIME, OPAC)		EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::UI,	\
+	UIEffect::Create(GRPDEV, _TAG, SKILL_TYPE, {_X, _Y, 0.f}, {_SX, _SY, 0.f}, OPAC, FALSE, PLAYTIME));		// 몬스터 : 이펙트 최초 한번 실행
+
+#define REPLAY_UI_EFFECT(_TAG)		UIEffect::Replay_Effect(_TAG);
 ////////////////////////////////////////////////////////////////////////////////////

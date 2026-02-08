@@ -112,7 +112,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
     float main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(::MonitorFromPoint(POINT{ 0, 0 }, MONITOR_DEFAULTTOPRIMARY));
     //SetProcessDPIAware();
     hWnd = CreateWindowW(szWindowClass, L"Software Rendering Project", WS_OVERLAPPEDWINDOW,
-       (Resolution.x - WINCX)/2, (Resolution.y - WINCY) / 2 - 50, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
+       (Resolution.x - WINCX)/2 - 8, (Resolution.y - WINCY) / 2 - 19, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
 
     
     if (!hWnd) return FALSE;

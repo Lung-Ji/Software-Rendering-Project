@@ -40,7 +40,11 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	GameObject::Update_GameObject(_DT);
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
-	SetOnTerrain();
+	if (KEY_DOWN(DIK_Y)) {
+		Set_ObjectDead(TRUE);
+	}
+
+	SetOnTerrain(); 
 
 	_frameTick += _DT;
 
@@ -494,14 +498,15 @@ void Player::IDLE_STATE(const _float& _DT)
 		if (KEY_DOWN(DIK_2)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_2, 0.5f); }
 		if (KEY_DOWN(DIK_3)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_3, 0.5f); }
 	}
-	if (MOUSE_LBUTTON)
-	{
-		_vec3	vPickPos = RayOnTerrain();
-		_vec3	vDir = vPickPos - *Component_Transform->Get_Position();
-
-		//Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), 10.f, _DT);
-		// vDir = (플레이어 -> 피킹 위치) 방향
-	}
+	//if (MOUSE_LBUTTON)
+	//{
+	//	_vec3	vPickPos = RayOnTerrain();
+	//	_vec3	vDir = vPickPos - *Component_Transform->Get_Position();
+	//
+	//	//Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), 10.f, _DT);
+	//	// vDir = (플레이어 -> 피킹 위치) 방향
+	//}
+	// - 광윤 디버깅
 	///////////////////////////////////////////////////////////////////////////////////////////////
 }
 
