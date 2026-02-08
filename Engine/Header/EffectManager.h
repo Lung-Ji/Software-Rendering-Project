@@ -19,8 +19,9 @@ public:
 	VOID		LateUpdate_EffectManager(CONST FLOAT& _DT);
 	VOID		Render_EffectManager(LPDIRECT3DDEVICE9 _GRPDEV);
 public:
-	HRESULT			Append_Effect(EFFECT_OWNER _Owner, GameObject* _Effect);
-	GameObject*		Get_Effect(EFFECT_OWNER _Owner, wstring	_TAG);
+	HRESULT				Append_Effect(EFFECT_OWNER _Owner, GameObject* _Effect);
+	GameObject*			Get_Effect(EFFECT_OWNER _Owner, wstring	_TAG);
+	list<GameObject*>*	Get_EffectLst(EFFECT_OWNER _Owner);
 private:
 	list<GameObject*>	Container_PlayerEffect;
 	list<GameObject*>	Container_MonsterEffect;

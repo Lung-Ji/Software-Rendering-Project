@@ -16,14 +16,13 @@ public:
 public:
 	HRESULT Component_Initialize();
 	HRESULT Sprite_Initialize();
+	HRESULT Effect_Initialize();
 
 	static	MainUI*		Create(LPDIRECT3DDEVICE9 _GRPDEV);
 
 private:
 	SpriteObject*				Component_Sprite;
 	vector<SpriteINFO>*			TextureList;
-	INT	INDEX = 0;
-
 private:
 	virtual	VOID		Free();
 };

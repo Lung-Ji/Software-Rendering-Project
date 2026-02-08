@@ -101,6 +101,18 @@ GameObject* EffectManager::Get_Effect(EFFECT_OWNER _Owner, wstring _TAG) {
 	}
 	return nullptr;
 }
+list<GameObject*>* EffectManager::Get_EffectLst(EFFECT_OWNER _Owner) {
+	if (_Owner == EFFECT_OWNER::PLAYER)
+		return &Container_PlayerEffect;
+	else if (_Owner == EFFECT_OWNER::MONSTER)
+		return &Container_MonsterEffect;
+	else if (_Owner == EFFECT_OWNER::ENVIROMENT)
+		return &Container_EnviromentEffect;
+	else if (_Owner == EFFECT_OWNER::UI)
+		return &Container_UIEffect;
+
+	return nullptr;
+}
 VOID	EffectManager::Free() {
 	for (auto& EFF : Container_PlayerEffect)
 		Safe_Release(EFF);

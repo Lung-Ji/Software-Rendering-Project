@@ -7,13 +7,21 @@ HRESULT		Layer::Ready_Layer() {
 	return S_OK;
 }
 INT			Layer::Update_Layer(const FLOAT& _DT) {
-	for (auto& GOBJ : GameObjectList)
-		GOBJ->Update_GameObject(_DT);
+	int ObjectResult = 0;
+	for (auto& GOBJ : GameObjectList) {
+		if (GOBJ->Get_ObjectDead() == FALSE) {
+			ObjectResult = GOBJ->Update_GameObject(_DT);
+		}
+		if(ObjectResult == -1)
+			Safe_Release(GOBJ);
+	}
 	return 0;
 }
 VOID		Layer::LateUpdate_Layer(const FLOAT& _DT) {
-	for (auto& GOBJ : GameObjectList)
-		GOBJ->LateUpdate_GameObject(_DT);
+	for (auto& GOBJ : GameObjectList) {
+		if (!GOBJ->Get_ObjectDead())
+			GOBJ->LateUpdate_GameObject(_DT);
+	}
 }
 GameObject* Layer::Get_GameObject(CONST TCHAR* _TAG) {
 	for (auto& OBJ : GameObjectList) {
