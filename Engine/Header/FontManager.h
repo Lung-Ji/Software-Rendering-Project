@@ -8,7 +8,7 @@ class ENGINE_DLL FontManager : public Component
 private:
   explicit FontManager();
   explicit FontManager(LPDIRECT3DDEVICE9 _GRPDEV);
-  explicit FontManager(CONST FontManager& _RHS);
+ // explicit FontManager(CONST FontManager& _RHS);
   virtual  ~FontManager();
 
 public:

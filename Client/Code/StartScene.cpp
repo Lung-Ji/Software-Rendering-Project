@@ -7,7 +7,7 @@ StartScene::~StartScene() {}
 HRESULT	StartScene::Ready_Scene() {
 	Scene::Ready_Scene();
 	ProtoManager::GetInstance()->Ready_Prototype(GRPDEV);
-
+	UIManager::GetInstance()->Ready_UIObject(GRPDEV);
 	if (FAILED( Ready_Enviroment_Layer()	))		return E_FAIL;
 	if (FAILED( Ready_GameLogic_Layer()		))		return E_FAIL;
 	if (FAILED( Ready_UserInterface_Layer()	))		return E_FAIL;
@@ -49,6 +49,8 @@ HRESULT StartScene::Ready_GameLogic_Layer() {
 HRESULT StartScene::Ready_UserInterface_Layer() {
 	Add_GameObjectToScene<MainMenuButton>	(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  ,	L"MainButton"	);
 	Add_GameObjectToScene<MainMenu>			(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  ,	L"MainMenu"		);
+
+
 	return S_OK;
 }
 StartScene* StartScene::Create(LPDIRECT3DDEVICE9 _GRPDEV) {

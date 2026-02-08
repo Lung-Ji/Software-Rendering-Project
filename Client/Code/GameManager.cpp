@@ -85,6 +85,7 @@ VOID		 GameManager::Free() {
 	GUIManager		::DestroyInstance();
 	TileManager		::DestroyInstance();
 	ResourceManager	::DestroyInstance();
+	UIManager			::DestroyInstance();
 	EffectManager	::DestroyInstance();
 	DEVCLASS		->DestroyInstance();
 }

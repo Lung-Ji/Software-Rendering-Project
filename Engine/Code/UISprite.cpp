@@ -24,28 +24,29 @@ UISprite* UISprite::Create(LPDIRECT3DDEVICE9 _GRPDEV, CONST TCHAR* _PATH, UINT _
 HRESULT	UISprite::Ready_UI(CONST TCHAR* _PATH, UINT _WIDTH, UINT _HEIGHT,
   FLOAT _POSX, FLOAT _POSY, BOOL _VIS, INT _OPACITY) {
 
-  IDirect3DBaseTexture9* pTexture = nullptr;
+  c_Sprite->Import_Sprite(_PATH, _WIDTH, _HEIGHT, _POSX, _POSY, _VIS, _OPACITY);
 
-  if (FAILED(D3DXCreateTextureFromFileExW(GRPDEV, _PATH, _WIDTH, _HEIGHT, 1, 0, D3DFMT_A8B8G8R8,
-    D3DPOOL_MANAGED, D3DX_DEFAULT, 0, NULL, NULL, NULL, (LPDIRECT3DTEXTURE9*)pTexture)))
-  {
-    MSG_BOX("Cannot Create Texture");
-    Safe_Release(pTexture);
-    return E_FAIL;
-  }
+  //if (FAILED(D3DXCreateTextureFromFileExW(GRPDEV, _PATH, _WIDTH, _HEIGHT, 1, 0, D3DFMT_A8B8G8R8,
+  //  D3DPOOL_MANAGED, D3DX_DEFAULT, 0, NULL, NULL, NULL, (LPDIRECT3DTEXTURE9*)pTexture)))
+  //{
+  //  MSG_BOX("Cannot Create Texture");
+  //  Safe_Release(pTexture);
+  //  return E_FAIL;
+  //}
   return S_OK;
 }
 
 INT UISprite::Update_Sprite() {
-  return 0;
+  return 0; 
 }
 
 VOID UISprite::Render_Sprite() {
-  GRPDEV->SetRenderState(D3DRS_ZENABLE, FALSE);
-  Sprite->Begin(D3DXSPRITE_ALPHABLEND);
 
-  Sprite->End();
-  GRPDEV->SetRenderState(D3DRS_ZENABLE, TRUE);
+  if (!m_Visible)
+    return;
+
+  if(m_Visible)
+    c_Sprite->Render_Sprite();
 }
 
 Component* UISprite::Clone() {

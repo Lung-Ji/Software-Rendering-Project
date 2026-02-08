@@ -8,10 +8,13 @@ MainMenu::~MainMenu() {}
 HRESULT	MainMenu::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 	return S_OK;
+
 }
 INT		MainMenu::Update_GameObject(CONST FLOAT& _DT) {
 	GameObject::Update_GameObject(_DT);
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_UI, this);
+
+
 	return 0;
 }
 VOID	MainMenu::LateUpdate_GameObject(CONST FLOAT& _DT) {
@@ -19,12 +22,12 @@ VOID	MainMenu::LateUpdate_GameObject(CONST FLOAT& _DT) {
 }
 VOID	MainMenu::Render_GameObject() {
 
-	Component_Sprite->Render_Sprite();
-}
-HRESULT MainMenu::Component_Initialize() {
-	Component_Sprite = ADD_COMPONENT_SPRITE;
+	UIManager::GetInstance()->Render_UI(GRPDEV, Inventory);
 
-	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/Spr_Tilte_logo.png", 100, 100, 400, 250, 100, TRUE);
+}
+HRESULT MainMenu::Component_Initialize(){
+	UIManager::GetInstance()->Import_UISprite(GRPDEV, Inventory, L"../../Resource/MainMenu/Spr_Tilte_Illustration.png", 1280, 720,0,0,TRUE, 255);
+
 
 	return S_OK;
 }
