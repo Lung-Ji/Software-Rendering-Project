@@ -26,7 +26,7 @@ INT	Monster1::Update_GameObject(const _float& _DT)
 {
 	// <플레이어 업데이트 시점>
 	GameObject::Update_GameObject(_DT);
-
+	
 	_frameTick += _DT;
 
 	Set_Target(L"Player");
@@ -70,6 +70,7 @@ INT	Monster1::Update_GameObject(const _float& _DT)
 }
 VOID Monster1::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
+	if (KEY_DOWN(DIK_0)) { PLAY_MONSTER_EFFECT_ONCE(MONSTER_SKILL::SKILL_1, 0.5f); }
 }
 VOID Monster1::Render_GameObject() {
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);

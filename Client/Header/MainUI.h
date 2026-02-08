@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "FontManager.h"
 
 class MainUI : public GameObject {
 private:
