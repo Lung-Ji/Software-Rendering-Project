@@ -183,9 +183,7 @@
     <ClInclude Include="..\Header\Font.h">
       <Filter>11. FontManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\UISprite.h">
-      <Filter>10. UIManager</Filter>
-    </ClInclude>
+    <ClInclude Include="..\Header\UISprite.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GraphicDevice.cpp">
@@ -266,8 +264,6 @@
     <ClCompile Include="..\Code\Font.cpp">
       <Filter>11. FontManager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\UISprite.cpp">
-      <Filter>10. UIManager</Filter>
-    </ClCompile>
+    <ClCompile Include="..\Code\UISprite.cpp" />
   </ItemGroup>
 </Project>
