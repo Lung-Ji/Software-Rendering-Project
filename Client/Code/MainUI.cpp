@@ -15,10 +15,19 @@ HRESULT	MainUI::Ready_GameObject() {
 INT		MainUI::Update_GameObject(CONST FLOAT& _DT) {
 	GameObject::Update_GameObject(_DT);
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_UI, this);
-	if (KEY_DOWN(DIK_G)) {  }
-	if (KEY_DOWN(DIK_H)) {  }
-	if (KEY_DOWN(DIK_J)) {  }
-	if (KEY_DOWN(DIK_K)) {  }
+	if (KEY_DOWN(DIK_LCONTROL)) {  
+		REPLAY_UI_EFFECT(L"HP_EFFECT1");
+		REPLAY_UI_EFFECT(L"HP_EFFECT2");
+		REPLAY_UI_EFFECT(L"HP_EFFECT3");
+		REPLAY_UI_EFFECT(L"HP_EFFECT4");
+		REPLAY_UI_EFFECT(L"HP_EFFECT5");
+		REPLAY_UI_EFFECT(L"TEARDROP_EFFECT1");
+		REPLAY_UI_EFFECT(L"TEARDROP_EFFECT2");
+		REPLAY_UI_EFFECT(L"TEARDROP_EFFECT3");
+		REPLAY_UI_EFFECT(L"COIN_EFFECT");
+		REPLAY_UI_EFFECT(L"DS_EFFECT1");
+		REPLAY_UI_EFFECT(L"DS_EFFECT2");
+	}
 	return 0;
 }
 VOID	MainUI::LateUpdate_GameObject(CONST FLOAT& _DT) {
@@ -36,7 +45,7 @@ HRESULT MainUI::Component_Initialize() {
 }
 HRESULT MainUI::Sprite_Initialize() {
 	////////////////////////////////////////////// BACKBAR //////////////////////////////////////////////////////
-	Component_Sprite->Import_Sprite(L"../../UI/MainUI/WeaponBG_Arrow.png", L"WeaponBG_Arrow", 1166.f, 580.f, 108, 108, TRUE, 150);
+	Component_Sprite->Import_Sprite(L"../../UI/MainUI/WeaponBG_Arrow.png",		L"WeaponBG_Arrow", 1166.f, 580.f, 108, 108, TRUE, 150);
 	Component_Sprite->Import_Sprite(L"../../UI/MainUI/WeaponBG_ArrowCount.png", L"WeaponBG_ArrowCount", 1167.f, 681.f, 108, 30, TRUE, 150);
 	Component_Sprite->Import_Sprite(L"../../UI/MainUI/HP_BG.png", L"HP_BG", 13.f, -60.f, 183, 180, TRUE, 255);
 	Component_Sprite->Import_Sprite(L"../../UI/MainUI/HP_BG.png", L"TEARDROP_BG", 13.f, -15.f, 130, 180, TRUE, 255);
@@ -62,16 +71,15 @@ HRESULT MainUI::Sprite_Initialize() {
 	Component_Sprite->Import_Sprite(L"../../UI/MainUI/Key.png", L"KEY", 18.f, 103.f, 18, 18, TRUE);
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////// SKILL ////////////////////////////////////////////////////////
-	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_BG.png", L"SkillState_BG", 0.f, 600.f, 290.f, 120.f, TRUE);
-	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_Frame.png", L"SkillState_Frame", 0.f, 600.f, 290.f, 120.f, TRUE);
-	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_Symbol_OFF.png", L"SkillState_Symbol_OFF", 15.f, 615.f, 80.f, 80.f, TRUE);
-	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_SkillOn.png", L"SkillState_SkillOn", 15.f, 615.f, 80.f, 80.f, FALSE);
-	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_Symbol_ON.png", L"SkillState_Symbol_ON", 15.f, 615.f, 80.f, 80.f, TRUE);
-	Component_Sprite->Import_Sprite(L"../../UI/MainUI/KEY_Q.png", L"KEY_Q", 45.f, 595.f, 20.f, 20.f, TRUE);
-	Component_Sprite->Import_Sprite(L"../../UI/MainUI/DashStock.png", L"DashStock", 104.f, 669.f, 33.f, 29.f, TRUE);
-	Component_Sprite->Import_Sprite(L"../../UI/MainUI/DashStock.png", L"DashStock", 137.f, 669.f, 33.f, 29.f, TRUE);
+	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_BG.png",			L"SkillState_BG", 0.f, 600.f, 290.f, 120.f, TRUE);
+	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_Frame.png",		L"SkillState_Frame", 0.f, 600.f, 290.f, 120.f, TRUE);
+	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_Symbol_OFF.png",	L"SkillState_Symbol_OFF", 15.f, 615.f, 80.f, 80.f, TRUE);
+	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_SkillOn.png",		L"SkillState_SkillOn", 15.f, 615.f, 80.f, 80.f, FALSE);
+	Component_Sprite->Import_Sprite(L"../../UI/MainUI/SkillState_Symbol_ON.png",	L"SkillState_Symbol_ON", 15.f, 615.f, 80.f, 80.f, TRUE);
+	Component_Sprite->Import_Sprite(L"../../UI/MainUI/KEY_Q.png",					L"KEY_Q", 45.f, 595.f, 20.f, 20.f, TRUE);
+	Component_Sprite->Import_Sprite(L"../../UI/MainUI/DashStock.png",				L"DashStock1", 104.f, 669.f, 33.f, 29.f, TRUE);
+	Component_Sprite->Import_Sprite(L"../../UI/MainUI/DashStock.png",				L"DashStock2", 137.f, 669.f, 33.f, 29.f, TRUE);
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	////////////////////////////////////////////// INTERACT /////////////////////////////////////////////////////
 	Component_Sprite->Import_Sprite(L"../../UI/MainUI/KEY_E.png", L"KEY_E", 720.f, 590.f, 35, 35, TRUE, 255);
 	Component_Sprite->Import_Sprite(L"../../UI/MainUI/Interaction_BG.png", L"Interaction_BG", 720.f, 590.f, 215, 35, TRUE, 155);

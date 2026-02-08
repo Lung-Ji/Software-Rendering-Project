@@ -115,9 +115,6 @@
     <Filter Include="03. GameObject\02. Monster\02. Monster1\01. Bat">
       <UniqueIdentifier>{47a98307-749c-40cc-a1ff-9d9504e380c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. UI\03. Button">
-      <UniqueIdentifier>{7f00d095-4fd7-44b9-9f88-5a2f0d44ae50}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. GameObject\07. ProJectile">
       <UniqueIdentifier>{439bbeef-a25b-49de-a227-87dae46c6b96}</UniqueIdentifier>
     </Filter>

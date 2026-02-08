@@ -54,7 +54,10 @@ INT	Bat::Update_GameObject(const _float& _DT)
 	default:
 		break;
 	}
-
+	if (KEY_DOWN(DIK_7)) {
+		Set_ObjectDead(TRUE);
+		return 0;
+	}
 
 	//_vec3 vLook;
 	//Component_Transform->Get_Info(INFO_LOOK, &vLook);

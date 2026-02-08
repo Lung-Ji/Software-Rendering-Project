@@ -18,10 +18,11 @@ public:
 	virtual VOID		LateUpdate_Layer(CONST FLOAT& _DT);
 	//virtual VOID		Render_Layer();
 
-	vector<GameObject*>* Get_GameObjectList() { return &GameObjectList; }
+	list<GameObject*>*	Get_GameObjectList() { return &GameObjectList; }
+	HRESULT				Delete_Object(GameObject* _OBJ);
 
 private:
-	vector<GameObject*>	GameObjectList;
+	list<GameObject*>	GameObjectList;
 
 public:
 	static	Layer*		Create();
