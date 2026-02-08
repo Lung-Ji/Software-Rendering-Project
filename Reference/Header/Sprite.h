@@ -31,6 +31,7 @@ struct ENGINE_DLL SpriteINFO {
 
 	VOID	Set_Visible(BOOL  _B) { VISIBLE = _B; }
 };
+
 class ENGINE_DLL SpriteObject: public Component {
 private:
 	explicit SpriteObject();

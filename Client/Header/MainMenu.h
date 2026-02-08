@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "UIManager.h"
 
 class MainMenu : public GameObject {
 private:
