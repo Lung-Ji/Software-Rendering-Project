@@ -54,6 +54,7 @@
 #include "CXZTile.h"
 #include "MainMenuButton.h"
 #include "MainMenu.h"
+#include "TileDestoryEffect.h"
 //////////////////////////////////////////// Scene List
 
 #include "StartScene.h"
@@ -61,7 +62,7 @@
 #include "VillageScene.h"
 #include "DungeonScene.h"
 #include "UITest.h"
-
+#include "MapScene.h"
 //////////////////////////////////////////// Manager
 #include "GUIManager.h"
 #include "ResourceManager.h"

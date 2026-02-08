@@ -12,7 +12,7 @@ private:
 
 public:
 
-    virtual			HRESULT		Ready_GameObject(TILE_SIDE eid);
+    virtual			HRESULT		Ready_GameObject(TILE_SIDE eid, TILE_STATE eState);
     virtual			INT			Update_GameObject(CONST FLOAT& _DT);
     virtual			VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
     virtual			VOID		Render_GameObject();
@@ -21,16 +21,26 @@ public:
   
 public:
     void            Set_Buffer(TILE_SIDE eid);
-private:
-    HRESULT			Component_Initialize(TILE_SIDE eid);
-    
-    TileInfo*              m_pTileInfo;
-    Buffer*                m_pBuffer;
-    Transform*             m_pTransform;
+    void            Frame_Move      (CONST FLOAT& _DT);
+    void            Tile_Animation  (CONST FLOAT& _DT);
+    void            Tile_Destory    (CONST FLOAT& _DT);
+    void            Tile_Potal      (CONST FLOAT& _DT);
 
-    _uint                  m_fFrame;
+    Transform*       Crash_Player();
+private:
+    HRESULT			Component_Initialize(TILE_SIDE eid, TILE_STATE eState);
+    
+    TileInfo*               m_pTileInfo;
+    Buffer*                 m_pBuffer;
+    Buffer*                 m_CubeBuffer;
+
+    Transform*              m_pTransform;
+    Collider*               m_pCollider;
+    _float                  m_fFrame;
+    _float                  m_fTime;
+    _bool                   m_bStopFrame;
 public:
-    static         CXZTile* Create(LPDIRECT3DDEVICE9 pGraphicDev, TILE_SIDE eid);
+    static         CXZTile* Create(LPDIRECT3DDEVICE9 pGraphicDev, TILE_SIDE eid, TILE_STATE eState);
 
 private:
    virtual  void            Free();

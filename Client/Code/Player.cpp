@@ -28,7 +28,7 @@ HRESULT Player::Ready_GameObject() {
 	_float angle = acosf(D3DXVec3Dot(D3DXVec3Normalize(&cameraDir, &cameraDir), D3DXVec3Normalize(&planeDir, &planeDir)));
 	_cameraAngle = angle / D3DX_PI * 180.f;
 
-	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
+	Component_Transform->Set_Scale({ 2.f, 2.f, 2.f });
 	Component_Transform->Rotation(ROT_X, 90.f - _cameraAngle);
 	Component_Transform->Set_Pos({ 5.f, 1.f, 5.f });
 
@@ -149,7 +149,7 @@ void Player::IDLE_STATE(const _float& _DT)
 
 		}
 			
-		Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
+		Component_Transform->Set_Scale({ 2.f, 2.f, 2.f });
 
 		if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A))
 		{
@@ -506,7 +506,6 @@ void Player::IDLE_STATE(const _float& _DT)
 	//	//Component_Transform->Move_Pos(D3DXVec3Normalize(&vDir, &vDir), 10.f, _DT);
 	//	// vDir = (플레이어 -> 피킹 위치) 방향
 	//}
-	// - 광윤 디버깅
 	///////////////////////////////////////////////////////////////////////////////////////////////
 }
 

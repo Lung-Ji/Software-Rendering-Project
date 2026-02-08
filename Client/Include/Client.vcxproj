@@ -210,14 +210,9 @@
     </ClInclude>
     <ClInclude Include="..\Header\Player.h" />
     <ClInclude Include="..\Header\StartScene.h" />
-    <ClInclude Include="..\Header\Terrain.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\Header\Tile.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\Header\Terrain.h" />
+    <ClInclude Include="..\Header\Tile.h" />
+    <ClInclude Include="..\Header\TileDestoryEffect.h" />
     <ClInclude Include="..\Header\UIEffect.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
@@ -309,14 +304,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\StartScene.cpp" />
-    <ClCompile Include="..\Code\Terrain.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\Code\Tile.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\Code\Terrain.cpp" />
+    <ClCompile Include="..\Code\Tile.cpp" />
+    <ClCompile Include="..\Code\TileDestoryEffect.cpp" />
     <ClCompile Include="..\Code\UIEffect.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
