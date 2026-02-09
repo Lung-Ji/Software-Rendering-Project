@@ -1,25 +1,40 @@
 #pragma once
-#include "Component.h"
+
+#include "Base.h"
+#include "Engine_Define.h"
+#include "Font.h"
 
 BEGIN(Engine)
-class ENGINE_DLL FontManager : public Component
+
+class ENGINE_DLL FontMgr : public Base
 {
-  DECLARE_SINGLETON(FontManager)
+	DECLARE_SINGLETON(FontMgr)
+
 private:
-  explicit FontManager();
-  explicit FontManager(LPDIRECT3DDEVICE9 _GRPDEV);
- // explicit FontManager(CONST FontManager& _RHS);
-  virtual  ~FontManager();
+	explicit FontMgr();
+	virtual ~FontMgr();
 
 public:
-  HRESULT Ready_FontManager(LPD3DXFONT* ppFont, LPDIRECT3DDEVICE9 _GRPDEV, INT _height, UINT _width, UINT _weight);
-  HRESULT Draw_Text(CONST TCHAR* _string, INT _count, LPRECT pRect, DWORD _format, D3DCOLOR _color);
-  
-private:
+	HRESULT				Ready_Font(LPDIRECT3DDEVICE9 pGraphicDev,
+		const _tchar* pFontTag,
+		const _tchar* pFontType,
+		const _uint& iWidth,
+		const _uint& iHeight,
+		const _uint& iWeight);
+
+	void				Render_Font(const _tchar* pFontTag,
+		const _tchar* pString,
+		const _vec2* pPos,
+		D3DXCOLOR Color);
 
 private:
-  virtual VOID Free();
+	FontObject* Find_Font(const _tchar* pFontTag);
+
+private:
+	map<const _tchar*, FontObject*>			m_mapFont;
+
+private:
+	virtual void	Free();
 };
 
 END
-

@@ -1,6 +1,7 @@
 #pragma once
-#include "Component.h"
 
+#include "Transform.h"
+#include "Component.h"
 
 BEGIN(Engine)
 struct ENGINE_DLL FontINFO {
@@ -41,6 +42,9 @@ public:
     const _uint& iWidth,
     const _uint& iHeight,
     const _uint& iWeight);
+
+private:
+  virtual void Free();
 
 private:
   LPD3DXFONT		Font;		
