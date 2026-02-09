@@ -62,6 +62,9 @@ private:
     const _tchar*                m_pTileState;
 
 private:
+    _int                         m_iStge;
+    _int                         m_iMode;
+    _int                         m_iNumber;
     _vec3                        m_vOriginal;
     _vec3                        m_vNextPos;
     _vec3                        m_vMousePos;

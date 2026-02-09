@@ -31,7 +31,8 @@ public:
     void            Save_Tile(HWND g_hWnd);
     void            Load_TilePush(GameObject* pGame,TILE_STAGE eStage, TILEMODE_CHANGE eMod) { m_vecTileBuffer[eStage][eMod].push_back(pGame); }
 
-
+    _bool           Choice_Tile(_int* eState, _int* eMode, _int* iTileNumber, _vec3 Origin, _vec3 vDir, _vec3* returnPos);
+    void            Set_Tile(_vec3 vPos, _int eStage, _int eMode, _int TileNumber);
     void            Move_Tile(_vec3 vPos, _vec3 Origin, _vec3 vDir);
     void            Change_Tile(TILE_STAGE eStage) { m_eStage = eStage; }
     void            Reset_TileList();

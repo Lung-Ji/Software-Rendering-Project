@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 const _tchar* m_pTileName[128];
-Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) :m_eTileInstall(INSTALL_MODE::MODE_END),m_vScalePivot({ 0,0,0 }),m_vNextPos({ 0,0,0, }), GameObject(_GRPDEV), m_pTileState(nullptr), m_bTileCheck(true), m_pTileFront(nullptr), m_pTileLeft(nullptr), m_pTileRight(nullptr)
+Tile::Tile(LPDIRECT3DDEVICE9 _GRPDEV) :m_iMode(0),m_iNumber(0),m_iStge(0), m_eTileInstall(INSTALL_MODE::MODE_END), m_vScalePivot({0,0,0}), m_vNextPos({0,0,0,}), GameObject(_GRPDEV), m_pTileState(nullptr), m_bTileCheck(true), m_pTileFront(nullptr), m_pTileLeft(nullptr), m_pTileRight(nullptr)
 , m_eTileState(TILE_STATE::STATE_END), m_vTilePos(0,0,0), m_vPosPivot(0,0,0),m_vRotationPivot(0,0,0),m_eStage(TILE_STAGE::STAGE_END),m_pTileBack(nullptr), m_fHeight(0.f), m_pTransform(nullptr), m_pBuffer(nullptr), m_pTileName(nullptr), m_bMouseClick(false), m_eMode(TILEMODE_CHANGE::MODE_END),m_eTile(Engine::TILE_SIDE::TILE_END)
 {
 	m_vOriginal = {};
@@ -139,7 +139,7 @@ void Tile::Imgui_Setting()
 	_vec3 vScale = *m_pTransform->Get_Scale();
 	_vec3 vRotation = *m_pTransform->Get_Rotation();
 	_vec3 vPos = {};
-	_float fMin(0.0f), fMax(100),vMouseMin(0),vMouseMax(0), fHeightMin(0.f), fHeightMax(10.f), fPosMin(0.f), fPosMax(200.f);
+	_float fMin(0.0f), fMax(100),fMovePosMin(0), fMovePosMax(0),vMouseMin(0), vMouseMax(0), fHeightMin(0.f), fHeightMax(10.f), fPosMin(0.f), fPosMax(200.f);
 	_float fRotationMin(-180.f), fRotationMax(180);
 	_vec3 vSca = { 1.f,1.f,1.f };
 	_vec3 vRot = { 0.f,0.f,0.f };
@@ -233,6 +233,13 @@ void Tile::Imgui_Setting()
 			ImGui::SliderFloat3("##4", m_vNextPos, fPosMin, fPosMax);
 			Imgui_PivotButton("Potal", &m_vNextPos);
 
+
+        ///////////////////MoveTile/////////////////////////
+			ImGui::Text("MoveTile");
+			ImGui::SameLine(100.f, 0.f);
+			ImGui::SliderFloat3("##5", m_vOriginal, fMovePosMin, fMovePosMax);
+			Imgui_PivotButton("Move", &m_vOriginal);
+		
 		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
@@ -440,85 +447,172 @@ void Tile::Imgui_PivotButton(const char pName[32], _vec3* vPivot)
 {
 	
 	char tXP[32] = "X", tYP[32] = "Y", tZP[32] = "Z", tXM[32] = "X", tYM[32] = "Y", tZM[32] = "Z",
-		   tP[32]  = "+", tM[32] = "-";
+		   tP[32]  = "+", tM[32] = "-", 
+		tfXP[32] = "FX", tfYP[32] = "FY", tfZP[32] = "FZ", tfXM[32] = "FX", tfYM[32] = "FY", tfZM[32] = "FZ";
+		 
 	strcat_s(tXP, 32, pName); strcat_s(tXP, 32, tP); strcat_s(tXM, 32, pName); strcat_s(tXM, 32, tM);
 	strcat_s(tYP, 32, pName); strcat_s(tYP, 32, tP); strcat_s(tYM, 32, pName); strcat_s(tYM, 32, tM);
 	strcat_s(tZP, 32, pName); strcat_s(tZP, 32, tP); strcat_s(tZM, 32, pName); strcat_s(tZM, 32, tM);
 
-	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-	if (ImGui::Button(tXP))
+	strcat_s(tfXP, 32, pName); strcat_s(tfXP, 32, tP); strcat_s(tfXM, 32, pName); strcat_s(tfXM, 32, tM);
+	strcat_s(tfYP, 32, pName); strcat_s(tfYP, 32, tP); strcat_s(tfYM, 32, pName); strcat_s(tfYM, 32, tM);
+	strcat_s(tfZP, 32, pName); strcat_s(tfZP, 32, tP); strcat_s(tfZM, 32, pName); strcat_s(tfZM, 32, tM);
+
+	///////////////정수/////////////////
 	{
-		vPivot->x += 1;
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tXP))
+		{
+			vPivot->x += 1;
+		}
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine(70.f, 0.f);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tXM))
+		{
+			vPivot->x -= 1;
+			if (vPivot->x < 0)
+				vPivot->x = 1;
+		}
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine(140.f, 0.f);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tYP))
+		{
+			vPivot->y += 1;
+			if (vPivot->y < 0)
+				vPivot->y = 1;
+		}
+
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine(210.f, 0.f);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tYM))
+		{
+			vPivot->y -= 1;
+			if (vPivot->y < 0)
+				vPivot->y = 1;
+		}
+
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine(280.f, 0.f);
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tZP))
+		{
+			vPivot->z += 1;
+			if (vPivot->z < 0)
+				vPivot->z = 1;
+		}
+
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine(350.f, 0.f);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tZM))
+		{
+			vPivot->z -= 1;
+			if (vPivot->z < 0)
+				vPivot->z = 1;
+		}
+		ImGui::PopStyleColor(3);
 	}
-	ImGui::PopStyleColor(3);
 
-	ImGui::SameLine(70.f, 0.f);
-
-	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-	if (ImGui::Button(tXM))
+	///////////////실수/////////////////
 	{
-		vPivot->x -= 1;
-		if (vPivot->x < 0)
-			vPivot->x = 1;
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tfXP))
+		{
+			vPivot->x += 0.1;
+		}
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine(70.f, 0.f);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tfXM))
+		{
+			vPivot->x -= 0.1;
+			if (vPivot->x < 0)
+				vPivot->x = 0.1;
+		}
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine(140.f, 0.f);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tfYP))
+		{
+			vPivot->y += 0.1;
+			if (vPivot->y < 0)
+				vPivot->y = 0.1;
+		}
+
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine(210.f, 0.f);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tfYM))
+		{
+			vPivot->y -= 0.1;
+			if (vPivot->y < 0)
+				vPivot->y = 0.1;
+		}
+
+		ImGui::PopStyleColor(3);
+		ImGui::SameLine(280.f, 0.f);
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tfZP))
+		{
+			vPivot->z += 0.1;
+			if (vPivot->z < 0)
+				vPivot->z = 0.1;
+		}
+
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine(350.f, 0.f);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
+		if (ImGui::Button(tfZM))
+		{
+			vPivot->z -= 0.1;
+			if (vPivot->z < 0)
+				vPivot->z = 0.1;
+		}
+		ImGui::PopStyleColor(3);
 	}
-	ImGui::PopStyleColor(3);
-
-	ImGui::SameLine(140.f, 0.f);
-
-	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-	if (ImGui::Button(tYP))
-	{
-		vPivot->y += 1;
-		if (vPivot->y < 0)
-			vPivot->y = 1;
-	}
-
-	ImGui::PopStyleColor(3);
-	ImGui::SameLine(210.f, 0.f);
-
-	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-	if (ImGui::Button(tYM))
-	{
-		vPivot->y -= 1;
-		if (vPivot->y < 0)
-			vPivot->y = 1;
-	}
-
-	ImGui::PopStyleColor(3);
-	ImGui::SameLine(280.f, 0.f);
-	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-	if (ImGui::Button(tZP))
-	{
-		vPivot->z += 1;
-		if (vPivot->z < 0)
-			vPivot->z = 1;
-	}
-
-	ImGui::PopStyleColor(3);
-
-	ImGui::SameLine(350.f, 0.f);
-
-	ImGui::PushStyleColor(ImGuiCol_Button, D3DXCOLOR(0.0f, 0.f, 0.f, 1.f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f, 0.7f, 0.7f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.5f, 0.7f, 0.7f));
-	if (ImGui::Button(tZM))
-	{
-		vPivot->z -= 1;
-		if (vPivot->z < 0)
-			vPivot->z = 1;
-	}
-	ImGui::PopStyleColor(3);
-
 }
 void Tile::Set_AnimationCount(_int* icnt)
 {
@@ -971,10 +1065,6 @@ void Tile::Move_Tile()
 	_vec3 vMouseCheck, vMouseBlockCheck{}, vMouseTest;
 	_float fu(0), fv(0), ft(0);
 	
-	//클릭 했을때 현재 마우스 좌표에 있는 tile 선택
-	//해당 타일은 마우스를 계속 따라가도록 설정
-	//if (MOUSE_LBUTTON
-
 	if (D3DXIntersectTri(pBuffer->Get_BufferPos((VTXCNTZ - 1) * VTXCNTX), pBuffer->Get_BufferPos(0), pBuffer->Get_BufferPos((VTXCNTZ - 1) * VTXCNTX + VTXCNTX - 1), &vOrigin, &vDirection, &fu, &fv, &ft))
 	{
 		vMouseCheck = vOrigin + vDirection * ft;
@@ -1028,30 +1118,37 @@ void Tile::Move_Tile()
 	if (vMouseCheck.z < 1)
 		vMouseCheck.z = 1;
 
-	if (Check_Bottom(&vMouseCheck))
-	{
-		m_bTileCheck = false;
-	}
-	else m_bMouseClick = true;
 	m_vMousePos = vMouseCheck; // 마우스위치 확인용
 	vMouseCheck = vMouseCheck + m_vPosPivot;
 	m_vTilePos = vMouseCheck;
 	m_pTransform->Set_Pos(vMouseCheck.x, vMouseCheck.y, vMouseCheck.z);
 	//좌클릭시 블럭 설치
 
-	if (m_bTileCheck && m_pTileName != nullptr && m_eStage != TILE_STAGE::STAGE_END)
+	//클릭 했을때 현재 마우스 좌표에 있는 tile 선택
+	//해당 타일은 마우스를 계속 따라가도록 설정
+	// 
+	if (MOUSE_LBUTTON && !m_bMouseClick)
 	{
-		m_bMouseClick = false;
+		if(TileManager::GetInstance()->Choice_Tile(&m_iStge, &m_iMode, &m_iNumber, vOrigin, vDirection, &m_vOriginal))
+			m_bMouseClick = true;
+			//해당 타일이 클릭되면 true
 	}
-	//우클릭 삭제
-	if (m_eMode != TILEMODE_CHANGE::MODE_END && MOUSE_RBUTTON && !m_bMouseClick)
+	//타일 움직이기
+	if (m_bMouseClick)
 	{
-		TileManager::GetInstance()->Delete_Tile(vMouseCheck, vOrigin, vDirection);
+		TileManager::GetInstance()->Set_Tile(m_vOriginal, m_iStge,m_iMode,m_iNumber);
+	}
+	//우클릭시 해당 위치에 타일 놓기
+	if (MOUSE_RBUTTON)
+	{
+		
+		//타일 놓으면 다시 클릭 활성화
+		m_iStge = 0, m_iMode = 0, m_iNumber = 0;
 		m_bMouseClick = false;
 	}
 
 	m_pTransform->Set_Pos(vMouseCheck.x, vMouseCheck.y + 1.f + (pTransform->Get_Scale()->y) * 0.15, vMouseCheck.z);
-	m_bTileCheck = true;
+
 }
 Tile* Tile::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	Tile* pTile = new Tile(_GRPDEV);

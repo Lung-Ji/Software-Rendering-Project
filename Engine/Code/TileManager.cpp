@@ -33,6 +33,53 @@ HRESULT TileManager::Add_Tile(GameObject* pObject, _vec3 vPos, TILE_STAGE eStage
 
 	return S_OK;
 }
+_bool TileManager::Choice_Tile(_int* eState, _int* eMode, _int* iTileNumber,_vec3 Origin, _vec3 vDir, _vec3* returnPos)
+{
+	_float fu, fv, ft;
+	for (size_t i = 0; i < TILE_STAGE::STAGE_END; ++i)
+	{
+		for (size_t j = 0; j < TILEMODE_CHANGE::MODE_END; ++j)
+		{
+			for (size_t k = 0 ; k < m_vecTileBuffer[i][j].size(); ++k)
+			{
+				_vec3 vTileLocalPos[4];
+				_matrix InverseWorld;
+
+				memcpy(&InverseWorld, dynamic_cast<Transform*>
+			((m_vecTileBuffer[i][j][k])->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_World(), sizeof(_matrix));
+
+				vTileLocalPos[0] = { -1.f, 0.f, -1.f }; //좌하단
+				vTileLocalPos[1] = { 1.f,  0.f, -1.f };  //우하단
+				vTileLocalPos[2] = { -1.f, 0.f,  1.f }; //좌상단
+				vTileLocalPos[3] = { 1.f,  0.f,  1.f };  //우상단
+
+				for (int i = 0; i < 4; ++i)
+					D3DXVec3TransformCoord(&vTileLocalPos[i], &vTileLocalPos[i], &InverseWorld);
+
+				if (D3DXIntersectTri(&vTileLocalPos[0], &vTileLocalPos[1], &vTileLocalPos[2], &Origin, &vDir, &fu, &fv, &ft) ||
+					D3DXIntersectTri(&vTileLocalPos[2], &vTileLocalPos[1], &vTileLocalPos[3], &Origin, &vDir, &fu, &fv, &ft))
+				{
+
+					dynamic_cast<Transform*>
+						((m_vecTileBuffer[i][j][k])->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_Info(INFO_POS, returnPos);
+					*eState= i;
+					*eMode = j;
+					*iTileNumber = k;
+					return true;
+				}
+
+			}
+		}
+	}
+	return false;
+}
+void TileManager::Set_Tile(_vec3 vPos, _int eStage, _int eMode, _int TileNumber)
+{
+	Component* pComponent = m_vecTileBuffer[eStage][eMode][TileNumber]->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM);
+	Transform* pTransform = dynamic_cast<Transform*>(pComponent);
+	_vec3 Pos;
+	pTransform->Set_Pos(vPos.x, vPos.y, vPos.z);
+}
 void TileManager::Move_Tile(_vec3 vPos, _vec3 Origin, _vec3 vDir)
 {
 	_float fu, fv, ft;
