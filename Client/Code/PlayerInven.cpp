@@ -40,7 +40,7 @@ HRESULT PlayerInven::Component_Initialize() {
 HRESULT PlayerInven::Sprite_Initialize() {
 	
 		///////////////////////////////////////////////// BACKGROUND //////////////////////////////////////////////////////
-		//omponent_Sprite->Import_Sprite(L"../../UI/MainUI/WeaponBG_ArrowCount.png", L"INVEN_BACKGROUND", -45.f, -125.f, 1380.f, 1000.f, TRUE);
+		//Component_Sprite->Import_Sprite(L"../../UI/MainUI/WeaponBG_ArrowCount.png", L"INVEN_BACKGROUND", -45.f, -125.f, 1380.f, 1000.f, TRUE);
 		UIManager::GetInstance()->Import_UISprite(GRPDEV, Inventory, L"../../UI/MainUI/WeaponBG_ArrowCount.png",
 			1380.f, 1000.f, -45.f, -125.f, TRUE,155);
 		////////////////////////////////////////////// CUR_EQUIP_ARROW //////////////////////////////////////////////////////
@@ -66,15 +66,15 @@ HRESULT PlayerInven::Sprite_Initialize() {
 		///////////////////////////////////////////////EXAMPLE_WEARPON/////////////////////////////////////////////////////////////
 		//Component_Sprite->Import_Sprite(L"../../UI/Weapon_UI/Spr_Weapon_No006_LongBowThumbnail.png", L"ARROW_INVEN1", 420.f, 265.f, 85.f, 85.f, TRUE);
 		////////////////////////////////////////////INVENTORY_ITEM_BACKGROUND//////////////////////////////////////////////////////////////
-		UIManager::GetInstance()->Import_UISprite(GRPDEV, Inventory, L"../../UI/Inventory_UI/Spr_Ui_Inventory_Background.png", 450.f, 300.f, 900.f, 300.f, TRUE, 255);
+		UIManager::GetInstance()->Import_UISprite(GRPDEV, Inventory, L"../../UI/Inventory_UI/Spr_Ui_Inventory_Background.png", 450.f, 300.f, 820.f, 200.f, TRUE, 200);
 
 		//Component_Sprite->Import_Sprite(L"../../UI/Inventory_UI/Spr_Ui_Inventory_Background.png", L"INVENTORY_BACKGROUND", 900.f, 300.f, 450.f, 300.f, TRUE);
 		/////////////////////////////////////////////INVENTORY_ITEM////////////////////////////////////////////////////////////////////////
 		UIManager::GetInstance()->Import_UISprite(GRPDEV, Inventory, L"../../UI/Weapon_UI/Spr_Weapon_No006_LongBowThumbnail.png",
 		85.f, 85.f, 420.f, 265.f, TRUE, 255);
 		//Component_Sprite->Import_Sprite(L"../../UI/Inventory_UI/Spr_Ui_Center_ItemAcquisition_Frame_Backgroud.png", L"INVENTORY_ITEM", 700.f, 250.f, 55.f, 55.f, TRUE);
-		UIManager::GetInstance()->Import_UISprite(GRPDEV, Inventory, L"../../UI/Inventory_UI/Spr_Ui_Center_ItemAcquisition_Frame_Backgroud.png", 
-			55.f, 55.f, 700.f, 150.f, TRUE, 255);
+		//UIManager::GetInstance()->Import_UISprite(GRPDEV, Inventory, L"../../UI/Inventory_UI/Spr_Ui_Center_ItemAcquisition_Frame_Backgroud.png", 
+		//	55.f, 55.f, 700.f, 150.f, TRUE, 255);
 		
 	return S_OK;
 }
