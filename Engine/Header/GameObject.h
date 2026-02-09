@@ -16,6 +16,7 @@ public:
 	Component*			Add_Component(COMPONENT_TYPE _CID);
 
 	FLOAT				Get_AlphaZValue() { return AlphaZValue; }
+	FLOAT				Get_AlphaYValue() { return AlphaYValue; }
 
 	VOID				Set_ObjectTag(CONST TCHAR* _OBJTAG)			{ ObjectTAG = _OBJTAG;	 }
 	wstring				Get_ObjectTag()								{	return ObjectTAG;	 }
@@ -39,6 +40,7 @@ public:
 
 public:
 	VOID	AlphaSorting(CONST D3DXVECTOR3* _Vec);
+	VOID	AlphaYSorting(CONST D3DXVECTOR3* _Vec);
 
 protected:
 	vector<Component*>				ComponentList;
@@ -49,6 +51,7 @@ protected:
 	BOOL							ObjectDead;
 
 	FLOAT							AlphaZValue;
+	FLOAT							AlphaYValue;
 
 protected:
 	virtual VOID		Free();

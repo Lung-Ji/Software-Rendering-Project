@@ -25,7 +25,9 @@ public:
     void            Tile_Animation  (CONST FLOAT& _DT);
     void            Tile_Destory    (CONST FLOAT& _DT);
     void            Tile_Potal      (CONST FLOAT& _DT);
-
+    void            Tile_Potal_Effect(CONST FLOAT& _DT);
+    void            Tile_Trigger      ();
+    void            Tile_Gasi_Destory();
     Transform*       Crash_Player();
 private:
     HRESULT			Component_Initialize(TILE_SIDE eid, TILE_STATE eState);
@@ -39,6 +41,7 @@ private:
     _float                  m_fFrame;
     _float                  m_fTime;
     _bool                   m_bStopFrame;
+
 public:
     static         CXZTile* Create(LPDIRECT3DDEVICE9 pGraphicDev, TILE_SIDE eid, TILE_STATE eState);
 

@@ -33,7 +33,42 @@ HRESULT TileManager::Add_Tile(GameObject* pObject, _vec3 vPos, TILE_STAGE eStage
 
 	return S_OK;
 }
+void TileManager::Move_Tile(_vec3 vPos, _vec3 Origin, _vec3 vDir)
+{
+	_float fu, fv, ft;
+	//윗면 기준으로 광선쏴서 삭제
+	for (size_t i = 0; i < TILE_STAGE::STAGE_END; ++i)
+	{
+		for (size_t j = 0; j < TILEMODE_CHANGE::MODE_END; ++j)
+		{
+			for (auto iter = m_vecTileBuffer[i][j].begin(); iter != m_vecTileBuffer[i][j].end();)
+			{
+				_vec3 vTileLocalPos[4];
+				_matrix InverseWorld;
 
+				memcpy(&InverseWorld, dynamic_cast<Transform*>((*iter)->Get_Component(Engine::COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_World(), sizeof(_matrix));
+
+				vTileLocalPos[0] = { -1.f, 0.f, -1.f }; //좌하단
+				vTileLocalPos[1] = { 1.f,  0.f, -1.f };  //우하단
+				vTileLocalPos[2] = { -1.f, 0.f,  1.f }; //좌상단
+				vTileLocalPos[3] = { 1.f,  0.f,  1.f };  //우상단
+
+				for (int i = 0; i < 4; ++i)
+					D3DXVec3TransformCoord(&vTileLocalPos[i], &vTileLocalPos[i], &InverseWorld);
+
+				if (D3DXIntersectTri(&vTileLocalPos[0], &vTileLocalPos[1], &vTileLocalPos[2], &Origin, &vDir, &fu, &fv, &ft) ||
+					D3DXIntersectTri(&vTileLocalPos[2], &vTileLocalPos[1], &vTileLocalPos[3], &Origin, &vDir, &fu, &fv, &ft))
+				{
+					Safe_Release((*iter));
+					iter = m_vecTileBuffer[i][j].erase(iter);
+				}
+
+				if (iter != m_vecTileBuffer[i][j].end())
+					++iter;
+			}
+		}
+	}
+}
 void TileManager::Delete_Tile(_vec3 vPos, _vec3 Origin, _vec3 vDir)
 {
 	_float fu, fv, ft;
@@ -88,7 +123,6 @@ HRESULT TileManager::Update_TileList(const _float& fTimeDetla)
 	
 	return S_OK;
 }
-
 void TileManager::Render_TileList()
 {
 	for (size_t i = 0; i < TILE_STAGE::STAGE_END; ++i)
@@ -100,6 +134,18 @@ void TileManager::Render_TileList()
 		}
 	}
 }
+
+void TileManager::Set_Trigger(TILE_STAGE eStage, TILEMODE_CHANGE eMode, TILE_STATE eState)
+{
+	for (auto& iter : m_vecTileBuffer[eStage][eMode])
+		if (dynamic_cast<TileInfo*>(iter->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileStateName() == TILE_STATE::STATE_POTALEFFECT ||
+			dynamic_cast<TileInfo*>(iter->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileStateName() == TILE_STATE::STATE_POTALGASI ||
+			dynamic_cast<TileInfo*>(iter->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileStateName() == TILE_STATE::STATE_POTALGASI_EFFECT)
+		{
+			dynamic_cast<TileInfo*>(iter->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_PotalOpen();
+		}
+}
+
 
 void TileManager::Save_Tile(HWND g_hWnd)
 {

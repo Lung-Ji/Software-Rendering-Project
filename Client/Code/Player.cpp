@@ -31,7 +31,7 @@ HRESULT Player::Ready_GameObject() {
 
 	Component_Transform->Set_Scale({ 2.f, 2.f, 2.f });
 	Component_Transform->Rotation(ROT_X, 90.f - _cameraAngle);
-	Component_Transform->Set_Pos({ 5.f, 1.f, 5.f });
+	Component_Transform->Set_Pos({ 5.f, 0.5, 5.f });
 
 	SceneManager::GetInstance()->Get_CurrentScene()->Add_GameObjectToScene<Bow>(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_PLAYER, L"Bow");
 	dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Bow"))->Set_PlayerPos(Component_Transform->Get_Position());
@@ -615,11 +615,11 @@ void Player::ATTACK_STATE(const _float& _DT)
 
 void Player::Idle_Final_Input(const _float& _DT)
 {
-	if (MOUSE_RBUTTON) {
-		_pState = pState::STATE_DASH;
-		_dashStart = true;
-		_frame = 1;
-	}
+	//if (MOUSE_RBUTTON) {
+	//	_pState = pState::STATE_DASH;
+	//	_dashStart = true;
+	//	_frame = 1;
+	//}
 }
 
 void Player::SetGrahpic()

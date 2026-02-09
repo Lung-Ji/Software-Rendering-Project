@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-enum class OBJECT_DESTORY { STONE, GRASS, DESTORY_END };
+enum class OBJECT_DESTORY { STONE, GRASS,POTALEFFECT, DESTORY_END };
 class TileDestoryEffect :
     public GameObject
 {

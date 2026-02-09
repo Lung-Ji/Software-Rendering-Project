@@ -57,7 +57,10 @@ public:
     const _tchar*          Get_AnimationName(_uint iCnt) { return m_vecAnimationName[iCnt].c_str(); }
     TILE_STAGE             Get_TileStage()               { return m_eTileStage; }
     _vec3                  Get_NextPos()                 { return m_NextPos; }
-    _bool                  Set_PotalOpen()               { return m_bPortal; }
+    _bool                  Get_PotalOpen()               { return m_bPortal; }
+
+
+    void                   Set_PotalOpen()               { m_bPortal = true; }
     void                   Set_TextureID(IDirect3DBaseTexture9* pTexture) { 
         
         auto iter = pTexture;

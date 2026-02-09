@@ -37,6 +37,18 @@ VOID GameObject::AlphaSorting(const D3DXVECTOR3* _Vec) {
 	D3DXVECTOR3 DirectionToCam = CameraPosition - *_Vec;
 	AlphaZValue = D3DXVec3Length(&DirectionToCam);
 }
+VOID GameObject::AlphaYSorting(const D3DXVECTOR3* _Vec)
+{
+	D3DXMATRIX WorldMat;
+	GRPDEV->GetTransform(D3DTS_VIEW, &WorldMat);
+	D3DXMatrixInverse(&WorldMat, 0, &WorldMat);
+
+	D3DXVECTOR3 CameraPosition;
+	memcpy(&CameraPosition, &WorldMat.m[3][0], sizeof(D3DXVECTOR3));
+
+	D3DXVECTOR3 DirectionToCam = CameraPosition - *_Vec;
+	AlphaYValue = D3DXVec3Length(&DirectionToCam);
+}
 Component*	GameObject::Get_Component(COMPONENT_TYPE _CID) {
 	return ComponentList[(LONG)_CID] != nullptr ? ComponentList[(LONG)_CID] : nullptr;
 }

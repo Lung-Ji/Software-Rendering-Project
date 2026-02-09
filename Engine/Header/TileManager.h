@@ -27,9 +27,12 @@ public:
     void            Render_TileList();
     void            Set_TileMode(TILEMODE_CHANGE eMode) { m_eMode = eMode; }
 
+    void            Set_Trigger(TILE_STAGE eStage, TILEMODE_CHANGE eMode, TILE_STATE eState);
     void            Save_Tile(HWND g_hWnd);
     void            Load_TilePush(GameObject* pGame,TILE_STAGE eStage, TILEMODE_CHANGE eMod) { m_vecTileBuffer[eStage][eMod].push_back(pGame); }
 
+
+    void            Move_Tile(_vec3 vPos, _vec3 Origin, _vec3 vDir);
     void            Change_Tile(TILE_STAGE eStage) { m_eStage = eStage; }
     void            Reset_TileList();
 private:

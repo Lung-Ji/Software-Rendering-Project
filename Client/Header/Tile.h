@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-
+enum class INSTALL_MODE{MODE_INSTALL, MODE_MOVE, MODE_END};
 class Tile :
     public GameObject
 {
@@ -30,13 +30,17 @@ public:
     void                        Imgui_PivotButton(const char pName[32], _vec3* vPivot);
 public:
     void                        Set_AnimationCount(int* icnt);
+
+public:
+
+    _bool                       Check_Bottom(_vec3* vOrigin);
+    void                        Check_TilePoint();
+    void                        Check_Distance(_vec3 vMouse);
+    void                        Move_Tile();
 private:
     HRESULT                     Load_Image(const _tchar* pName, TILE_STATE eid);
     HRESULT                     LoadFile();
     HRESULT			            Component_Initialize();
-    _bool                       Check_Bottom(_vec3* vOrigin);
-    void                        Check_TilePoint();
-    void                        Check_Distance(_vec3 vMouse);
     //타일 체크용 버퍼
     Buffer*                      m_pBuffer;
     Buffer*                      m_pTileLeft;
@@ -70,6 +74,7 @@ private:
     TILE_STATE                   m_eTileState;
     TILEMODE_CHANGE              m_eMode;
     TILE_STAGE                   m_eStage;
+    INSTALL_MODE                 m_eTileInstall;
 public:
     static      Tile* Create(LPDIRECT3DDEVICE9 pGraphicDev);
    

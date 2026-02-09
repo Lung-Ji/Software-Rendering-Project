@@ -19,6 +19,9 @@ HRESULT TileDestoryEffect::Ready_GameObject(OBJECT_DESTORY eid, _int iCnt, _vec3
 		case OBJECT_DESTORY::STONE:
 		Add_Effect(OBJECT_DESTORY::STONE, L"StoneBox_Destruction_%d.png", iCnt);
 		break;
+		case OBJECT_DESTORY::POTALEFFECT:
+		Add_Effect(OBJECT_DESTORY::POTALEFFECT, L"Spr_InfectionThorns_DestructionEffect_0%d.png", iCnt);
+		break;
 	}
 		
 	return S_OK;
@@ -64,7 +67,7 @@ void TileDestoryEffect::Frame_Move(const FLOAT& _DT)
 		case OBJECT_DESTORY::STONE:
 			
 				m_fTime += _DT;		 //지난 시간
-				if (m_fTime > 0.3f) //0.1초가 지나면
+				if (m_fTime > 0.1f) //0.1초가 지나면
 				{
 					++m_fFrame;     //프레임 증가
 					m_fTime = 0.f;	//시간 초기화
@@ -77,7 +80,20 @@ void TileDestoryEffect::Frame_Move(const FLOAT& _DT)
 					}
 				}
 			break;
-		case OBJECT_DESTORY::GRASS:
+		case OBJECT_DESTORY::POTALEFFECT:
+			m_fTime += _DT;		 //지난 시간
+			if (m_fTime > 0.1f) //0.1초가 지나면
+			{
+				++m_fFrame;     //프레임 증가
+				m_fTime = 0.f;	//시간 초기화
+
+				if (m_fFrame >= m_iCnt - 1)
+				{
+					//m_fFrame = 1.f;
+					m_bEffect = false;
+					Set_ObjectDead(TRUE);
+				}
+			}
 			break;
 		}
 	}
