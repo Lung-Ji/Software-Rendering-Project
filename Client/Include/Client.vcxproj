@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Header\Arrow.h" />
     <ClInclude Include="..\Header\Bow.h" />
     <ClInclude Include="..\Header\Bat.h" />
     <ClInclude Include="..\Header\Bullet_Standard.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="ENUM.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Code\Arrow.cpp" />
     <ClCompile Include="..\Code\Bow.cpp" />
     <ClCompile Include="..\Code\Bat.cpp" />
     <ClCompile Include="..\Code\Bullet_Standard.cpp" />

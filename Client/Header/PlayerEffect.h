@@ -38,5 +38,7 @@ private:
 	Transform*		Component_Transform;
 	Texture*		Component_Texture;
 	Collider*		Component_Collider;
+
+	_vec3* _playerPos;
 };
 

@@ -124,6 +124,9 @@
     <Filter Include="03. GameObject\06. Effect\03. EnvEffect">
       <UniqueIdentifier>{67951d9e-7d40-478f-8302-55c93ba9b870}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. GameObject\01. Player\01. Arrow">
+      <UniqueIdentifier>{876f658b-2647-4f66-9e4e-b05122adf8d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -273,6 +276,7 @@
     <ClInclude Include="..\Header\TileDestoryEffect.h">
       <Filter>03. GameObject\05. Tile</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Arrow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -407,6 +411,7 @@
     <ClCompile Include="..\Code\TileDestoryEffect.cpp">
       <Filter>03. GameObject\05. Tile</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Arrow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">

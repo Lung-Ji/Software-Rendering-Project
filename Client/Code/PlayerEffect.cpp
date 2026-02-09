@@ -8,23 +8,75 @@ PlayerEffect::~PlayerEffect(){}
 HRESULT PlayerEffect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
+	_bool AngleChase = true;
+
 	if		(_SKILLTYPE == PLAYER_SKILL::SKILL_1)	{ Make_TextureList(L"Spr_Effect_ExplosionNormal02_");		}
 	else if (_SKILLTYPE == PLAYER_SKILL::SKILL_2)	{ Make_TextureList(L"Spr_Ui_Effect_BossClear_lraCharge_");	}
 	else if (_SKILLTYPE == PLAYER_SKILL::SKILL_3)	{ Make_TextureList(L"Spr_Ui_Stage01_TureMapEffect_");		}
+	else if (_SKILLTYPE == PLAYER_SKILL::ICEARROW_PULSE) { Make_TextureList(L"IceArrow_Pulse"); }
 
-	Component_Transform->Set_Pos(*_PlayerPOS);		// 기본 위치 : 플레이어 중심 
-	Repeatable = _Repeatable;
+	if (!AngleChase)
+	{
+		Component_Transform->Set_Pos(*_PlayerPOS);		// 기본 위치 : 플레이어 중심 
+		Repeatable = _Repeatable;
 
-	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
+		CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
 
-	_vec3 cameraDir = *(Camera->Get_EyeVec()) - *(Camera->Get_AtVec());
-	_vec3 planeDir = { 0.f, 1.f, 0.f };
+		_vec3 cameraDir = *(Camera->Get_EyeVec()) - *(Camera->Get_AtVec());
+		_vec3 planeDir = { 0.f, 1.f, 0.f };
 
-	_float angle = acosf(D3DXVec3Dot(D3DXVec3Normalize(&cameraDir, &cameraDir), D3DXVec3Normalize(&planeDir, &planeDir)));
-	angle = angle / D3DX_PI * 180.f;
+		_float angle = acosf(D3DXVec3Dot(D3DXVec3Normalize(&cameraDir, &cameraDir), D3DXVec3Normalize(&planeDir, &planeDir)));
+		angle = angle / D3DX_PI * 180.f;
 
-	Component_Transform->Rotation(ROT_X, 90.f - angle);
+		Component_Transform->Rotation(ROT_X, 90.f - angle);
+	}
+	else
+	{
+		_playerPos = _PlayerPOS;
+		
+		CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
+		_vec3 cameraDir = *(Camera->Get_EyeVec()) - *(Camera->Get_AtVec());
+		D3DXVec3Normalize(&cameraDir, &cameraDir);
+
+		POINT MousePoint{ 0, 0 };
+		GetCursorPos(&MousePoint);
+		ScreenToClient(hWnd, &MousePoint);
+
+		_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
+		_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
+
+		_vec2 dir2D = mousePos - screenCenter;
+		D3DXVec2Normalize(&dir2D, &dir2D);
+
+		float angle = atan2f(dir2D.y, dir2D.x);
+
+		_vec3 eye = { 0.f, 0.f, 0.f };
+		_vec3 at = cameraDir;
+		_vec3 up = { 0.f, 1.f, 0.f };
+
+		_matrix matSize;
+		D3DXMatrixIdentity(&matSize);
+		D3DXMatrixScaling(&matSize, 1.f, 1.f, 1.f);
+
+		_matrix matBillboard;
+		D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
+		D3DXMatrixInverse(&matBillboard, nullptr, &matBillboard);
+
+		float radian = D3DX_PI / 180.f;
+		_matrix matRotZ;
+		D3DXMatrixRotationZ(&matRotZ, angle - D3DX_PI);
+
+		_matrix matWorld = matSize * matRotZ * matBillboard;
+
+		matWorld._41 = (*_playerPos).x;
+		matWorld._42 = (*_playerPos).y;
+		matWorld._43 = (*_playerPos).z;
+
+		Component_Transform->Set_World(&matWorld);
+	}
+	
 	PlayTime = _PlayTime;
+
 	//CollisionManager::GetInstance()->Add_ColliderObject(this);
 
 	return S_OK;
@@ -49,6 +101,49 @@ INT  PlayerEffect::Update_GameObject(CONST FLOAT& _DT) {
 	GameObject::Update_GameObject(_DT);
 	 
 	FrameTick += _DT;
+
+	if (true)
+	{
+		CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
+		_vec3 cameraDir = *(Camera->Get_EyeVec()) - *(Camera->Get_AtVec());
+		D3DXVec3Normalize(&cameraDir, &cameraDir);
+
+		POINT MousePoint{ 0, 0 };
+		GetCursorPos(&MousePoint);
+		ScreenToClient(hWnd, &MousePoint);
+
+		_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
+		_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
+
+		_vec2 dir2D = mousePos - screenCenter;
+		D3DXVec2Normalize(&dir2D, &dir2D);
+
+		float angle = atan2f(dir2D.y, dir2D.x);
+
+		_vec3 eye = { 0.f, 0.f, 0.f };
+		_vec3 at = cameraDir;
+		_vec3 up = { 0.f, 1.f, 0.f };
+
+		_matrix matSize;
+		D3DXMatrixIdentity(&matSize);
+		D3DXMatrixScaling(&matSize, 1.f, 1.f, 1.f);
+
+		_matrix matBillboard;
+		D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
+		D3DXMatrixInverse(&matBillboard, nullptr, &matBillboard);
+
+		float radian = D3DX_PI / 180.f;
+		_matrix matRotZ;
+		D3DXMatrixRotationZ(&matRotZ, angle - D3DX_PI);
+
+		_matrix matWorld = matSize * matRotZ * matBillboard;
+
+		matWorld._41 = (*_playerPos).x;
+		matWorld._42 = (*_playerPos).y;
+		matWorld._43 = (*_playerPos).z;
+
+		Component_Transform->Set_World(&matWorld);
+	}
 
 	return 0;
 }

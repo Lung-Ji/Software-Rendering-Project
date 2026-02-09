@@ -120,6 +120,7 @@ private:
 	void			Idle_Final_Input(const _float& _DT);
 	void			SetGrahpic();
 	void			Anim(TCHAR FileName[128], float delay, int maxIdx, bool reverse = false);
+	void			Set_Effect(const _float& _DT);
 
 private:
 	bool			Debug;
@@ -140,6 +141,9 @@ private:
 
 	float			_g;
 	float			_slideTime;
+
+	_vec3			_pulsepos;
+	float			_pulseDelay;
 
 	GameObject*			_inventory[8];
 	Bow*				_weaponSlot[4];

@@ -74,10 +74,7 @@ INT	Player::Update_GameObject(const _float& _DT) {
 VOID Player::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
 
-	// 광윤 - KeyInput이란 함수에 넣었었는데 Merge하니까 다른 곳으로 옮겨졌어요,////////////////////
-	//if (KEY_DOWN(DIK_1)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_1, 0.5f); }
-	//if (KEY_DOWN(DIK_2)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_2, 0.5f); }
-	//if (KEY_DOWN(DIK_3)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_3, 0.5f); }
+	Set_Effect(_DT);
 }
 VOID Player::Render_GameObject() {
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
@@ -894,6 +891,34 @@ void Player::Anim(TCHAR FileName[128], float delay, int maxIdx, bool reverse)
 		}
 	}
 
+}
+void Player::Set_Effect(const _float& _DT)
+{
+	_vec3* playerPos = Component_Transform->Get_Position();
+
+	POINT MousePoint{ 0, 0 };
+	GetCursorPos(&MousePoint);
+	ScreenToClient(hWnd, &MousePoint);
+
+	_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
+	_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
+
+	_vec2 dir2D = mousePos - screenCenter;
+	D3DXVec2Normalize(&dir2D, &dir2D);
+
+	float angle = atan2f(dir2D.y, dir2D.x);
+
+	float radius = 2.3f;
+
+	float offsetX = cosf(angle) * radius;
+	float offsetY = sinf(angle) * radius;
+
+	_pulsepos = { playerPos->x + offsetX , playerPos->y, playerPos->z - offsetY };
+
+	if (KEY_DOWN(DIK_1)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_1, playerPos, 0.5f); }
+	else if (KEY_DOWN(DIK_2)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_2, playerPos, 0.5f); }
+	else if (KEY_DOWN(DIK_3)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_3, playerPos, 0.5f); }
+	else if (KEY_DOWN(DIK_4)) { PLAY_PLAYER_EFFECT(PLAYER_SKILL::ICEARROW_PULSE, &_pulsepos, 0.2f); }
 }
 D3DXVECTOR3 Player::MousePicker_NonTarget(HWND _hWnd, Buffer* _TerrainBuffer, Transform* _TerrainTransform) {
 
