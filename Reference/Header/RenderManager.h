@@ -31,7 +31,7 @@ private:
 	virtual VOID	Free();
 
 public:
-	static VOID Make_BillBoard(Transform* Component_Transform, LPDIRECT3DDEVICE9 _GRPDEV);
+	static VOID Make_BillBoard(Transform* Component_Transform, LPDIRECT3DDEVICE9 _GRPDEV, ROTATION efix	= ROT_END);
 };
 
 END

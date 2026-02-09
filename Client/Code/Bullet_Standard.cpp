@@ -46,6 +46,7 @@ VOID Bullet_Standard::Render_GameObject() {
 HRESULT Bullet_Standard::Component_Initialize() {
 
 	m_fSpeed = 1.f;
+	_frame = 1;
 
 	Component_Buffer = ADD_COMPONENT_RECTTEX;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
@@ -53,7 +54,7 @@ HRESULT Bullet_Standard::Component_Initialize() {
 
 	Component_Transform->Set_Pos(1.f, 1.f, 1.f);
 	Component_Transform->Set_Rotation(0.f, 0.f, 0.f);
-	Component_Transform->Set_Scale(0.1f, 0.1f, 0.1f);
+	Component_Transform->Set_Scale(0.5f, 0.5f, 0.5f);
 
 	Component_Collider = ADD_COMPONENT_COLLIDER;
 	Component_Collider->Set_CenterPos(Component_Transform);

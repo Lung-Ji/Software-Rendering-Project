@@ -93,7 +93,7 @@ VOID	RenderManager::Free() {
 	Clear_RenderGroup();
 }
 
-VOID RenderManager::Make_BillBoard(Transform* Component_Transform, LPDIRECT3DDEVICE9 _GRPDEV)
+VOID RenderManager::Make_BillBoard(Transform* Component_Transform, LPDIRECT3DDEVICE9 _GRPDEV, ROTATION eFix)
 {
 	_matrix		matBill, matWorld, matView;
 
@@ -102,22 +102,45 @@ VOID RenderManager::Make_BillBoard(Transform* Component_Transform, LPDIRECT3DDEV
 
 	D3DXMatrixIdentity(&matBill);
 
-	//XÃà
-	matBill._11 = matView._11;
-	matBill._12 = matView._12;
-	matBill._13 = matView._13;
-	//YÃà
-	matBill._21 = matView._21;
-	matBill._22 = matView._22;
-	matBill._23 = matView._23;
-	//ZÃà
-	matBill._31 = matView._31;
-	matBill._32 = matView._32;
-	matBill._33 = matView._33;
+	switch (eFix)
+	{
+	case Engine::ROT_X:
+		matBill._22 = matView._22;
+		matBill._23 = matView._23;
+		matBill._32 = matView._32;
+		matBill._33 = matView._33;
+		break;
+	case Engine::ROT_Y:
+		matBill._11 = matView._11;
+		matBill._13 = matView._13;
+		matBill._31 = matView._31;
+		matBill._33 = matView._33;
+		break;
+	case Engine::ROT_Z:
+		matBill._11 = matView._11;
+		matBill._12 = matView._12;
+		matBill._21 = matView._21;
+		matBill._22 = matView._22;
+		break;
+	case Engine::ROT_END:
+	default:
+		//X축
+		matBill._11 = matView._11;
+		matBill._12 = matView._12;
+		matBill._13 = matView._13;
+		//Y축
+		matBill._21 = matView._21;
+		matBill._22 = matView._22;
+		matBill._23 = matView._23;
+		//Z축
+		matBill._31 = matView._31;
+		matBill._32 = matView._32;
+		matBill._33 = matView._33;
+		break;
+	}
 
 	D3DXMatrixInverse(&matBill, 0, &matBill);
 
-	// ÁÖÀÇ ÇÒ °Í
 	matWorld = matBill * matWorld;
 
 	Component_Transform->Set_World(&matWorld);

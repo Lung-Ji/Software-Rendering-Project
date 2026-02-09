@@ -169,7 +169,10 @@
     <ClInclude Include="..\Header\DungeonScene.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Header\Fireball.h" />
     <ClInclude Include="..\Header\MonsterEffect.h" />
+    <ClInclude Include="..\Header\MonsterSummon03.h" />
+    <ClInclude Include="..\Header\MonsterSummon01.h" />
     <ClInclude Include="..\Header\MonsterTest.h" />
     <ClInclude Include="..\Header\PlayerEffect.h" />
     <ClInclude Include="..\Header\GameManager.h" />
@@ -252,7 +255,10 @@
     <ClCompile Include="..\Code\DungeonScene.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Code\Fireball.cpp" />
     <ClCompile Include="..\Code\MonsterEffect.cpp" />
+    <ClCompile Include="..\Code\MonsterSummon03.cpp" />
+    <ClCompile Include="..\Code\MonsterSummon01.cpp" />
     <ClCompile Include="..\Code\MonsterTest.cpp" />
     <ClCompile Include="..\Code\PlayerEffect.cpp" />
     <ClCompile Include="..\Code\GameManager.cpp" />

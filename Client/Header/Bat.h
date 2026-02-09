@@ -4,13 +4,6 @@
 #define BatIMGX 287.f
 #define BatIMGY 173.f
 
-#define BATTRACKINGDIS 5.f
-#define BATTRACKINGMAX 3.f
-#define BATTRACKINGMIN 2.f
-#define BATATTACKREADY 1.f
-#define BATATTACKEND	2.f
-#define BATRUSHSPEED	2.f
-
 enum BAT_STATE { BAT_IDLE, BAT_TRACKING, BAT_ATTACKING, BAT_Hit, BAT_DEAD };
 
 class Bat : public GameObject
