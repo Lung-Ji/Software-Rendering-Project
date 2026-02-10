@@ -231,6 +231,7 @@ VOID Bat::State_Attacking(const _float& _DT)
 				static_cast<Bullet_Standard*>(pBullet)->Set_Dir(*D3DXVec3Normalize(&vShootingDir, &vShootingDir));
 				SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_STATIC_OBJECT)
 					->Add_GameObject(pBullet);
+				//CollisionManager::GetInstance()->Add_ColliderObject(pBullet);
 			}
 		}
 	}

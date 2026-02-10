@@ -39,7 +39,7 @@ VOID Bullet_Standard::Render_GameObject() {
 
 		_frameTick = 0.f;
 	}
-	//Component_Buffer->Render_Buffer();
+	Component_Buffer->Render_Buffer();
 
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }

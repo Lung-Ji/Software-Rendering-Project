@@ -13,7 +13,7 @@ HRESULT	StartScene::Ready_Scene() {
 	if (FAILED( Ready_UserInterface_Layer()	))		return E_FAIL;
 
 	KeyManager::GetInstance()->Ready_KeyManager(hInst, hWnd);
-	CollisionManager::GetInstance()->Get_AllObjectOfScene();
+	//CollisionManager::GetInstance()->Get_AllObjectOfScene();
 
 	return S_OK;
 }
