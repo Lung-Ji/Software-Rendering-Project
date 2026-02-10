@@ -1,10 +1,9 @@
 #include "Font.h"
 
-FontObject::FontObject(LPDIRECT3DDEVICE9 _GRPDEV) {}
-
-FontObject::~FontObject()
-{
-}
+FontObject::FontObject() : Sprite(nullptr){};
+FontObject::FontObject(LPDIRECT3DDEVICE9 _GRPDEV)	:Component(_GRPDEV), Sprite(nullptr) {}
+FontObject::FontObject(CONST Component& _RHS){}
+FontObject::~FontObject() {}
 
 HRESULT FontObject::Ready_Font(const _tchar* pFontType, const _uint& iWidth, const _uint& iHeight, const _uint& iWeight)
 {
@@ -35,15 +34,32 @@ HRESULT FontObject::Ready_Font(const _tchar* pFontType, const _uint& iWidth, con
 
 void FontObject::Render_Font(const _tchar* pString, const _vec2* pPos, D3DXCOLOR Color)
 {
-	
+	RECT rc{ (_long)pPos->x, (_long)pPos->y };
+
+	Sprite->Begin(D3DXSPRITE_ALPHABLEND);
+
+	Font->DrawTextW(Sprite, pString, lstrlen(pString), &rc, DT_NOCLIP, Color);
+
+	Sprite->End();
+
 }
 
-FontObject* FontObject::Create(LPDIRECT3DDEVICE9 pGraphicDev, const _tchar* pFontType, const _uint& iWidth, const _uint& iHeight, const _uint& iWeight)
+FontObject* FontObject::Create(LPDIRECT3DDEVICE9 GRPDEV, const _tchar* pFontType, const _uint& iWidth, const _uint& iHeight, const _uint& iWeight)
 {
-  return nullptr;
+	FontObject* pFont = new FontObject(GRPDEV);
+	if (FAILED(pFont->Ready_Font(pFontType,iWidth,iHeight,iWeight))) {
+		MSG_BOX("ÆùÆ® ¸ø¸Í±Ý");
+		Safe_Release(pFont);
+		return nullptr;
+	}
+  return pFont;
 }
 
+FontObject* FontObject::Clone()
+{
+	return new FontObject(*this);
+}
 void FontObject::Free()
 {
-
+	Component::Free();
 }

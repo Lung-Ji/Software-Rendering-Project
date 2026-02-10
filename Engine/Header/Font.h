@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Transform.h"
 #include "Component.h"
 
 BEGIN(Engine)
@@ -23,7 +22,9 @@ struct ENGINE_DLL FontINFO {
 
 class ENGINE_DLL FontObject : public Component {
 private:
+  explicit FontObject();
   explicit FontObject(LPDIRECT3DDEVICE9 _GRPDEV);
+  explicit FontObject(CONST Component& _RHS);
   virtual ~FontObject();
 
 public:
@@ -37,7 +38,7 @@ public:
                    D3DXCOLOR Color);
 
 public:
-  static FontObject* Create(LPDIRECT3DDEVICE9 pGraphicDev,
+  static FontObject* Create(LPDIRECT3DDEVICE9 GRPDEV,
     const _tchar* pFontType,
     const _uint& iWidth,
     const _uint& iHeight,
@@ -45,7 +46,7 @@ public:
 
 private:
   virtual void Free();
-
+  virtual	FontObject* Clone()
 private:
   LPD3DXFONT		Font;		
   ID3DXSprite* Sprite;
