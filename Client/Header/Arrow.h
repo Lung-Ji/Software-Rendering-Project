@@ -40,7 +40,11 @@ private:
 private:
 	ArrowType	_type;
 
-	_vec3* _playerPos;
+	_vec3		_playerPos;
+	float		_angle;
+
+	float		_lifeTime;
 	float		_speed;
+	float		_sumSpeed;
 };
 

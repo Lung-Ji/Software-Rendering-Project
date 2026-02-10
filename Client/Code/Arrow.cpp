@@ -10,8 +10,11 @@ HRESULT Arrow::Ready_GameObject(ArrowType _ARROWTYPE, _vec3* _PlayerPOS)
     if (FAILED(Component_Initialize())) return E_FAIL;
 
     _type = ArrowType::IceArrow_LV1;
+    _speed = 15.f;
+    _sumSpeed = 0.f;
+    _lifeTime = 0.f;
 
-    _playerPos = _PlayerPOS;
+    _playerPos = { _PlayerPOS->x, _PlayerPOS->y, _PlayerPOS->z };
 
     CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
     _vec3 cameraDir = *(Camera->Get_EyeVec()) - *(Camera->Get_AtVec());
@@ -27,7 +30,7 @@ HRESULT Arrow::Ready_GameObject(ArrowType _ARROWTYPE, _vec3* _PlayerPOS)
     _vec2 dir2D = mousePos - screenCenter;
     D3DXVec2Normalize(&dir2D, &dir2D);
 
-    float angle = atan2f(dir2D.y, dir2D.x);
+    _angle = atan2f(dir2D.y, dir2D.x);
 
     _vec3 eye = { 0.f, 0.f, 0.f };
     _vec3 at = cameraDir;
@@ -43,13 +46,13 @@ HRESULT Arrow::Ready_GameObject(ArrowType _ARROWTYPE, _vec3* _PlayerPOS)
 
     float radian = D3DX_PI / 180.f;
     _matrix matRotZ;
-    D3DXMatrixRotationZ(&matRotZ, angle - D3DX_PI);
+    D3DXMatrixRotationZ(&matRotZ, _angle - D3DX_PI);
 
     _matrix matWorld = matSize * matRotZ * matBillboard;
 
-    matWorld._41 = (*_playerPos).x;
-    matWorld._42 = (*_playerPos).y;
-    matWorld._43 = (*_playerPos).z;
+    matWorld._41 = _playerPos.x;
+    matWorld._42 = _playerPos.y;
+    matWorld._43 = _playerPos.z;
 
     Component_Transform->Set_World(&matWorld);
 
@@ -65,7 +68,41 @@ INT Arrow::Update_GameObject(const _float& _DT)
     upDir = { 0.f, 0.f, 1.f };
     rightDir = { 1.f, 0.f, 0.f };
 
-    Component_Transform->Move_Pos(D3DXVec3Normalize(&rightDir, &rightDir), _speed, _DT);
+    _lifeTime += _DT;
+
+    if (_lifeTime > 0.5f)
+        return 0;
+
+    {
+        CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
+        _vec3 cameraDir = *(Camera->Get_EyeVec()) - *(Camera->Get_AtVec());
+        D3DXVec3Normalize(&cameraDir, &cameraDir);
+
+        _vec3 eye = { 0.f, 0.f, 0.f };
+        _vec3 at = cameraDir;
+        _vec3 up = { 0.f, 1.f, 0.f };
+
+        _matrix matSize;
+        D3DXMatrixIdentity(&matSize);
+        D3DXMatrixScaling(&matSize, 0.5f, 0.5f, 0.5f);
+
+        _matrix matBillboard;
+        D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
+        D3DXMatrixInverse(&matBillboard, nullptr, &matBillboard);
+
+        float radian = D3DX_PI / 180.f;
+        _matrix matRotZ;
+        D3DXMatrixRotationZ(&matRotZ, _angle - D3DX_PI);
+
+        _matrix matWorld = matSize * matRotZ * matBillboard;
+
+        _sumSpeed += _DT * _speed;
+        matWorld._41 = _playerPos.x + _sumSpeed * cosf(_angle);
+        matWorld._42 = _playerPos.y;
+        matWorld._43 = _playerPos.z - _sumSpeed * sinf(_angle);
+
+        Component_Transform->Set_World(&matWorld);
+    }
 
     return S_OK;
 }

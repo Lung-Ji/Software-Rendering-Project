@@ -433,7 +433,7 @@ void Player::ATTACK_STATE(const _float& _DT)
 			GameObject* arrow = Arrow::Create(GRPDEV, ArrowType::IceArrow_LV1, &_pulsepos);
 
 			TCHAR arrowTag[128] = L"";
-			wsprintfW(arrowTag, L"PlayerArrow_%d", _arrowCount);
+			wsprintfW(arrowTag, L"PlayerArrow_%d", _arrowCount++);
 
 			arrow->Set_ObjectTag(arrowTag);
 			arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
