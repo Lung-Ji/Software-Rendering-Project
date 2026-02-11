@@ -145,6 +145,9 @@ call Copy.bat</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Header\Font.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Inventory.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
@@ -160,11 +163,8 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\Engine_Macro.h" />
     <ClInclude Include="..\Header\Engine_Struct.h" />
     <ClInclude Include="..\Header\Engine_Typedef.h" />
-    <ClInclude Include="..\Header\Font.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="..\Header\FontManager.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\KeyManager.h" />
     <ClInclude Include="..\Header\ResourceManager.h" />
@@ -193,10 +193,10 @@ call Copy.bat</Command>
     <ClCompile Include="..\Code\CollisionManager.cpp" />
     <ClCompile Include="..\Code\Component.cpp" />
     <ClCompile Include="..\Code\Font.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\FontManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\EffectManager.cpp" />
     <ClCompile Include="..\Code\Inventory.cpp">

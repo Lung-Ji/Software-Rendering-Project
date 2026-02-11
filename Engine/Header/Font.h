@@ -17,9 +17,19 @@ struct ENGINE_DLL FontINFO {
   LPD3DXFONT FONT;
 
   FontINFO(CONST TCHAR* _msg, UINT _weight, UINT _width,_vec2 _pos ) 
-    :MSG(_msg), WEIGHT(_weight), WIDTH(_width), POS(_pos.x,_pos.y),MIPLEVELS(1),
-    COLOR(1.f,1.f,1.f,1.f), ITALIC(false), CHARSET(DEFAULT_CHARSET), OUTPUTPRECISION(1), QUALITY(DEFAULT_QUALITY),
-       PITCHANDFAMILY(DEFAULT_PITCH), FONT(nullptr),FACENAME(L"Times New Roman"){} 
+    :MSG(_msg),
+    WEIGHT(_weight), 
+    WIDTH(_width), 
+    POS(_pos),
+    MIPLEVELS(1),
+    COLOR(1.f,1.f,1.f,1.f),
+    ITALIC(false), 
+    CHARSET(HANGUL_CHARSET),
+    OUTPUTPRECISION(1), 
+    QUALITY(DEFAULT_QUALITY),
+    PITCHANDFAMILY(DEFAULT_PITCH),
+    FACENAME(L"Times New Roman"),
+    FONT(nullptr) {}
 };
 
 class ENGINE_DLL FontObject : public Component {
@@ -36,7 +46,8 @@ public:
     const _uint& iWeight);
 
   void Render_Font();
-  void Import_Font(CONST TCHAR* _msg, UINT _weight, UINT _width, const _vec2 _pos);
+
+  HRESULT Import_Font(CONST TCHAR* _msg, UINT _weight, UINT _width, const _vec2 _pos);
 
 
 public:
@@ -49,6 +60,7 @@ public:
 private:
   virtual void Free();
   virtual	FontObject* Clone();
+
 private:
   LPD3DXFONT		Font;		
   ID3DXSprite* Sprite;

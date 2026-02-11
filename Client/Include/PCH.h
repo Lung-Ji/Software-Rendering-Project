@@ -57,6 +57,7 @@
 #include "Bow.h"
 #include "TileDestoryEffect.h"
 #include "PlayerInven.h"
+#include "Augments.h"
 //////////////////////////////////////////// Scene List
 
 #include "StartScene.h"

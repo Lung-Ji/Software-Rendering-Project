@@ -28,7 +28,7 @@ VOID	PlayerInven::LateUpdate_GameObject(CONST FLOAT& _DT) {
 VOID	PlayerInven::Render_GameObject() {	
 		UIManager::GetInstance()->Render_UI(GRPDEV, Inventory);
 		UIManager::GetInstance()->Render_UI(GRPDEV, Object);
-
+		//Component_Font->Render_Component();
 }	
 HRESULT PlayerInven::Component_Initialize() {
 	UIManager::GetInstance()->Set_Active(true);
@@ -87,6 +87,9 @@ HRESULT PlayerInven::Sprite_Initialize() {
 		//UIManager::GetInstance()->Import_UISprite(GRPDEV, Inventory, L"../../UI/Inventory_UI/Spr_Ui_Center_ItemAcquisition_Frame_Backgroud.png", 
 		//	55.f, 55.f, 700.f, 150.f, TRUE, 255);
 		
+	//	_vec2 rc = { 500.f,300.f };
+	//	Component_Font->Import_Font(L"Test", 400, 1, rc);
+
 	return S_OK;
 }
 

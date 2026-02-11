@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Header\Augments.h" />
     <ClInclude Include="..\Header\Bow.h" />
     <ClInclude Include="..\Header\Bat.h" />
     <ClInclude Include="..\Header\Bullet_Standard.h" />
@@ -215,9 +216,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\Player.h" />
-    <ClInclude Include="..\Header\PlayerEquipMent.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="..\Header\PlayerInven.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -252,6 +250,7 @@
     <ClInclude Include="ENUM.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Code\Augments.cpp" />
     <ClCompile Include="..\Code\Bow.cpp" />
     <ClCompile Include="..\Code\Bat.cpp" />
     <ClCompile Include="..\Code\Bullet_Standard.cpp" />
@@ -323,9 +322,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\Player.cpp" />
-    <ClCompile Include="..\Code\PlayerEquipMent.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\Code\PlayerInven.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>

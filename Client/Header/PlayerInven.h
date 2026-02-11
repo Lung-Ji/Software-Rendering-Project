@@ -21,7 +21,6 @@ public:
 
 private:
 	SpriteObject* Component_Sprite;
-		
 private:
 	virtual	VOID		Free();
 };

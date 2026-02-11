@@ -124,8 +124,11 @@
     <Filter Include="04. UI\01. MainUI\MainMenuUI">
       <UniqueIdentifier>{5aecb6cf-f877-4f39-8fe8-44da2610ab28}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. UI\01. MainUI\InventoryUI">
+    <Filter Include="04. UI\InventoryUI">
       <UniqueIdentifier>{9a0e251d-3851-4318-b454-5525a5729ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. UI\AugmentUI">
+      <UniqueIdentifier>{cdda3270-297f-43a4-a689-5010dc732961}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -277,13 +280,13 @@
       <Filter>03. GameObject\05. Tile</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\PlayerInven.h">
-      <Filter>04. UI\01. MainUI\InventoryUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Header\PlayerEquipMent.h">
-      <Filter>04. UI\01. MainUI\InventoryUI</Filter>
+      <Filter>04. UI\InventoryUI</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\Object_Explain.h">
-      <Filter>04. UI\01. MainUI\InventoryUI</Filter>
+      <Filter>04. UI\InventoryUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Augments.h">
+      <Filter>04. UI\AugmentUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -420,13 +423,13 @@
       <Filter>03. GameObject\05. Tile</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\PlayerInven.cpp">
-      <Filter>04. UI\01. MainUI\InventoryUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\PlayerEquipMent.cpp">
-      <Filter>04. UI\01. MainUI\InventoryUI</Filter>
+      <Filter>04. UI\InventoryUI</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Object_Explain.cpp">
-      <Filter>04. UI\01. MainUI\InventoryUI</Filter>
+      <Filter>04. UI\InventoryUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Augments.cpp">
+      <Filter>04. UI\AugmentUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

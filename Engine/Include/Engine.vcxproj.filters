@@ -180,13 +180,11 @@
     <ClInclude Include="..\Header\FontManager.h">
       <Filter>11. FontManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Font.h">
-      <Filter>99. Component\07. Font</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\UISprite.h" />
     <ClInclude Include="..\Inventory.h">
       <Filter>99. Component\08. Inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Font.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GraphicDevice.cpp">
@@ -262,11 +260,9 @@
       <Filter>11. FontManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\UISprite.cpp" />
-    <ClCompile Include="..\Code\Font.cpp">
-      <Filter>99. Component\07. Font</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Inventory.cpp">
       <Filter>99. Component\08. Inventory</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Font.cpp" />
   </ItemGroup>
 </Project>

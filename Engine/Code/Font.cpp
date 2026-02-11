@@ -2,7 +2,7 @@
 
 FontObject::FontObject() : Sprite(nullptr){}
 FontObject::FontObject(LPDIRECT3DDEVICE9 _GRPDEV)	:Component(_GRPDEV), Sprite(nullptr) {}
-FontObject::FontObject(CONST Component& _RHS){}
+FontObject::FontObject(CONST Component& _RHS):Component(_RHS){}
 FontObject::~FontObject() {}
 
 HRESULT FontObject::Ready_Font(const _tchar* pFontType, const _uint& iWidth, const _uint& iHeight, const _uint& iWeight)
@@ -18,13 +18,11 @@ HRESULT FontObject::Ready_Font(const _tchar* pFontType, const _uint& iWidth, con
 
 void FontObject::Render_Font()
 {
-
 	GRPDEV->SetRenderState(D3DRS_ZENABLE, FALSE);
 	Sprite->Begin(D3DXSPRITE_ALPHABLEND);
 
 	for (auto& FONT : FontList) {
-		RECT rc{ FONT.POS.x,FONT.POS.y };
-		Font->DrawTextW(Sprite, FONT.MSG.c_str(), lstrlen(FONT.MSG.c_str()), &rc, DT_NOCLIP, FONT.COLOR);
+		Font->DrawTextW(Sprite, FONT.MSG.c_str(), lstrlen(FONT.MSG.c_str()), (LPRECT)&FONT.POS, DT_NOCLIP, FONT.COLOR);
 	}
 
 	Sprite->End();
@@ -35,7 +33,7 @@ HRESULT FontObject::Import_Font(CONST TCHAR* _msg, UINT _weight, UINT _width, co
 	FontList.push_back(FontINFO(_msg, _weight, _width, _pos));
 
 	D3DXCreateFont(GRPDEV, 12, FontList.back().WIDTH, FontList.back().WEIGHT, FontList.back().MIPLEVELS, FontList.back().ITALIC, FontList.back().CHARSET,
-		FontList.back().OUTPUTPRECISION, FontList.back().QUALITY, FontList.back().PITCHANDFAMILY, FontList.back().FACENAME, &Font);
+		FontList.back().OUTPUTPRECISION, FontList.back().QUALITY, FontList.back().PITCHANDFAMILY, FontList.back().FACENAME, &FontList.back().FONT);
 
 	return S_OK;
 }
