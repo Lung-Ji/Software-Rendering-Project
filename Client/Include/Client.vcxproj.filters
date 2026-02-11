@@ -130,6 +130,9 @@
     <Filter Include="04. UI\03. Inventory">
       <UniqueIdentifier>{0342db50-c41a-444b-be99-85b8ffe4f75f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. UI\04. NPCTalk">
+      <UniqueIdentifier>{d4b94dac-8b9e-4ebb-ae55-e178ec4c4624}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -282,6 +285,9 @@
     <ClInclude Include="..\Header\Inventory.h">
       <Filter>04. UI\03. Inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\NPCTalk.h">
+      <Filter>04. UI\04. NPCTalk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -418,6 +424,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Inventory.cpp">
       <Filter>04. UI\03. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\NPCTalk.cpp">
+      <Filter>04. UI\04. NPCTalk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

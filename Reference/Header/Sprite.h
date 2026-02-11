@@ -38,6 +38,36 @@ struct ENGINE_DLL SpriteINFO {
 	VOID	Set_Visible(BOOL  _B) { VISIBLE = _B; }
 };
 
+struct ENGINE_DLL ItemINFO {
+	wstring ItemKey;
+	wstring ItemName;
+	wstring ItemClass;
+
+	wstring ItemDesc;
+	wstring ItemExDesc;
+	_int	ItemPrice;
+
+	ItemINFO(wstring _ItemKey, wstring _ItemName, wstring _ItemClass, wstring _ItemDesc, wstring _ItemExDesc, _int _ItemPrice)
+		: ItemKey(_ItemKey), ItemName(_ItemName), ItemClass(_ItemClass), ItemDesc(_ItemDesc), ItemExDesc(_ItemExDesc), ItemPrice(_ItemPrice) {}
+public:
+	wstring	Get_ItemKey() { return ItemKey; }
+
+	VOID	Set_ItemName(wstring _Name) { ItemName = _Name; }
+	wstring Get_ItemName() { return ItemName; }
+
+	VOID	Set_ItemClass(wstring _Class) { ItemClass = _Class; }
+	wstring Get_ItemClass() { return ItemClass; }
+
+	VOID	Set_ItemDesc(wstring _Desc) { ItemDesc = _Desc; }
+	wstring Get_ItemDesc() { return ItemDesc; }
+
+	VOID	Set_ItemExDesc(wstring _ExDesc) { ItemExDesc = _ExDesc; }
+	wstring Get_ItemExDesc() { return ItemExDesc; }
+
+	VOID	Set_ItemPrice(_int _Price) { ItemPrice = _Price; }
+	_int	Get_ItemPrice() { return ItemPrice; }
+};
+
 class ENGINE_DLL SpriteObject: public Component {
 private:
 	explicit SpriteObject();

@@ -7,18 +7,25 @@ struct ENGINE_DLL FontObject {
 	_vec2		Position;
 	wstring		Text;
 	_int		TextScale;
+	_int		TextWeight;
 	wstring		FontTag;
 	wstring		FontType;
 	BOOL		Visible;
 	D3DCOLOR	TextColor;
 	ID3DXFont*	DXFont;
 
-	FontObject(_vec2 _Position, wstring _Text, _int _TextScale, wstring _FontTag, wstring _FontType, D3DCOLOR _Color, BOOL _Visible)
-		: Position(_Position), Text(_Text), TextScale(_TextScale), FontTag(_FontTag), 
+	FontObject(_vec2 _Position, wstring _Text, _int _TextScale, _int _TextWeight, wstring _FontTag, wstring _FontType, D3DCOLOR _Color, BOOL _Visible)
+		: Position(_Position), Text(_Text), TextScale(_TextScale), TextWeight(_TextWeight), FontTag(_FontTag),
 		FontType(_FontType), Visible(_Visible), TextColor(_Color), DXFont(nullptr){}
 
 	VOID	Set_Text(wstring _TXT)	{ Text = _TXT; }
 	wstring	Get_Text()				{ return Text; }
+
+	VOID	Set_Pos(_float _PosX, _float _PosY) { Position.x = _PosX; Position.y = _PosY; }
+	_vec2	Get_Pos() { return Position; }
+
+	VOID	Set_Color(INT _A, INT _R, INT _G, INT _B) { TextColor = D3DCOLOR_ARGB(_A, _R, _G, _B); }
+	FLOAT	Set_Color() { return TextColor; }
 };
 class ENGINE_DLL FontManager : public Base {
   DECLARE_SINGLETON(FontManager)
@@ -32,8 +39,9 @@ public:
 	VOID	LateUpdate_FontManager(CONST FLOAT& _DT);
 	VOID	Render_FontManager();
 
-	HRESULT	Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _vec2 _Position, _int _TextScale, wstring _FontTag, 
-		wstring _FontType, D3DCOLOR _Color = D3DCOLOR_ARGB(255, 255, 255, 255), BOOL _Visible = TRUE);
+	HRESULT	Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _vec2 _Position, _int _TextScale, wstring _FontTag,
+		wstring _FontType, D3DCOLOR _Color = D3DCOLOR_ARGB(255, 255, 255, 255), _int TextWeight = 100, BOOL _Visible = TRUE);
+	FontObject* Find_FontObject(wstring _Text);
 private:
 	
 	ID3DXSprite*	DXSprite;

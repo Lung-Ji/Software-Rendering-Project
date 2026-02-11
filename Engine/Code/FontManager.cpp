@@ -25,22 +25,24 @@ VOID FontManager::Render_FontManager() {
 
 	for (auto& TXT : FontList) {
 		if (TXT.second->Visible == TRUE) {
-			RECT RT = { TXT.second->Position.x, TXT.second->Position.y, 1, 1 };
-			TXT.second->DXFont->DrawTextW(DXSprite, TXT.second->Text.c_str(), -1, &RT, DT_LEFT | DT_NOCLIP, TXT.second->TextColor);
+			FLOAT XPos = TXT.second->Position.x;
+			FLOAT YPos = TXT.second->Position.y;
+			RECT RT = { XPos, YPos, XPos + 1, YPos + 1 };
+			TXT.second->DXFont->DrawTextW(DXSprite, TXT.second->Text.c_str(), -1, &RT, DT_CENTER | DT_NOCLIP, TXT.second->TextColor);
 		}
 	}
 
 	DXSprite->End();
 }
-HRESULT FontManager::Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _vec2 _Position, _int _TextScale, wstring _FontTag, wstring _FontType, D3DCOLOR _Color, BOOL _Visible) {
+HRESULT FontManager::Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _vec2 _Position, _int _TextScale, wstring _FontTag, wstring _FontType, D3DCOLOR _Color, _int TextWeight, BOOL _Visible) {
 
-	FontObject* FO = new FontObject(_Position, _Text, _TextScale, _FontTag, _FontType, _Color, _Visible);
+	FontObject* FO = new FontObject(_Position, _Text, _TextScale, TextWeight, _FontTag, _FontType, _Color, _Visible);
 
 	D3DXFONT_DESCW FontInfo;
 	ZeroMemory(&FontInfo, sizeof(FontInfo));
 
 	FontInfo.Height = FO->TextScale;
-	FontInfo.Weight = 100;
+	FontInfo.Weight = FO->TextWeight;
 	FontInfo.CharSet = HANGUL_CHARSET;
 	FontInfo.OutputPrecision = OUT_DEFAULT_PRECIS;
 	FontInfo.Quality = DEFAULT_QUALITY;
@@ -56,6 +58,11 @@ HRESULT FontManager::Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _v
 	FontList.insert({ FO->FontTag.c_str(), FO });
 
 	return S_OK;
+}
+FontObject* FontManager::Find_FontObject(wstring _Text) {
+	auto iter = find_if(FontList.begin(), FontList.end(), CTag_Finder(_Text.c_str()));
+	if (iter == FontList.end())	return nullptr;
+	return iter->second;
 }
 VOID FontManager::Free() {
 	for (auto& FO : FontList) 

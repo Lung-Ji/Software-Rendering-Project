@@ -73,8 +73,6 @@ VOID CollisionManager::Get_AllObjectOfScene() {
 		if (GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_COLLIDER) != nullptr)
 			SceneObjectList.push_back(GOBJ);
 	}
-
-
 }
 
 VOID CollisionManager::Delete_ColliderObject(GameObject* _OBJ) {
