@@ -155,7 +155,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\Bow.h" />
-    <ClInclude Include="..\Header\Bat.h" />
+    <ClInclude Include="..\Header\Bat.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Header\Bullet_Standard.h" />
     <ClInclude Include="..\Header\Camera.h" />
     <ClInclude Include="..\Header\CubeTile.h">
@@ -177,7 +179,9 @@
     <ClInclude Include="..\Header\MonsterSummon01.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\Header\MonsterTest.h" />
+    <ClInclude Include="..\Header\MonsterTest.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Header\PlayerEffect.h" />
     <ClInclude Include="..\Header\GameManager.h" />
     <ClInclude Include="..\Header\GUIManager.h" />
@@ -217,6 +221,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\Player.h" />
+    <ClInclude Include="..\Header\ScorpionEvilSoul.h" />
     <ClInclude Include="..\Header\StartScene.h" />
     <ClInclude Include="..\Header\Terrain.h" />
     <ClInclude Include="..\Header\Tile.h" />
@@ -245,7 +250,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\Bow.cpp" />
-    <ClCompile Include="..\Code\Bat.cpp" />
+    <ClCompile Include="..\Code\Bat.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Code\Bullet_Standard.cpp" />
     <ClCompile Include="..\Code\Camera.cpp" />
     <ClCompile Include="..\Code\CubeTile.cpp">
@@ -267,7 +274,9 @@
     <ClCompile Include="..\Code\MonsterSummon01.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\Code\MonsterTest.cpp" />
+    <ClCompile Include="..\Code\MonsterTest.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Code\PlayerEffect.cpp" />
     <ClCompile Include="..\Code\GameManager.cpp" />
     <ClCompile Include="..\Code\GUIManager.cpp" />
@@ -317,6 +326,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\Player.cpp" />
+    <ClCompile Include="..\Code\ScorpionEvilSoul.cpp" />
     <ClCompile Include="..\Code\StartScene.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\Tile.cpp" />

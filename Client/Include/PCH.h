@@ -43,6 +43,7 @@
 //#include "MonsterSummon02.h"
 //#include "MonsterSummon03.h"
 #include "Bat.h"
+#include "ScorpionEvilSoul.h"
 #include "Docheol.h"
 
 #include "Bullet_Standard.h"

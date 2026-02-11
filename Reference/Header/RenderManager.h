@@ -30,8 +30,8 @@ private:
 private:
 	virtual VOID	Free();
 
+
 public:
-	static _matrix Make_BillBoardMatrix(_matrix Src, LPDIRECT3DDEVICE9 _GRPDEV, ROTATION efix	= ROT_END);
 };
 
 END

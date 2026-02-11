@@ -133,8 +133,11 @@
     <Filter Include="03. GameObject\06. Effect\02. MonsterEffect\01. MonsterSummon">
       <UniqueIdentifier>{972b69e8-ba8b-4e8f-9b7a-88f61efefedd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. GameObject\02. Monster\02. Monster\02. Bat%28Blue%29">
+    <Filter Include="03. GameObject\02. Monster\02. Monster\02. ScorpionEvilSoul">
       <UniqueIdentifier>{9cb39ed9-d361-4a69-b06c-890759bbd692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. GameObject\06. Effect\02. MonsterEffect\01. MonsterSummon\00. MonsterEffect">
+      <UniqueIdentifier>{fc51ebe6-2fb3-4524-897b-a5e5fa378c26}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -255,9 +258,6 @@
     <ClInclude Include="..\Header\UIEffect.h">
       <Filter>03. GameObject\06. Effect\04. UIEffect</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Monster_State.h">
-      <Filter>03. GameObject\02. Monster\99. TrashBin</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\Monster1.h">
       <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
     </ClInclude>
@@ -279,14 +279,17 @@
     <ClInclude Include="..\Header\Fireball.h">
       <Filter>03. GameObject\07. ProJectile\02.Fireball</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\MonsterEffect.h">
-      <Filter>03. GameObject\06. Effect\02. MonsterEffect\01. MonsterSummon</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\MonsterSummon01.h">
       <Filter>03. GameObject\06. Effect\02. MonsterEffect\99. Abandoned</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\MonsterSummon03.h">
       <Filter>03. GameObject\06. Effect\02. MonsterEffect\99. Abandoned</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ScorpionEvilSoul.h">
+      <Filter>03. GameObject\02. Monster\02. Monster\02. ScorpionEvilSoul</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\MonsterEffect.h">
+      <Filter>03. GameObject\06. Effect\02. MonsterEffect\01. MonsterSummon\00. MonsterEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -389,9 +392,6 @@
     <ClCompile Include="..\Code\UIEffect.cpp">
       <Filter>03. GameObject\06. Effect\04. UIEffect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Monster_State.cpp">
-      <Filter>03. GameObject\02. Monster\99. TrashBin</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Monster1.cpp">
       <Filter>03. GameObject\02. Monster\00. BaseMonster</Filter>
     </ClCompile>
@@ -414,9 +414,6 @@
       <Filter>03. GameObject\07. ProJectile\02.Fireball</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\MonsterEffect.cpp">
-      <Filter>03. GameObject\06. Effect\02. MonsterEffect\99. Abandoned</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\MonsterEffect.cpp">
       <Filter>03. GameObject\06. Effect\02. MonsterEffect\01. MonsterSummon</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\MonsterSummon01.cpp">
@@ -424,6 +421,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\MonsterSummon03.cpp">
       <Filter>03. GameObject\06. Effect\02. MonsterEffect\99. Abandoned</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ScorpionEvilSoul.cpp">
+      <Filter>03. GameObject\02. Monster\02. Monster\02. ScorpionEvilSoul</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MonsterEffect.cpp">
+      <Filter>03. GameObject\06. Effect\02. MonsterEffect\01. MonsterSummon\00. MonsterEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

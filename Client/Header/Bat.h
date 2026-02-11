@@ -1,11 +1,10 @@
 #pragma once
 #include "GameObject.h"
 
-#define BatIMGX 287.f
-#define BatIMGY 173.f
+#define BatIMGX 280
+#define BatIMGY 219
 
 enum BAT_STATE { BAT_IDLE, BAT_TRACKING, BAT_ATTACKING, BAT_Hit, BAT_DEAD };
-enum BAT_COLOUR { BLUE };
 
 class Bat : public GameObject
 {
@@ -54,10 +53,5 @@ private:
 	_float Default_Speed;
 	_float Speed;
 
-
-	vector<IDirect3DTexture9*> _vecTexture;
-	_uint _frame;
-	_uint _Endframe;
-	_float _frameTick;
-
+	TEXINFO m_tTexInfo;
 };

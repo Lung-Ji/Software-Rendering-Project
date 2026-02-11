@@ -33,10 +33,7 @@ INT	Docheol::Update_GameObject(const _float& _DT)
 }
 VOID Docheol::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
-	_matrix World = *Component_Transform->Get_World();
-	_matrix BillBoard = RenderManager::Make_BillBoardMatrix(World, GRPDEV);
-	World = BillBoard * World;
-	Component_Transform->Set_World(&World);
+	Monster::BillBoard(Component_Transform, GRPDEV);
 }
 VOID Docheol::Render_GameObject() {
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);

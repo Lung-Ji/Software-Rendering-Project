@@ -41,6 +41,6 @@ private:
 	_uint		_frame;
 	_float		_frameTick;
 
-public:
+private:
 		VOID BillBoard();
 };

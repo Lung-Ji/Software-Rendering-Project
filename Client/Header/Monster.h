@@ -24,17 +24,24 @@
 #define BATRUSHSPEED	2.f
 #pragma endregion
 
-class Monster
+typedef struct tagTextureInfo
+{
+	vector<IDirect3DTexture9*>	_vecTexture;
+	TCHAR						_Filename[256]	= L"";
+	_uint						_frame			=	0;
+	_uint						_Endframe		=	0;
+	_float						_frameTick		=	0.f;
+}TEXINFO;
+
+class Monster 
 {
 public:
-	explicit Monster() {}
-	virtual ~Monster() {}
+	static	GameObject*		Set_Target(CONST TCHAR* _TAG, GameObject*& GameObj);
+	static	GameObject*		Set_Target(CONST TCHAR* _TAG);
 
-	static GameObject*	Set_Target(CONST TCHAR* _TAG, GameObject* GameObj = nullptr);
+//·»´õ¸µ °ü·Ã
+	static	HRESULT			Set_TextureList(CONST TCHAR* __FileName, TEXINFO* __Textures);
+	static	FLOAT			BillBoard(Transform* TransCom, LPDIRECT3DDEVICE9 _GRPDEV, _vec3 vRight = { 1.f, 0.f,0.f });
 
-	static D3DSURFACE_DESC	Get_SurfaceDesc(LPDIRECT3DTEXTURE9 pTexture);
-
-	static IDirect3DTexture9* Find_CurrTexture(CONST TCHAR* _FileName, IDirect3DTexture9* pTexture = nullptr);
-
-	static size_t Set_TextureList(CONST TCHAR* __FileName, vector<IDirect3DTexture9*>* __Textures);
+	static	HRESULT			Flip_Horizontal(Transform* TransCom, _vec3* pDir, _float Buffer);
 };

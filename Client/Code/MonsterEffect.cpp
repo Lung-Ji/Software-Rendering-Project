@@ -63,6 +63,7 @@ HRESULT MonsterEffect::Make_TextureList(CONST TCHAR* _Filename)
 //
 //	return S_OK;
 //}
+
 INT  MonsterEffect::Update_GameObject(CONST FLOAT& _DT) {
 	if (ObjectDead)	return 0;
 	GameObject::Update_GameObject(_DT);
@@ -74,10 +75,10 @@ INT  MonsterEffect::Update_GameObject(CONST FLOAT& _DT) {
 VOID MonsterEffect::LateUpdate_GameObject(CONST FLOAT& _DT) {
 	if (ObjectDead)	return;
 
-	_matrix World = *Component_Transform->Get_World();
-	_matrix BillBoard = RenderManager::Make_BillBoardMatrix(World, GRPDEV);
-	World *= BillBoard;
-	Component_Transform->Set_World(&World);
+	//_matrix World = *Component_Transform->Get_World();
+	//_matrix BillBoard = RenderManager::Make_BillBoardMatrix(World, GRPDEV);
+	//World *= BillBoard;
+	//Component_Transform->Set_World(&World);
 
 	if (FrameTick > PlayTime / ENDFRAME) {
 		if (TextureIndex++ >= ENDFRAME - 2) {
@@ -115,12 +116,6 @@ BOOL MonsterEffect::OnCollisionExit(GameObject* _Other) {
 HRESULT			MonsterEffect::Component_Initialize() {
 	Component_Buffer = ADD_COMPONENT_RECTTEX;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
-
-	//Component_Collider = ADD_COMPONENT_COLLIDER;
-	//Component_Collider->Set_CenterPos(Component_Transform);			// 충돌체가 오브젝트를 따라 다니도록
-	//Component_Collider->Set_Scale(0.1f, 0.1f, 0.1f);				// 충돌체의 범위 조절
-
-	//Component_Texture = ADD_COMPONENT_TEXTURE;
 
 	return S_OK;
 }

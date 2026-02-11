@@ -24,11 +24,10 @@ HRESULT Bat::Ready_GameObject() {
 }
 INT	Bat::Update_GameObject(const _float& _DT)
 {
-	_Endframe = Monster::Set_TextureList(L"Spr_Monster_BlueBat", &_vecTexture);
 	// <플레이어 업데이트 시점>
 	GameObject::Update_GameObject(_DT);
 
-	_frameTick += _DT;
+	m_tTexInfo._frameTick += _DT;
 
 	Set_Target(L"Player");
 
@@ -60,11 +59,6 @@ INT	Bat::Update_GameObject(const _float& _DT)
 		return 0;
 	}
 
-	//_vec3 vLook;
-	//Component_Transform->Get_Info(INFO_LOOK, &vLook);
-	//D3DXVec3Normalize(&vLook, &vLook);
-	//Component_Transform->Move_Pos(&vLook, Speed, _DT);
-
 	D3DXVec3Normalize(&vDir, &vDir);
 	vDir.y = 0.f;
 	Component_Transform->Move_Pos(&vDir, Speed, _DT);
@@ -74,32 +68,20 @@ INT	Bat::Update_GameObject(const _float& _DT)
 }
 VOID Bat::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
-	
-	_matrix World = *Component_Transform->Get_World();
-	_matrix BillBoard = RenderManager::Make_BillBoardMatrix(World, GRPDEV);
-	World = BillBoard * World;
-	Component_Transform->Set_World(&World);
-	if (_frameTick > 0.1f)
+
+	Monster::Set_TextureList(L"Spr_Monster_BlueEvilBat", &m_tTexInfo);
+
+	if (m_tTexInfo._frameTick > 0.1f)
 	{
-		_frameTick = 0.f;
-		++_frame %= _Endframe / 2;
+		m_tTexInfo._frameTick = 0.f;
+		++m_tTexInfo._frame %= m_tTexInfo._Endframe / 2;
 	}
 
-	if(fabsf(vDir.z)>0.1f)
-		if (vDir.z > 0.f)
-			if (_frame < _Endframe / 2)
-				_frame += _Endframe / 2;
+	Monster::Flip_Horizontal(Component_Transform, &vDir, 0.1f);
 
-	if (vDir.x < -0.1f)
-	{
-		if (Component_Transform->Get_Scale()->x < 0)
-			Component_Transform->Get_Scale()->x *= -1.f;
-	}
-	else if (vDir.x > 0.1f)
-	{
-		if (Component_Transform->Get_Scale()->x > 0)
-			Component_Transform->Get_Scale()->x *= -1.f;
-	}
+	Monster::BillBoard(Component_Transform, GRPDEV);
+
+
 
 }
 VOID Bat::Render_GameObject() {
@@ -107,11 +89,8 @@ VOID Bat::Render_GameObject() {
 
 	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	//TCHAR FileName[128] = L"";
-	//wsprintfW(FileName, L"Bat_LF_0%d.png", _frame);
-	//GRPDEV->SetTexture(0, ResourceManager::GetInstance()->Find_Texture(FileName));
 
-	GRPDEV->SetTexture(0, _vecTexture[_frame]);
+	GRPDEV->SetTexture(0, m_tTexInfo._vecTexture[m_tTexInfo._frame]);
 
 	Component_Buffer->Render_Buffer();
 
@@ -122,14 +101,14 @@ HRESULT Bat::Component_Initialize() {
 	Component_Buffer = ADD_COMPONENT_RECTTEX;
 	Component_Transform = ADD_COMPONENT_TRANSFORM;
 
-	Component_Transform->Set_Pos(10.f, 1.f, 10.f);
+	Component_Transform->Set_Pos(10.f, 0.5f, 10.f);
 	Component_Transform->Set_Rotation(0.f, 0.f, 0.f);
-	Component_Transform->Set_Scale(2.f, 1.f, 1.f);
+	Component_Transform->Set_Scale(0.56f, 0.438f, 1.f);
 
 	Component_Collider = ADD_COMPONENT_COLLIDER;
 	Component_Collider->Set_CenterPos(Component_Transform);
 
-	Component_Collider->Set_Scale(0.2f, 0.2f, 0.2f);
+	Component_Collider->Set_Scale(0.3f, 1.3f, 0.3f);
 
 	return S_OK;
 }

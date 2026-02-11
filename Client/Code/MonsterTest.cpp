@@ -29,7 +29,6 @@ INT	MonsterTest::Update_GameObject(const _float& _DT)
 
 	_frameTick += _DT;
 
-	Set_Target(L"Player");
 
 	if (pTarget == nullptr)
 	{
@@ -70,10 +69,10 @@ INT	MonsterTest::Update_GameObject(const _float& _DT)
 }
 VOID MonsterTest::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
-	_matrix World = *Component_Transform->Get_World();
-	_matrix BillBoard = RenderManager::Make_BillBoardMatrix(World, GRPDEV);
-	World = BillBoard * World;
-	Component_Transform->Set_World(&World);
+	//_matrix World = *Component_Transform->Get_World();
+	//_matrix BillBoard = RenderManager::Make_BillBoardMatrix(World, GRPDEV);
+	//World = BillBoard * World;
+	//Component_Transform->Set_World(&World);
 }
 VOID MonsterTest::Render_GameObject() {
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
@@ -123,15 +122,6 @@ MonsterTest* MonsterTest::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 VOID MonsterTest::Free() {
 
 	GameObject::Free();
-}
-
-VOID MonsterTest::Set_Target(const TCHAR* _TAG)
-{
-	pTarget = SceneManager::GetInstance()->Get_GameObject(_TAG);
-	if (pTarget != nullptr)
-	{
-		pTargetPos = POS(pTarget);
-	}
 }
 
 VOID MonsterTest::Change_State(MONSTERTEST_STATE eState)
