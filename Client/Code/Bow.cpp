@@ -24,37 +24,42 @@ HRESULT Bow::Ready_GameObject()
 
 	switch (_type) {
 	case BowType::FairyBow:
+		_Stat.bowLv = 1;
 		_Stat.minAtk = 20;
 		_Stat.maxAtk = 23;
 		_Stat.maxArrow = 987654321;
 		_Stat.curArrow = 987654321;
-		_Stat.bowLv = 1;
+		_Stat.range = 10.f;
+		_Stat.delay = 0.6f;
 		break;
 	case BowType::IceBow:
+		_Stat.bowLv = 1;
 		_Stat.minAtk = 20;
 		_Stat.maxAtk = 23;
 		_Stat.maxArrow = 180;
 		_Stat.curArrow = 180;
-		_Stat.bowLv = 1;
+		_Stat.range = 10.f;
+		_Stat.delay = 0.6f;
 		break;
 	case BowType::EvilHeadBow:
+		_Stat.bowLv = 1;
 		_Stat.minAtk = 20;
 		_Stat.maxAtk = 23;
 		_Stat.maxArrow = 150;
 		_Stat.curArrow = 150;
-		_Stat.bowLv = 1;
+		_Stat.range = 10.f;
+		_Stat.delay = 0.6f;
 		break;
 	case BowType::WindBow:
+		_Stat.bowLv = 1;
 		_Stat.minAtk = 20;
 		_Stat.maxAtk = 23;
 		_Stat.maxArrow = 180;
 		_Stat.curArrow = 180;
-		_Stat.bowLv = 1;
+		_Stat.range = 10.f;
+		_Stat.delay = 0.6f;
 		break;
 	}
-
-	Player* player = dynamic_cast<Player*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Player"));
-	PSTATUS* _playerStatus = player->Get_Status();
 
 	return S_OK;
 }
@@ -105,6 +110,7 @@ INT Bow::Update_GameObject(const _float& _DT)
 		float angle = atan2f(dir2D.y, dir2D.x);
 
 		float radius = 1.f;
+		if (_type == BowType::FairyBow) radius = 1.5f;
 
 		float offsetX = cosf(angle) * radius;
 		float offsetY = sinf(angle) * radius;
@@ -118,7 +124,6 @@ INT Bow::Update_GameObject(const _float& _DT)
 		_vec3 eye = { 0.f, 0.f, 0.f };
 		_vec3 at = _cameraDir;
 		_vec3 up = { 0.f, 1.f, 0.f };
-
 
 		_matrix matSize;
 		D3DXMatrixIdentity(&matSize);
@@ -139,6 +144,9 @@ INT Bow::Update_GameObject(const _float& _DT)
 		matWorld._43 = (*_playerPos).z - offsetY;
 
 		Component_Transform->Set_World(&matWorld);
+
+		CreateEffect(_DT);
+		CreateArrow(_DT);
 	}
 	else
 		_alphaRatio = 0.f;
@@ -203,9 +211,6 @@ void Bow::SetGrahpic()
 	case BowType::WindBow:
 		wsprintfW(FileName, L"WindBow.png");
 		break;
-	default:
-		wsprintfW(FileName, L"FairyBow.png");
-		break;
 	}
 
 	DWORD tfactor = D3DCOLOR_ARGB(
@@ -228,6 +233,108 @@ void Bow::SetGrahpic()
 	GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 	GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TFACTOR);
+}
+
+void Bow::CreateArrow(const _float& _DT)
+{
+	bool mouseLB = KeyManager::GetInstance()->Get_MouseState(DIM_LB) & 0x80;
+
+	if (mouseLB)
+	{
+		if (_attackDelay > 0.6) {
+			POINT MousePoint{ 0, 0 };
+			GetCursorPos(&MousePoint);
+			ScreenToClient(hWnd, &MousePoint);
+
+			_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
+			_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
+
+			_vec2 dir2D = mousePos - screenCenter;
+			D3DXVec2Normalize(&dir2D, &dir2D);
+
+			float angle = atan2f(dir2D.y, dir2D.x);
+
+			float radius = 1.8f;
+
+			float offsetX = cosf(angle) * radius;
+			float offsetY = sinf(angle) * radius;
+
+			_arrowPos = { _playerPos->x + offsetX , _playerPos->y, _playerPos->z - offsetY };
+
+			{
+				GameObject* arrow = Arrow::Create(GRPDEV, ArrowType::IceArrow_LV1, &_arrowPos);
+
+				TCHAR arrowTag[128] = L"";
+				wsprintfW(arrowTag, L"PlayerArrow_%d", _arrowCount++);
+
+				arrow->Set_ObjectTag(arrowTag);
+				arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
+
+				SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow);
+			}
+
+			_attackDelay = 0.f;
+		}
+	}
+
+}
+
+void Bow::CreateEffect(const _float& _DT)
+{
+	bool mouseLB = KeyManager::GetInstance()->Get_MouseState(DIM_LB) & 0x80;
+	_attackDelay += _DT;
+
+	POINT MousePoint{ 0, 0 };
+	GetCursorPos(&MousePoint);
+	ScreenToClient(hWnd, &MousePoint);
+
+	_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
+	_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
+
+	_vec2 dir2D = mousePos - screenCenter;
+	D3DXVec2Normalize(&dir2D, &dir2D);
+
+	float angle = atan2f(dir2D.y, dir2D.x);
+
+	float radius = 1.f;
+	if (_type == BowType::FairyBow) radius = 1.1f;
+	else if (_type == BowType::IceBow) radius = 1.6f;
+	else if (_type == BowType::EvilHeadBow) radius = 1.0f;
+	else if (_type == BowType::WindBow) radius = 1.6f;
+
+	float offsetX = cosf(angle) * radius;
+	float offsetY = sinf(angle) * radius;
+
+	_pulsepos = { _playerPos->x + offsetX , _playerPos->y, _playerPos->z - offsetY };
+
+	if (mouseLB)
+	{
+		// ÀÌÆåÆ®
+		if (_attackDelay > 0.6) {
+			_vec3 Size = { 1.f, 1.f, 1.f };
+			switch (_type)
+			{
+			case BowType::FairyBow :
+				PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::FAIRY_PULSE, &_pulsepos, 0.2f, Size);
+				break;
+			case BowType::IceBow:
+				Size = { 1.5f, 1.5f, 1.5f };
+				PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::ICEARROW_PULSE, &_pulsepos, 0.2f, Size);
+				break;
+			case BowType::EvilHeadBow:
+				Size = { 2.f, 2.2f, 2.f };
+				PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::EVILHEAD_PULSE, &_pulsepos, 0.5f, Size);
+				break;
+			case BowType::WindBow:
+				Size = { 1.f, 1.f, 1.f };
+				PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::WIND_PULSE, &_pulsepos, 0.3f, Size);
+				Size = { 1.f, 1.f, 1.f };
+				PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::WIND_CHARGING, &_pulsepos, 0.6f, Size);
+				break;
+			}
+			
+		}
+	}
 }
 
 Bow* Bow::Create(LPDIRECT3DDEVICE9 _GRPDEV)

@@ -5,15 +5,20 @@ PlayerEffect:: PlayerEffect(LPDIRECT3DDEVICE9 _GRPDEV)	: GameObject(_GRPDEV), Te
 PlayerEffect:: PlayerEffect(CONST GameObject& _RHS)		: GameObject(_RHS), TextureIndex(0), FrameTick(0.f) {}
 PlayerEffect::~PlayerEffect(){}
 
-HRESULT PlayerEffect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
+HRESULT PlayerEffect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime, _vec3 _Size) {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
 	_bool AngleChase = true;
+	_effectSize = _Size;
 
 	if		(_SKILLTYPE == PLAYER_SKILL::SKILL_1)	{ Make_TextureList(L"Spr_Effect_ExplosionNormal02_");		}
 	else if (_SKILLTYPE == PLAYER_SKILL::SKILL_2)	{ Make_TextureList(L"Spr_Ui_Effect_BossClear_lraCharge_");	}
 	else if (_SKILLTYPE == PLAYER_SKILL::SKILL_3)	{ Make_TextureList(L"Spr_Ui_Stage01_TureMapEffect_");		}
+	else if (_SKILLTYPE == PLAYER_SKILL::FAIRY_PULSE) { Make_TextureList(L"Fairy_Pulse"); }
 	else if (_SKILLTYPE == PLAYER_SKILL::ICEARROW_PULSE) { Make_TextureList(L"IceArrow_Pulse"); }
+	else if (_SKILLTYPE == PLAYER_SKILL::EVILHEAD_PULSE) { Make_TextureList(L"EvilHeadBow_Pulse"); }
+	else if (_SKILLTYPE == PLAYER_SKILL::WIND_PULSE) { Make_TextureList(L"Wind_Charge"); }
+	else if (_SKILLTYPE == PLAYER_SKILL::WIND_CHARGING) { Make_TextureList(L"Wind_Charging"); }
 
 	if (!AngleChase)
 	{
@@ -56,7 +61,7 @@ HRESULT PlayerEffect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, B
 
 		_matrix matSize;
 		D3DXMatrixIdentity(&matSize);
-		D3DXMatrixScaling(&matSize, 1.f, 1.f, 1.f);
+		D3DXMatrixScaling(&matSize, _effectSize.x, _effectSize.y, _effectSize.z);
 
 		_matrix matBillboard;
 		D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
@@ -126,7 +131,7 @@ INT  PlayerEffect::Update_GameObject(CONST FLOAT& _DT) {
 
 		_matrix matSize;
 		D3DXMatrixIdentity(&matSize);
-		D3DXMatrixScaling(&matSize, 1.f, 1.f, 1.f);
+		D3DXMatrixScaling(&matSize, _effectSize.x, _effectSize.y, _effectSize.z);
 
 		_matrix matBillboard;
 		D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
@@ -193,9 +198,9 @@ HRESULT	PlayerEffect::Component_Initialize() {
 
 	return S_OK;
 }
-PlayerEffect* PlayerEffect::Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime) {
+PlayerEffect* PlayerEffect::Create(LPDIRECT3DDEVICE9 _GRPDEV, PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime, _vec3 _Size) {
 	PlayerEffect* EFT = new PlayerEffect(_GRPDEV);
-	if (FAILED(EFT->Ready_Effect(_SKILLTYPE, _PlayerPOS, _Repeatable, _PlayTime))) {
+	if (FAILED(EFT->Ready_Effect(_SKILLTYPE, _PlayerPOS, _Repeatable, _PlayTime, _Size))) {
 		MSG_BOX("Cannot Create Effect.");
 		Safe_Release(EFT);
 		return nullptr;

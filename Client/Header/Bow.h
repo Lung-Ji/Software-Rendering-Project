@@ -12,11 +12,13 @@ enum class BowType {
 };
 
 struct BowStat {
+	int bowLv;
 	int minAtk;
 	int maxAtk;
 	int maxArrow;
 	int curArrow;
-	int bowLv;
+	int range;
+	_float delay;
 };
 
 class Bow : public GameObject
@@ -38,6 +40,8 @@ public:
 private:
 	HRESULT			Component_Initialize();
 	void			SetGrahpic();
+	void			CreateArrow(const _float& _DT);
+	void			CreateEffect(const _float& _DT);
 private:
 	Buffer* Component_Buffer;
 	Transform* Component_Transform;
@@ -65,6 +69,10 @@ private:
 	bool		_isDestroied;
 	float		_motionDelay;
 	float		_alphaRatio;
-	
+
+	_vec3		_pulsepos;
+	_vec3		_arrowPos;
+	float		_attackDelay;
+	int			_arrowCount;
 };
 

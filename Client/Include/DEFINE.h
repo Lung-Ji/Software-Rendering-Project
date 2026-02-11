@@ -48,8 +48,8 @@
 /////////////////////////////////// EFFECT /////////////////////////////////////////				
 #define PLAY_PLAYER_EFFECT(SKILL_TYPE, POSITION, PLAYTIME)		EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,	\
 	PlayerEffect::Create(GRPDEV, SKILL_TYPE, POSITION, TRUE, PLAYTIME));						// 플레이어 : 이펙트 반복 실행
-#define PLAY_PLAYER_EFFECT_ONCE(SKILL_TYPE, POSITION, PLAYTIME)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,	\
-	PlayerEffect::Create(GRPDEV, SKILL_TYPE, POSITION, FALSE, PLAYTIME));					// 플레이어 : 이펙트 최초 한번 실행
+#define PLAY_PLAYER_EFFECT_ONCE(SKILL_TYPE, POSITION, PLAYTIME, SIZE)	EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::PLAYER,	\
+	PlayerEffect::Create(GRPDEV, SKILL_TYPE, POSITION, FALSE, PLAYTIME, SIZE));					// 플레이어 : 이펙트 최초 한번 실행
 
 #define PLAY_MONSTER_EFFECT(SKILL_TYPE, POSITION, PLAYTIME)		EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::MONSTER,	\
 	MonsterEffect::Create(GRPDEV, SKILL_TYPE, POSITION, TRUE, PLAYTIME));					// 몬스터 : 이펙트 반복 실행

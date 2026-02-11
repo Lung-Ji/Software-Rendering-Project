@@ -50,6 +50,7 @@ HRESULT Player::Ready_GameObject() {
 	Component_Transform->Rotation(ROT_X, 90.f - _cameraAngle);
 	Component_Transform->Set_Pos({ 5.f, 0.5f, 5.f });
 
+	// 활 생성
 	{
 		SceneManager::GetInstance()->Get_CurrentScene()->Add_GameObjectToScene<Bow>(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_PLAYER, L"FairyBow");
 		dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"FairyBow"))->Set_PlayerPos(Component_Transform->Get_Position());
@@ -76,7 +77,6 @@ HRESULT Player::Ready_GameObject() {
 		_weaponSlot[3]->Set_Bow_Equip(false);
 	}
 
-	//_weaponSlot[0]->Set_PlayerPos(Component_Transform->Get_Position());
 	Debug = false;
 
 	return S_OK;
@@ -135,9 +135,9 @@ HRESULT Player::Component_Initialize() {
 	Component_Texture	= ADD_COMPONENT_TEXTURE;
 	//Component_FSM		= ADD_COMPONENT_FSM;
 
-	//Component_Collider = ADD_COMPONENT_COLLIDER;					// 충돌체 컴포넌트 추가
-	//Component_Collider->Set_CenterPos(Component_Transform);			// 충돌체가 오브젝트를 따라 다니도록
-	//Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// 충돌체의 범위 조절
+	Component_Collider = ADD_COMPONENT_COLLIDER;					// 충돌체 컴포넌트 추가
+	Component_Collider->Set_CenterPos(Component_Transform);			// 충돌체가 오브젝트를 따라 다니도록
+	Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// 충돌체의 범위 조절
 
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
@@ -483,44 +483,44 @@ void Player::ATTACK_STATE(const _float& _DT)
 	_attackDelay += _DT;
 
 	// 이펙트
-	if (_attackDelay > 0.6) {
-		_vec3* playerPos = Component_Transform->Get_Position();
-
-		POINT MousePoint{ 0, 0 };
-		GetCursorPos(&MousePoint);
-		ScreenToClient(hWnd, &MousePoint);
-
-		_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
-		_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
-
-		_vec2 dir2D = mousePos - screenCenter;
-		D3DXVec2Normalize(&dir2D, &dir2D);
-
-		float angle = atan2f(dir2D.y, dir2D.x);
-
-		float radius = 1.8f;
-
-		float offsetX = cosf(angle) * radius;
-		float offsetY = sinf(angle) * radius;
-
-		_pulsepos = { playerPos->x + offsetX , playerPos->y, playerPos->z - offsetY };
-
-		PLAY_PLAYER_EFFECT(PLAYER_SKILL::ICEARROW_PULSE, &_pulsepos, 0.2f);
-
-		{
-			GameObject* arrow = Arrow::Create(GRPDEV, ArrowType::IceArrow_LV1, &_pulsepos);
-
-			TCHAR arrowTag[128] = L"";
-			wsprintfW(arrowTag, L"PlayerArrow_%d", _arrowCount++);
-
-			arrow->Set_ObjectTag(arrowTag);
-			arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
-
-			SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow);
-		}
-
-		_attackDelay = 0.f;
-	}
+	//if (_attackDelay > 0.6) {
+	//	_vec3* playerPos = Component_Transform->Get_Position();
+	//
+	//	POINT MousePoint{ 0, 0 };
+	//	GetCursorPos(&MousePoint);
+	//	ScreenToClient(hWnd, &MousePoint);
+	//
+	//	_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
+	//	_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
+	//
+	//	_vec2 dir2D = mousePos - screenCenter;
+	//	D3DXVec2Normalize(&dir2D, &dir2D);
+	//
+	//	float angle = atan2f(dir2D.y, dir2D.x);
+	//
+	//	float radius = 1.8f;
+	//
+	//	float offsetX = cosf(angle) * radius;
+	//	float offsetY = sinf(angle) * radius;
+	//
+	//	_pulsepos = { playerPos->x + offsetX , playerPos->y, playerPos->z - offsetY };
+	//
+	//	PLAY_PLAYER_EFFECT(PLAYER_SKILL::ICEARROW_PULSE, &_pulsepos, 0.2f);
+	//
+	//	{
+	//		GameObject* arrow = Arrow::Create(GRPDEV, ArrowType::IceArrow_LV1, &_pulsepos);
+	//
+	//		TCHAR arrowTag[128] = L"";
+	//		wsprintfW(arrowTag, L"PlayerArrow_%d", _arrowCount++);
+	//
+	//		arrow->Set_ObjectTag(arrowTag);
+	//		arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
+	//
+	//		SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow);
+	//	}
+	//
+	//	_attackDelay = 0.f;
+	//}
 
 	_vec3		upDir, rightDir;
 	upDir = { 0.f, 0.f, 1.f };
