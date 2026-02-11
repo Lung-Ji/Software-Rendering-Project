@@ -21,107 +21,114 @@ HRESULT Bow::Ready_GameObject()
 	_alphaRatio = 0.f;
 
 	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
-	_type = BowType::IceBow;
 
 	return S_OK;
 }
 
 INT Bow::Update_GameObject(const _float& _DT)
 {
-	GameObject::Update_GameObject(_DT);
-	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
+	if (_isEquip) {
+		GameObject::Update_GameObject(_DT);
+		RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
+
+		if (_isDestroied) return -1;
+
+		float alphaSpeed = 3.f;
+
+		bool mouseLB = KeyManager::GetInstance()->Get_MouseState(DIM_LB) & 0x80;
+		if (mouseLB) {
+			if (_alphaRatio < 1.f)
+				_alphaRatio += _DT * alphaSpeed;
+			if (_alphaRatio > 1.f)
+				_alphaRatio = 1.f;
+		}
+		else
+		{
+			if (_alphaRatio > 0.f)
+				_alphaRatio -= _DT * alphaSpeed;
+			if (_alphaRatio < 0.f)
+				_alphaRatio = 0.f;
+		}
+
+		POINT MousePoint{ 0, 0 };
+		GetCursorPos(&MousePoint);
+		ScreenToClient(hWnd, &MousePoint);
+
+		_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
+		_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
+
+		_vec2 dir2D = mousePos - screenCenter;
+		D3DXVec2Normalize(&dir2D, &dir2D);
+
+		float angle = atan2f(dir2D.y, dir2D.x);
+
+		float radius = 1.f;
+
+		float offsetX = cosf(angle) * radius;
+		float offsetY = sinf(angle) * radius;
+
+		Component_Transform->Set_Pos({
+			(*_playerPos).x + offsetX,
+			(*_playerPos).y + offsetY,
+			(*_playerPos).z
+			});
+
+		_vec3 eye = { 0.f, 0.f, 0.f };
+		_vec3 at = _cameraDir;
+		_vec3 up = { 0.f, 1.f, 0.f };
 
 
+		_matrix matSize;
+		D3DXMatrixIdentity(&matSize);
+		D3DXMatrixScaling(&matSize, 1.0f, 2.0f, 1.0f);
 
-	float alphaSpeed = 3.f;
+		_matrix matBillboard;
+		D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
+		D3DXMatrixInverse(&matBillboard, nullptr, &matBillboard);
 
-	bool mouseLB = KeyManager::GetInstance()->Get_MouseState(DIM_LB) & 0x80;
-	if (mouseLB) {
-		if (_alphaRatio < 1.f)
-			_alphaRatio += _DT * alphaSpeed;
-		if (_alphaRatio > 1.f)
-			_alphaRatio = 1.f;
+		float radian = D3DX_PI / 180.f;
+		_matrix matRotZ;
+		D3DXMatrixRotationZ(&matRotZ, angle - D3DX_PI);
+
+		_matrix matWorld = matSize * matRotZ * matBillboard;
+
+		matWorld._41 = (*_playerPos).x + offsetX;
+		matWorld._42 = (*_playerPos).y;
+		matWorld._43 = (*_playerPos).z - offsetY;
+
+		Component_Transform->Set_World(&matWorld);
 	}
 	else
-	{
-		if (_alphaRatio > 0.f)
-			_alphaRatio -= _DT * alphaSpeed;
-		if (_alphaRatio < 0.f)
-			_alphaRatio = 0.f;
-	}
-
-	POINT MousePoint{ 0, 0 };
-	GetCursorPos(&MousePoint);
-	ScreenToClient(hWnd, &MousePoint);
-
-	_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
-	_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
-
-	_vec2 dir2D = mousePos - screenCenter;
-	D3DXVec2Normalize(&dir2D, &dir2D);
-
-	float angle = atan2f(dir2D.y, dir2D.x);
-
-	float radius = 1.5f;
-
-	float offsetX = cosf(angle) * radius;
-	float offsetY = sinf(angle) * radius;
-	
-	Component_Transform->Set_Pos({
-		(*_playerPos).x + offsetX,
-		(*_playerPos).y + offsetY,
-		(*_playerPos).z
-		});
-
-	_vec3 eye = { 0.f, 0.f, 0.f };
-	_vec3 at = _cameraDir;
-	_vec3 up = { 0.f, 1.f, 0.f };
-
-
-	_matrix matSize;
-	D3DXMatrixIdentity(&matSize);
-	D3DXMatrixScaling(&matSize, 1.0f, 2.0f, 1.0f);
-
-	_matrix matBillboard;
-	D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
-	D3DXMatrixInverse(&matBillboard, nullptr, &matBillboard);
-
-	float radian = D3DX_PI / 180.f;
-	_matrix matRotZ;
-	D3DXMatrixRotationZ(&matRotZ, angle - D3DX_PI);
-
-	_matrix matWorld = matSize * matRotZ * matBillboard;
-
-	matWorld._41 = (*_playerPos).x + offsetX;
-	matWorld._42 = (*_playerPos).y ;
-	matWorld._43 = (*_playerPos).z - offsetY;
-
-	Component_Transform->Set_World(&matWorld);
+		_alphaRatio = 0.f;
 	
 	return S_OK;
 }
 
 VOID Bow::LateUpdate_GameObject(const _float& _DT)
 {
-	GameObject::LateUpdate_GameObject(_DT);
+	if(_isEquip)
+		GameObject::LateUpdate_GameObject(_DT);
 }
 
 VOID Bow::Render_GameObject()
 {
-	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	if (_isEquip) {
+		GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-	GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
+		GRPDEV->SetTransform(D3DTS_WORLD, Component_Transform->Get_World());
 
-	SetGrahpic();
+		SetGrahpic();
 
-	Component_Buffer->Render_Buffer();
+		Component_Buffer->Render_Buffer();
 
-	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+		GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
-	// 초기화
-	GRPDEV->SetRenderState(D3DRS_TEXTUREFACTOR, 0xFFFFFFFF);
-	GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+		// 초기화
+		GRPDEV->SetRenderState(D3DRS_TEXTUREFACTOR, 0xFFFFFFFF);
+		GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+		GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	}
+	
 	return VOID();
 }
 
@@ -142,12 +149,20 @@ void Bow::SetGrahpic()
 	TCHAR FileName[128] = L"";
 
 	switch (_type) {
+	case BowType::FairyBow:
+		wsprintfW(FileName, L"FairyBow.png");
+		break;
 	case BowType::IceBow:
 		wsprintfW(FileName, L"IceBow.png");
 		break;
-
+	case BowType::EvilHeadBow:
+		wsprintfW(FileName, L"EvilHeadBow.png");
+		break;
+	case BowType::WindBow:
+		wsprintfW(FileName, L"WindBow.png");
+		break;
 	default:
-		wsprintfW(FileName, L"IceBow.png");
+		wsprintfW(FileName, L"FairyBow.png");
 		break;
 	}
 
@@ -160,7 +175,7 @@ void Bow::SetGrahpic()
 	GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	GRPDEV->SetRenderState(D3DRS_TEXTUREFACTOR, tfactor);
 
-	Component_Texture->Set_Texture(FileName);
+	GRPDEV->SetTexture(0, (ResourceManager::GetInstance()->Find_Texture(FileName)));
 	
 	// COLOR = Texture * TFACTOR
 	GRPDEV->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);

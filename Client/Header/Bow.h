@@ -2,9 +2,20 @@
 #include "GameObject.h"
 
 enum class BowType {
+	FairyBow,
 	IceBow,
+	EvilHeadBow,
+	WindBow,
 
 	End
+};
+
+struct BowStat {
+	int minAtk;
+	int maxAtk;
+	int maxArrow;
+	int curArrow;
+	int bowLv;
 };
 
 class Bow : public GameObject
@@ -22,7 +33,7 @@ public:
 
 public:
 	void			Set_PlayerPos(_vec3* pos) { _playerPos = pos; }
-
+	void			Set_Destroy() { _isDestroied = true; }
 private:
 	HRESULT			Component_Initialize();
 	void			SetGrahpic();
@@ -35,15 +46,22 @@ private:
 	ID3DXSprite* g_pSprite = NULL;   // 스프라이트 객체
 public:
 	static Bow* Create(LPDIRECT3DDEVICE9 _GRPDEV);
+	BowType		Get_Bow_Type() { return _type; }
+	void		Set_Bow_Type(BowType type) { _type = type; }
+	void		Set_Bow_Equip(bool isequip) { _isEquip = isequip; }
 private:
 	virtual VOID Free();
 private:
-	_vec3* _playerPos;
-	_float _cameraAngle;
-	_vec3 _cameraDir;
+	_vec3*		_playerPos;
+	_float		_cameraAngle;
+	_vec3		_cameraDir;
 private:
-	BowType _type;
-	float _motionDelay;
-	float _alphaRatio;
+	BowType		_type;
+	BowStat		_stat;
+
+	bool		_isEquip;
+	bool		_isDestroied;
+	float		_motionDelay;
+	float		_alphaRatio;
 };
 

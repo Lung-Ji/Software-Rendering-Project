@@ -13,12 +13,9 @@ HRESULT Arrow::Ready_GameObject(ArrowType _ARROWTYPE, _vec3* _PlayerPOS)
     _speed = 15.f;
     _sumSpeed = 0.f;
     _lifeTime = 0.f;
+    _frame = 1;
 
     _playerPos = { _PlayerPOS->x, _PlayerPOS->y, _PlayerPOS->z };
-
-    CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
-    _vec3 cameraDir = *(Camera->Get_EyeVec()) - *(Camera->Get_AtVec());
-    D3DXVec3Normalize(&cameraDir, &cameraDir);
 
     POINT MousePoint{ 0, 0 };
     GetCursorPos(&MousePoint);
@@ -31,30 +28,6 @@ HRESULT Arrow::Ready_GameObject(ArrowType _ARROWTYPE, _vec3* _PlayerPOS)
     D3DXVec2Normalize(&dir2D, &dir2D);
 
     _angle = atan2f(dir2D.y, dir2D.x);
-
-    _vec3 eye = { 0.f, 0.f, 0.f };
-    _vec3 at = cameraDir;
-    _vec3 up = { 0.f, 1.f, 0.f };
-
-    _matrix matSize;
-    D3DXMatrixIdentity(&matSize);
-    D3DXMatrixScaling(&matSize, 1.f, 1.f, 1.f);
-
-    _matrix matBillboard;
-    D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
-    D3DXMatrixInverse(&matBillboard, nullptr, &matBillboard);
-
-    float radian = D3DX_PI / 180.f;
-    _matrix matRotZ;
-    D3DXMatrixRotationZ(&matRotZ, _angle - D3DX_PI);
-
-    _matrix matWorld = matSize * matRotZ * matBillboard;
-
-    matWorld._41 = _playerPos.x;
-    matWorld._42 = _playerPos.y;
-    matWorld._43 = _playerPos.z;
-
-    Component_Transform->Set_World(&matWorld);
 
     return S_OK;
 }
@@ -71,7 +44,7 @@ INT Arrow::Update_GameObject(const _float& _DT)
     _lifeTime += _DT;
 
     if (_lifeTime > 0.5f)
-        return 0;
+        return -1;
 
     {
         CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
@@ -84,15 +57,14 @@ INT Arrow::Update_GameObject(const _float& _DT)
 
         _matrix matSize;
         D3DXMatrixIdentity(&matSize);
-        D3DXMatrixScaling(&matSize, 0.5f, 0.5f, 0.5f);
+        D3DXMatrixScaling(&matSize, 1.f, 1.f, 1.f);
 
         _matrix matBillboard;
         D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
         D3DXMatrixInverse(&matBillboard, nullptr, &matBillboard);
 
-        float radian = D3DX_PI / 180.f;
         _matrix matRotZ;
-        D3DXMatrixRotationZ(&matRotZ, _angle - D3DX_PI);
+        D3DXMatrixRotationZ(&matRotZ, _angle);
 
         _matrix matWorld = matSize * matRotZ * matBillboard;
 
@@ -138,19 +110,24 @@ HRESULT Arrow::Component_Initialize()
 
 void Arrow::SetGrahpic()
 {
-    //TCHAR FileName[128] = L"";
+    TCHAR FileName[128] = L"";
 
     switch (_type) {
     case ArrowType::IceArrow_LV1:
-        GRPDEV->SetTexture(0, ResourceManager::GetInstance()->Find_Texture(L"IceArrow_LV1_1.png"));
+        if (_frame > 6) _frame = 1;
+        wsprintfW(FileName, L"IceArrow_LV1_%d.png", _frame++);
         break;
-
+    case ArrowType::IceArrow_LV2:
+        if (_frame > 6) _frame = 1;
+        wsprintfW(FileName, L"IceArrow_%d.png", _frame++);
+        break;
     default:
-        GRPDEV->SetTexture(0, ResourceManager::GetInstance()->Find_Texture(L"IceArrow_LV1_1.png"));
+        if (_frame > 6) _frame = 1;
+        wsprintfW(FileName, L"IceArrow_LV1_%d.png", _frame++);
         break;
     }
     
-    //Component_Texture->Set_Texture(FileName);
+    GRPDEV->SetTexture(0, (ResourceManager::GetInstance()->Find_Texture(FileName)));
 }
 
 Arrow* Arrow::Create(LPDIRECT3DDEVICE9 _GRPDEV, ArrowType _ARROWTYPE, _vec3* _PlayerPOS)

@@ -8,10 +8,13 @@ Player::~Player()													{}
 HRESULT Player::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
+	memset(_weaponSlot, 0, sizeof(Bow*) * 4);
+	memset(_artifactSlot, 0, sizeof(GameObject*) * 4);
+	memset(_inventory, 0, sizeof(GameObject*) * 8);
 	_pState				= pState::STATE_IDLE;
 	_eState				= eState::STATE_STANDING;
 	_see				= pSee::SEE_DOWN;
-	_defaultSpeed		= 8.f;
+	_defaultSpeed		= 6.f;
 	_dashStart			= false;
 	_dashTime			= 0.f;
 	_dashG				= 30.f;
@@ -20,6 +23,17 @@ HRESULT Player::Ready_GameObject() {
 	_g					= 30.f;
 	_frame				= 1;
 	_arrowCount = 0;
+
+	{
+		_pStatus.hp				= 6;
+		_pStatus.Money			= 0;
+		_pStatus.UpgradeStone	= 0;
+		_pStatus.Dash_Count		= 3;
+		_pStatus.Sado_Count		= 2;
+
+		_pStatus.atk			= 1;
+		_pStatus.critical		= 0.f;
+	}
 
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
 		Get_GameObject(L"Camera"));
@@ -34,8 +48,32 @@ HRESULT Player::Ready_GameObject() {
 	Component_Transform->Rotation(ROT_X, 90.f - _cameraAngle);
 	Component_Transform->Set_Pos({ 5.f, 0.5f, 5.f });
 
-	SceneManager::GetInstance()->Get_CurrentScene()->Add_GameObjectToScene<Bow>(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_PLAYER, L"Bow");
-	dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Bow"))->Set_PlayerPos(Component_Transform->Get_Position());
+	{
+		SceneManager::GetInstance()->Get_CurrentScene()->Add_GameObjectToScene<Bow>(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_PLAYER, L"FairyBow");
+		dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"FairyBow"))->Set_PlayerPos(Component_Transform->Get_Position());
+		_weaponSlot[0] = dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"FairyBow"));
+		_weaponSlot[0]->Set_Bow_Type(BowType::FairyBow);
+		_weaponSlot[0]->Set_Bow_Equip(true);
+
+		SceneManager::GetInstance()->Get_CurrentScene()->Add_GameObjectToScene<Bow>(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_PLAYER, L"IceBow");
+		dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"IceBow"))->Set_PlayerPos(Component_Transform->Get_Position());
+		_weaponSlot[1] = dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"IceBow"));
+		_weaponSlot[1]->Set_Bow_Type(BowType::IceBow);
+		_weaponSlot[1]->Set_Bow_Equip(false);
+
+		SceneManager::GetInstance()->Get_CurrentScene()->Add_GameObjectToScene<Bow>(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_PLAYER, L"EvilHeadBow");
+		dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"EvilHeadBow"))->Set_PlayerPos(Component_Transform->Get_Position());
+		_weaponSlot[2] = dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"EvilHeadBow"));
+		_weaponSlot[2]->Set_Bow_Type(BowType::EvilHeadBow);
+		_weaponSlot[2]->Set_Bow_Equip(false);
+
+		SceneManager::GetInstance()->Get_CurrentScene()->Add_GameObjectToScene<Bow>(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_PLAYER, L"WindBow");
+		dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"WindBow"))->Set_PlayerPos(Component_Transform->Get_Position());
+		_weaponSlot[3] = dynamic_cast<Bow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"WindBow"));
+		_weaponSlot[3]->Set_Bow_Type(BowType::WindBow);
+		_weaponSlot[3]->Set_Bow_Equip(false);
+	}
+
 	//_weaponSlot[0]->Set_PlayerPos(Component_Transform->Get_Position());
 	Debug = false;
 
@@ -95,9 +133,9 @@ HRESULT Player::Component_Initialize() {
 	Component_Texture	= ADD_COMPONENT_TEXTURE;
 	//Component_FSM		= ADD_COMPONENT_FSM;
 
-	Component_Collider = ADD_COMPONENT_COLLIDER;					// 충돌체 컴포넌트 추가
-	Component_Collider->Set_CenterPos(Component_Transform);			// 충돌체가 오브젝트를 따라 다니도록
-	Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// 충돌체의 범위 조절
+	//Component_Collider = ADD_COMPONENT_COLLIDER;					// 충돌체 컴포넌트 추가
+	//Component_Collider->Set_CenterPos(Component_Transform);			// 충돌체가 오브젝트를 따라 다니도록
+	//Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// 충돌체의 범위 조절
 
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
 	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
@@ -133,6 +171,44 @@ void Player::IDLE_STATE(const _float& _DT)
 
 		//if (!mouseLB && _frame > 8)
 		//	_frame = 1;
+
+		// 장비 스왑
+		if (KEY_DOWN(DIK_1)) {
+			if (_weaponSlot[0] != nullptr) {
+				if (_equipNum != 0) {
+					_weaponSlot[_equipNum]->Set_Bow_Equip(false);
+					_equipNum = 0;
+					_weaponSlot[_equipNum]->Set_Bow_Equip(true);
+				}
+			}
+		}
+		else if (KEY_DOWN(DIK_2)) {
+			if (_weaponSlot[1] != nullptr) {
+				if (_equipNum != 1) {
+					_weaponSlot[_equipNum]->Set_Bow_Equip(false);
+					_equipNum = 1;
+					_weaponSlot[_equipNum]->Set_Bow_Equip(true);
+				}
+			}
+		}
+		else if (KEY_DOWN(DIK_3)) {
+			if (_weaponSlot[2] != nullptr) {
+				if (_equipNum != 2) {
+					_weaponSlot[_equipNum]->Set_Bow_Equip(false);
+					_equipNum = 2;
+					_weaponSlot[_equipNum]->Set_Bow_Equip(true);
+				}
+			}
+		}
+		else if (KEY_DOWN(DIK_4)) {
+			if (_weaponSlot[3] != nullptr) {
+				if (_equipNum != 3) {
+					_weaponSlot[_equipNum]->Set_Bow_Equip(false);
+					_equipNum = 3;
+					_weaponSlot[_equipNum]->Set_Bow_Equip(true);
+				}
+			}
+		}
 
 		if (KEY_HOLD(DIK_W) && KEY_HOLD(DIK_A))
 		{
@@ -420,7 +496,7 @@ void Player::ATTACK_STATE(const _float& _DT)
 
 		float angle = atan2f(dir2D.y, dir2D.x);
 
-		float radius = 2.3f;
+		float radius = 1.8f;
 
 		float offsetX = cosf(angle) * radius;
 		float offsetY = sinf(angle) * radius;
@@ -969,10 +1045,10 @@ void Player::Set_Effect(const _float& _DT)
 
 	_pulsepos = { playerPos->x + offsetX , playerPos->y, playerPos->z - offsetY };
 
-	if (KEY_DOWN(DIK_1)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_1, playerPos, 0.5f); }
-	else if (KEY_DOWN(DIK_2)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_2, playerPos, 0.5f); }
-	else if (KEY_DOWN(DIK_3)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_3, playerPos, 0.5f); }
-	else if (KEY_DOWN(DIK_4)) { PLAY_PLAYER_EFFECT(PLAYER_SKILL::ICEARROW_PULSE, &_pulsepos, 0.2f); }
+	//if (KEY_DOWN(DIK_1)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_1, playerPos, 0.5f); }
+	//else if (KEY_DOWN(DIK_2)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_2, playerPos, 0.5f); }
+	//else if (KEY_DOWN(DIK_3)) { PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::SKILL_3, playerPos, 0.5f); }
+	//else if (KEY_DOWN(DIK_4)) { PLAY_PLAYER_EFFECT(PLAYER_SKILL::ICEARROW_PULSE, &_pulsepos, 0.2f); }
 }
 D3DXVECTOR3 Player::MousePicker_NonTarget(HWND _hWnd, Buffer* _TerrainBuffer, Transform* _TerrainTransform) {
 
@@ -1083,6 +1159,11 @@ D3DXVECTOR3 Player::SetOnTerrain() {
 	if (TerrainBuffer == nullptr) return D3DXVECTOR3(0.f, 0.f, 0.f);
 
 	return D3DXVECTOR3(Position->x, 1.f, Position->z);
+}
+void Player::Destroy_Weapon()
+{
+	_weaponSlot[_equipNum]->Set_Destroy();
+	_weaponSlot[_equipNum] = nullptr;
 }
 Player* Player::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	Player* PLAYER = new Player(_GRPDEV);

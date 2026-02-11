@@ -11,7 +11,6 @@ enum class pState
 
 	End
 };
-
 enum class eState
 {
 	STATE_STANDING,
@@ -58,7 +57,6 @@ enum class eState
 
 	End
 };
-
 enum class pSee
 {
 	SEE_UP,
@@ -72,7 +70,6 @@ enum class pSee
 
 	End
 };
-
 enum class mousePos
 {
 	MOUSE_LT,
@@ -82,6 +79,18 @@ enum class mousePos
 
 	End
 };
+typedef struct playerStatus {
+	_uint	hp;
+	_uint	Dash_Count;
+	_uint	Sado_Count;
+
+	_uint	atk;
+	_float	critical;
+
+	_uint	Key;
+	_uint	Money;
+	_uint	UpgradeStone;
+}PSTATUS;
 
 class Player : public GameObject {
 private:
@@ -104,8 +113,10 @@ private:
 	StateMachine*	Component_FSM;
 	Collider*		Component_Collider;
 public:
-	static Player* Create(LPDIRECT3DDEVICE9 _GRPDEV);
-	float	Get_Speed() { return _speed; }
+	static Player*	Create(LPDIRECT3DDEVICE9 _GRPDEV);
+	float			Get_Speed() { return _speed; }
+	PSTATUS*		Get_Status() { return &_pStatus; }
+	BowType			Get_Weapon_Type() { return _weaponSlot[_equipNum]->Get_Bow_Type(); }
 private:
 	virtual VOID Free();
 
@@ -113,6 +124,8 @@ private:
 	D3DXVECTOR3			MousePicker_NonTarget(HWND _hWnd, Buffer* _TerrainBuffer, Transform* _TerrainTransform);
 	D3DXVECTOR3			RayOnTerrain();
 	D3DXVECTOR3			SetOnTerrain();
+
+	void			Destroy_Weapon();
 
 	void			IDLE_STATE(const _float& _DT);
 	void			DASH_STATE(const _float& _DT);
@@ -127,6 +140,7 @@ private:
 	bool			Debug;
 	float			_cameraAngle;
 
+	PSTATUS			_pStatus;
 	pState			_pState;
 	eState			_eState;
 	pSee			_see;
@@ -147,7 +161,9 @@ private:
 	float			_attackDelay;
 	int				_arrowCount;
 
-	GameObject*			_inventory[8];
-	Bow*				_weaponSlot[4];
-	GameObject*			_artifactSlot[4];
+	Bow*			_weaponSlot[4];
+	GameObject*		_artifactSlot[4];
+	GameObject*		_inventory[8];
+	int				_equipNum;
+
 };
