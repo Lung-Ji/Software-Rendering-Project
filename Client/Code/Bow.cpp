@@ -22,6 +22,40 @@ HRESULT Bow::Ready_GameObject()
 
 	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
 
+	switch (_type) {
+	case BowType::FairyBow:
+		_Stat.minAtk = 20;
+		_Stat.maxAtk = 23;
+		_Stat.maxArrow = 987654321;
+		_Stat.curArrow = 987654321;
+		_Stat.bowLv = 1;
+		break;
+	case BowType::IceBow:
+		_Stat.minAtk = 20;
+		_Stat.maxAtk = 23;
+		_Stat.maxArrow = 180;
+		_Stat.curArrow = 180;
+		_Stat.bowLv = 1;
+		break;
+	case BowType::EvilHeadBow:
+		_Stat.minAtk = 20;
+		_Stat.maxAtk = 23;
+		_Stat.maxArrow = 150;
+		_Stat.curArrow = 150;
+		_Stat.bowLv = 1;
+		break;
+	case BowType::WindBow:
+		_Stat.minAtk = 20;
+		_Stat.maxAtk = 23;
+		_Stat.maxArrow = 180;
+		_Stat.curArrow = 180;
+		_Stat.bowLv = 1;
+		break;
+	}
+
+	Player* player = dynamic_cast<Player*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Player"));
+	PSTATUS* _playerStatus = player->Get_Status();
+
 	return S_OK;
 }
 
@@ -32,6 +66,14 @@ INT Bow::Update_GameObject(const _float& _DT)
 		RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
 		if (_isDestroied) return -1;
+
+		Player* player = dynamic_cast<Player*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Player"));
+		PSTATUS* playerStatus = player->Get_Status();
+
+		// 최대 화살 수
+		_Stat.maxArrow	*= playerStatus->maxBowRatio;
+		_Stat.minAtk	+= playerStatus->atk;
+		_Stat.maxAtk	+= playerStatus->atk;
 
 		float alphaSpeed = 3.f;
 

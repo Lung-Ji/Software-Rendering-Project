@@ -83,13 +83,13 @@ typedef struct playerStatus {
 	_uint	hp;
 	_uint	Dash_Count;
 	_uint	Sado_Count;
-
-	_uint	atk;
-	_float	critical;
-
 	_uint	Key;
 	_uint	Money;
 	_uint	UpgradeStone;
+
+	_uint	atk;
+	_float	critical;
+	float	maxBowRatio;
 }PSTATUS;
 
 class Player : public GameObject {
@@ -114,9 +114,13 @@ private:
 	Collider*		Component_Collider;
 public:
 	static Player*	Create(LPDIRECT3DDEVICE9 _GRPDEV);
-	float			Get_Speed() { return _speed; }
-	PSTATUS*		Get_Status() { return &_pStatus; }
-	BowType			Get_Weapon_Type() { return _weaponSlot[_equipNum]->Get_Bow_Type(); }
+
+// UI용 Get/Set함수
+public:
+	float			Get_Speed()			{ return _speed; }
+	PSTATUS*		Get_Status()		{ return &_pStatus; }								// 플레이어 스테이터스
+	BowType			Get_Weapon_Type()	{ return _weaponSlot[_equipNum]->Get_Bow_Type(); }	// 현재 장착한 활 타입
+	BowStat*		Get_CurBow_Stat()	{ return _weaponSlot[_equipNum]->Get_Bow_Stat(); }	// 현재 장착한 활 스텟
 private:
 	virtual VOID Free();
 

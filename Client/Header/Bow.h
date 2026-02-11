@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Player.h"
 
 enum class BowType {
 	FairyBow,
@@ -46,9 +47,10 @@ private:
 	ID3DXSprite* g_pSprite = NULL;   // 스프라이트 객체
 public:
 	static Bow* Create(LPDIRECT3DDEVICE9 _GRPDEV);
-	BowType		Get_Bow_Type() { return _type; }
-	void		Set_Bow_Type(BowType type) { _type = type; }
-	void		Set_Bow_Equip(bool isequip) { _isEquip = isequip; }
+	BowType		Get_Bow_Type()					{ return _type; }
+	void		Set_Bow_Type(BowType type)		{ _type = type; }
+	void		Set_Bow_Equip(bool isequip)		{ _isEquip = isequip; }
+	BowStat*	Get_Bow_Stat()					{ return &_Stat; }
 private:
 	virtual VOID Free();
 private:
@@ -57,11 +59,12 @@ private:
 	_vec3		_cameraDir;
 private:
 	BowType		_type;
-	BowStat		_stat;
+	BowStat		_Stat;
 
 	bool		_isEquip;
 	bool		_isDestroied;
 	float		_motionDelay;
 	float		_alphaRatio;
+	
 };
 

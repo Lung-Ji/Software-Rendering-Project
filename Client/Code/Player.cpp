@@ -26,13 +26,15 @@ HRESULT Player::Ready_GameObject() {
 
 	{
 		_pStatus.hp				= 6;
+		_pStatus.Dash_Count = 3;
+		_pStatus.Sado_Count = 2;
+		_pStatus.Key = 1;
 		_pStatus.Money			= 0;
 		_pStatus.UpgradeStone	= 0;
-		_pStatus.Dash_Count		= 3;
-		_pStatus.Sado_Count		= 2;
 
 		_pStatus.atk			= 1;
 		_pStatus.critical		= 0.f;
+		_pStatus.maxBowRatio	= 1.f;
 	}
 
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
