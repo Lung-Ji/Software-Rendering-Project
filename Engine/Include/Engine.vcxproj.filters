@@ -181,6 +181,7 @@
       <Filter>99. Component\07. Font</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\UISprite.h" />
+     </ClInclude>
     <ClInclude Include="..\Header\NoCloneBuffer.h">
       <Filter>99. Component\01. Buffer</Filter>
     </ClInclude>
@@ -258,7 +259,6 @@
     <ClCompile Include="..\Code\FontManager.cpp">
       <Filter>11. FontManager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\UISprite.cpp" />
     <ClCompile Include="..\Code\Font.cpp">
       <Filter>99. Component\07. Font</Filter>
     </ClCompile>

@@ -6,7 +6,9 @@ UIManager::UIManager() : Sprite(nullptr), isActive(false) {}
 UIManager::~UIManager() { Free(); }
 
 HRESULT UIManager::Ready_UIManager(LPDIRECT3DDEVICE9 _GRPDEV) {
+    
 	D3DXCreateSprite(_GRPDEV, &Sprite);
+    Make_ItemList();
 	return S_OK;
 }
 INT UIManager::Update_UIManager(const FLOAT& _DT) {
@@ -37,6 +39,18 @@ HRESULT UIManager::Import_UISprite(LPDIRECT3DDEVICE9 _GRPDEV, UIType _uitype, CO
   return S_OK;
 }
 
+VOID UIManager::Make_ItemList() {
+    ItemList.insert({ L"Relic_Item1", new ItemINFO(L"Relic_Item1", L"풍수의 장화", L"유물/희귀",L"이동 속도가 +30% 증가합니다.", L"", 72) });
+    ItemList.insert({ L"Relic_Item2", new ItemINFO(L"Relic_Item2", L"불새 화살통", L"유물/희귀",L"불꽃 화살을 사용할 수 있습니다.", L"", 84) });
+    ItemList.insert({ L"Relic_Item3", new ItemINFO(L"Relic_Item3", L"청록 열매", L"유물/일반",L"공격 속도가 +20% 증가합니다.", L"", 28) });
+}
+
+ItemINFO* UIManager::Find_Item(wstring _TAG) {
+    auto iter = find_if(ItemList.begin(), ItemList.end(), CTag_Finder(_TAG.c_str()));
+    if(iter == ItemList.end()) return nullptr;
+    return iter->second;
+}
+
 VOID UIManager::Render_UI(LPDIRECT3DDEVICE9 _GRPDEV, UIType _uitype)
 {
     _GRPDEV->SetRenderState(D3DRS_ZENABLE, FALSE);
@@ -61,4 +75,7 @@ VOID UIManager::Render_UI(LPDIRECT3DDEVICE9 _GRPDEV, UIType _uitype)
 }
 
 VOID UIManager::Free() {
+    for (auto& Item : ItemList) 
+        Safe_Delete(Item.second);
+    ItemList.clear();
 }

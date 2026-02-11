@@ -63,3 +63,4 @@ VOID		GameObject::Free() {
 		Safe_Release(COM);
 	Safe_Release(GRPDEV);
 }
+

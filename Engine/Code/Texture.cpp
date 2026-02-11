@@ -10,7 +10,7 @@ VOID Texture::Set_Texture(CONST TCHAR* _FileName)	{
 	if (iter == TextureList.end())	return;
 	GRPDEV->SetTexture(0, iter->second);
 }
-IDirect3DBaseTexture9* Texture::Find_Texture(const TCHAR* _FileName){
+IDirect3DTexture9* Texture::Find_Texture(const TCHAR* _FileName){
 	auto iter = find_if(TextureList.begin(), TextureList.end(), CTag_Finder(_FileName));
 	if (iter == TextureList.end())	return nullptr;
 	return iter->second;
@@ -25,7 +25,7 @@ HRESULT Texture::Import_TextureFromFolder(wstring _FolderName)	{
 	
 	intptr_t Handle = _wfindfirst64(STRUNI.c_str(), &Data);
 
-	IDirect3DBaseTexture9* TEX = nullptr;
+	IDirect3DTexture9* TEX = nullptr;
 	
 	if (Handle == -1)	return E_FAIL;
 	while (Result != -1) {

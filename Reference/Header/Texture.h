@@ -13,11 +13,11 @@ private:
 public:
 	HRESULT		Ready_Texture(TEXTUREID _TID, CONST TCHAR* _PATH, CONST UINT& _COUNT);
 	VOID		Set_Texture(CONST TCHAR* _FileName);
-	IDirect3DBaseTexture9* Find_Texture(CONST TCHAR* _FileName);
+	IDirect3DTexture9* Find_Texture(CONST TCHAR* _FileName);
 
 	HRESULT		Import_TextureFromFolder(wstring _FolderName);
 private:
-	map<CONST TCHAR*, IDirect3DBaseTexture9*>	TextureList;
+	map<CONST TCHAR*, IDirect3DTexture9*>	TextureList;
 	vector<wstring*> KEY_Array;
 public:
 	static		Texture*	Create(LPDIRECT3DDEVICE9 _GRPDEV);
