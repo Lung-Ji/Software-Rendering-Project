@@ -42,6 +42,7 @@ HRESULT StartScene::Ready_Enviroment_Layer() {
 HRESULT StartScene::Ready_GameLogic_Layer() {
 	Add_GameObjectToScene<CameraObject>		(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_CAMERA , L"Camera"		);
 	Add_GameObjectToScene<Player>			(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_PLAYER, L"Player"		);
+	Add_GameObjectToScene<NPC>				(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_NPC, L"NPC_Tif"		);
 	//Add_GameObjectToScene<Monster1>			(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_MONSTER, L"Monster1"		);
 	Add_GameObjectToScene<Bat>				(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_MONSTER, L"Bat");
 	Add_GameObjectToScene<Docheol>			(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_MONSTER, L"Docheol");
@@ -51,6 +52,7 @@ HRESULT StartScene::Ready_UserInterface_Layer() {
 	Add_GameObjectToScene<MainMenuButton>	(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  ,	L"MainButton"	);
 	Add_GameObjectToScene<MainMenu>			(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  ,	L"MainMenu"		);
 	Add_GameObjectToScene<MainUI>			(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  , L"MainUI"		);
+	Add_GameObjectToScene<NPCTalk>			(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  , L"NPCTalk"		);
 	return S_OK;
 }
 StartScene* StartScene::Create(LPDIRECT3DDEVICE9 _GRPDEV) {

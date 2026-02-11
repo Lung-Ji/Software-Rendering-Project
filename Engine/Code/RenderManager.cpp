@@ -1,5 +1,8 @@
 #include "RenderManager.h"
 #include "TileManager.h"
+#include "EffectManager.h"
+#include "FontManager.h"
+
 IMPLEMENT_SINGLETON(RenderManager)
 
 RenderManager::RenderManager()	{			}
@@ -57,10 +60,21 @@ VOID RenderManager::Render_Alpha(LPDIRECT3DDEVICE9& _GRPDEV) {
 	_GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 }
 VOID RenderManager::Render_UI(LPDIRECT3DDEVICE9& _GRPDEV)	{
+	
 	for (auto& _OBJ : RenderGroup[RENDER_UI]){
-		if (_OBJ->Get_ObjectDead() == FALSE)
-			_OBJ->Render_GameObject();
+		if (_OBJ->Get_ObjectDead() == FALSE) {
+			if (_OBJ->Get_ObjectTag() == L"MainUI") {
+				_OBJ->Render_GameObject();
+				EffectManager::GetInstance()->Render_EffectManager(_GRPDEV);
+				FontManager::GetInstance()->Render_FontManager();
+			}
+			else {
+				_OBJ->Render_GameObject();
+				FontManager::GetInstance()->Render_FontManager();
+			}
+		}
 	}
+	
 }
 VOID RenderManager::Render_TILE(LPDIRECT3DDEVICE9& _GRPDEV)
 {

@@ -21,8 +21,7 @@ VOID	MainMenu::LateUpdate_GameObject(CONST FLOAT& _DT) {
 
 }
 VOID	MainMenu::Render_GameObject() {
-
-	UIManager::GetInstance()->Render_UI(GRPDEV, Inventory);
+	UIManager::GetInstance()->Render_UI(GRPDEV, Inven);
 
 }
 HRESULT MainMenu::Component_Initialize(){

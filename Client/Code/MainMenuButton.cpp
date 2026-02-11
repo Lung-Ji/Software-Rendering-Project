@@ -25,7 +25,7 @@ HRESULT MainMenuButton::Component_Initialize() {
 
 	Component_Sprite = ADD_COMPONENT_SPRITE;
 
-	//Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/KEY_E_Black.png", L"KEY_E", 700, 600, 50, 50, TRUE);
+	Component_Sprite->Import_Sprite(L"../../Resource/Extra/Example/KEY_E_Black.png", L"KEY_E", 700, 600, 50, 50, TRUE);
 	// 이미 E키 구현해놓아서 빼놨습니다
 	return S_OK;
 }

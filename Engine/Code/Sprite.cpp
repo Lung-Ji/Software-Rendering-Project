@@ -36,6 +36,15 @@ HRESULT SpriteObject::Import_Sprite(CONST TCHAR* _PATH, CONST TCHAR* _KEY, FLOAT
 	return S_OK;
 }
 
+HRESULT SpriteObject::Import_SpriteEX(wstring _RootPath, const TCHAR* _PATH, const TCHAR* _KEY, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY) {
+	TextureList.push_back(SpriteINFO(_KEY, _WIDTH, _HEIGHT, _POSX, _POSY, _VIS, _OPACITY));
+	_RootPath += _PATH;
+	D3DXCreateTextureFromFileExW(GRPDEV, _RootPath.c_str(), TextureList.back().WIDTH, TextureList.back().HEIGHT,
+		1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, (LPDIRECT3DTEXTURE9*)&TextureList.back().TEXTURE);
+
+	return S_OK;
+}
+
 SpriteINFO* SpriteObject::Get_Texture(wstring _KEY) {
 	SpriteINFO* Sprite = nullptr;
 
