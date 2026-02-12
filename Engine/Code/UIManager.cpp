@@ -61,8 +61,11 @@ VOID UIManager::Render_UI(LPDIRECT3DDEVICE9 _GRPDEV, UIType _uitype)
         {
             if (pair.first == _uitype)
             {
-                for (auto& sprite : pair.second)
-                    Sprite->Draw(sprite.TEXTURE, NULL, NULL, &sprite.POS, D3DCOLOR_ARGB(sprite.OPACITY, 255, 255, 255));
+                for (auto& sprite : pair.second) {
+                    if (sprite.VISIBLE == TRUE) {
+                        Sprite->Draw(sprite.TEXTURE, NULL, NULL, &sprite.POS, D3DCOLOR_ARGB(sprite.OPACITY, 255, 255, 255));
+                    }
+                }
             }
         }
     }

@@ -48,7 +48,7 @@ HRESULT Augments::Sprite_Initialize() {
 	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_Ui_LevelV2_Background.png", L"Perk_BackGround", 560.f, 230.f, 160.f, 160.f, TRUE, 255);
 	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_Ui_LevelV2_Background.png", L"Perk_BackGround", 800.f, 230.f, 160.f, 160.f, TRUE, 255);
 
-	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_PerkIcon_1-04.png", L"Perk_01", 340.f, 270.f, 80.f, 80.f, TRUE, 255);
+	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_PerkIcon_1-04.png", L"Perk_01", 340.f, 270.f,80.f, 80.f, TRUE, 255);
 	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_PerkIcon_1-05.png", L"Perk_02", 590.f, 260.f, 108.f, 108.f, TRUE, 255);
 	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_PerkIcon_1-07.png", L"Perk_03", 820.f, 260.f, 108.f, 108.f, TRUE, 255);
 

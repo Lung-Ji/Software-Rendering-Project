@@ -14,6 +14,23 @@ HRESULT		NPCTalk::Ready_GameObject() {
 	Timer01 = 0.f;
 	ContextPassing = 0;
 
+	ShadowCast = FALSE;
+
+	BackGround = Component_Sprite->Get_Texture(L"NPCTalk_BackGround");
+	GRD_Top = Component_Sprite->Get_Texture(L"FrameGradation_Top");
+	GRD_Bottom = Component_Sprite->Get_Texture(L"FrameGradation_Bottom");
+
+	Sprite_Yeon = Component_Sprite->Get_Texture(L"NPCTalk_Yeon");
+	Sprite_Tif = Component_Sprite->Get_Texture(L"NPCTalk_Tif");
+
+	NameBar = Component_Sprite->Get_Texture(L"NameBar");
+	Square = Component_Sprite->Get_Texture(L"TalkPass_Square");
+
+	PlayerObject = dynamic_cast<Player*>(SceneManager::GetInstance()->Get_GameObject(L"Player"));
+
+	Name = FontManager::GetInstance()->Find_FontObject(L"Personal Name");
+	Talk = FontManager::GetInstance()->Find_FontObject(L"TALK");
+
 	return S_OK;
 }
 INT			NPCTalk::Update_GameObject(CONST FLOAT& _DT) {
@@ -29,46 +46,51 @@ VOID		NPCTalk::Render_GameObject() {
 	Component_Sprite->Render_Sprite();
 }
 
-VOID NPCTalk::Activate_NPCTalk(NPC_CHARACTER _NPCC, FLOAT _DT) {
-	FontObject* Name = FontManager::GetInstance()->Find_FontObject(L"Personal Name");
-	FontObject* Talk = FontManager::GetInstance()->Find_FontObject(L"TALK");
-	if (_NPCC == NPC_CHARACTER::NPC_TIF) {
+BOOL NPCTalk::Activate_NPCTalk(NPC_CHARACTER _NPCC, FLOAT _DT) {
+	if (!ShadowCast) {
+		PlayerObject->Set_PlayerStop(TRUE);
 		Timer01 += _DT;
-		if (KEY_DOWN(DIK_E)) { ContextPassing++; }
-
-		Make_ShadowOutline(Timer01);
+		FontManager::GetInstance()->Find_FontObject(L"Interaction_Text")->Set_Color(0, 255, 255, 255);
+		FontManager::GetInstance()->Find_FontObject(L"ArrowCountText")->Set_Color(0, 255, 255, 255);
+		Shadow_FadeIn(Timer01);
+	}
+	
+	if (_NPCC == NPC_CHARACTER::NPC_TIF) {
+		if (KEY_DOWN(DIK_E) && ShadowCast) { ContextPassing++; }
+		
 		if (ContextPassing == 0){
 			Name->Text = L"시간의 사도";
 			Talk->Text = L"포근한 기운이 느껴진다..";
 		}
-		if (ContextPassing == 1) {
+		else if (ContextPassing == 1) {
 			Name->Text = L"시간의 사도";
 			Talk->Text = L"모두 함께 기도합시다...";
 		}
-		//if (ContextPassing == 2) {
-		//	Name->Text = L"이라";
-		//	Talk->Text = L"";
-		//}
+		else if (ContextPassing == 2) {
+			Name->Text = L"이라";
+			Talk->Text = L"...";
+		}
+		else if (ContextPassing == 3) {
+			ContextPassing = 999;
+		}
 	}
 	else {
 
 	}
+	if (ShadowCast && ContextPassing == 999) {
+		Timer01 += _DT;
+		if (Shadow_FadeOut(Timer01)) {
+			ShadowCast = FALSE;
+			ContextPassing = 0;
+			FontManager::GetInstance()->Find_FontObject(L"Interaction_Text")->Set_Color(200, 255, 255, 255);
+			FontManager::GetInstance()->Find_FontObject(L"ArrowCountText")->Set_Color(200, 255, 255, 255);
+			PlayerObject->Set_PlayerStop(FALSE);
+			return TRUE;
+		}
+	}
 }
 
-VOID NPCTalk::Make_ShadowOutline(FLOAT _Timer) {
-	SpriteINFO* BackGround = Component_Sprite->Get_Texture(L"NPCTalk_BackGround");
-	SpriteINFO* GRD_Top = Component_Sprite->Get_Texture(L"FrameGradation_Top");
-	SpriteINFO* GRD_Bottom = Component_Sprite->Get_Texture(L"FrameGradation_Bottom");
-
-	SpriteINFO* Sprite_Yeon = Component_Sprite->Get_Texture(L"NPCTalk_Yeon");
-	SpriteINFO* Sprite_Tif = Component_Sprite->Get_Texture(L"NPCTalk_Tif");
-
-	SpriteINFO* NameBar = Component_Sprite->Get_Texture(L"NameBar");
-	SpriteINFO* Square = Component_Sprite->Get_Texture(L"TalkPass_Square");
-
-	FontObject* Name = FontManager::GetInstance()->Find_FontObject(L"Personal Name");
-	FontObject* Talk = FontManager::GetInstance()->Find_FontObject(L"TALK");
-
+BOOL NPCTalk::Shadow_FadeIn(FLOAT _Timer) {
 	if (_Timer < 1.f) {
 		BackGround->Set_Opacity(_Timer * 150);
 		GRD_Top->Set_Opacity(_Timer * 255);
@@ -82,13 +104,40 @@ VOID NPCTalk::Make_ShadowOutline(FLOAT _Timer) {
 		Name->Set_Color(255 * (_Timer - 1), 255, 255, 255);
 		Talk->Set_Color(150 * (_Timer - 1), 255, 255, 255);
 	}
+	else if (_Timer > 2.f) {
+		Timer01 = 0.f;
+		ShadowCast = TRUE;
+		return TRUE;
+	}
+	return FALSE;
+}
+BOOL NPCTalk::Shadow_FadeOut(FLOAT _Timer) {
+	if (_Timer < 1.f) {
+		BackGround->Set_Opacity(150 - (_Timer * 150));
+		GRD_Top->Set_Opacity(255 - (_Timer * 255));
+		GRD_Bottom->Set_Opacity(255 - (_Timer * 255));
+		Sprite_Yeon->Set_Opacity(255 - (_Timer * 255));
+		Sprite_Tif->Set_Opacity(255 - (_Timer * 255));
+		Name->Set_Color(255 - 255 * (_Timer), 255, 255, 255);
+		Talk->Set_Color(150 - 150 * (_Timer), 255, 255, 255);
+	}
+	else if (_Timer > 1.f && _Timer < 2.f) {
+		NameBar->Set_Visible(FALSE);
+		Square->Set_Visible(FALSE);
+	}
+	else if (_Timer > 2.f) {
+		Timer01 = 0.f;
+		ShadowCast = FALSE;
+		return TRUE;
+	}
+	return FALSE;
 }
 
-HRESULT NPCTalk::Component_Initialize() {
+HRESULT  NPCTalk::Component_Initialize() {
 	Component_Sprite = ADD_COMPONENT_SPRITE;
 	return S_OK;
 }
-HRESULT NPCTalk::Sprite_Initialize() {
+HRESULT  NPCTalk::Sprite_Initialize() {
 	wstring BaseFolder = L"../../UI/NPCDialog/";
 
 	Component_Sprite->Import_SpriteEX(BaseFolder, L"NPCTalk_BackGround.png", L"NPCTalk_BackGround", 0.f, 0.f, 1280, 720, TRUE, 0);
@@ -101,12 +150,12 @@ HRESULT NPCTalk::Sprite_Initialize() {
 
 	return S_OK;
 }
-HRESULT NPCTalk::Effect_Initialize() {
+HRESULT  NPCTalk::Effect_Initialize() {
 	return S_OK;
 }
-HRESULT NPCTalk::Text_Initialize() {
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 643, 502.f }, 28, L"Personal Name", L"08서울한강체 L", D3DCOLOR_ARGB(0, 255, 255, 255));
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 640, 560.f }, 20, L"TALK", L"08서울한강체 L", D3DCOLOR_ARGB(0, 255, 255, 255));
+HRESULT  NPCTalk::Text_Initialize() {
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 643, 502.f }, 28, L"Personal Name", L"Yoon\u00AE 대한", D3DCOLOR_ARGB(0, 255, 255, 255));
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 640, 560.f }, 20, L"TALK", L"Yoon\u00AE 대한", D3DCOLOR_ARGB(0, 255, 255, 255));
 	return S_OK;
 }
 
@@ -119,7 +168,6 @@ NPCTalk* NPCTalk::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	}
 	return NPT;
 }
-
-VOID	NPCTalk::Free() {
+VOID	 NPCTalk::Free() {
 	GameObject::Free();
 }

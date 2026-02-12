@@ -37,22 +37,23 @@ private:
   virtual	~FontManager();
 
 public:
-	HRESULT Ready_FontManager(LPDIRECT3DDEVICE9 _GRPDEV);
-	INT		Update_FontManager(CONST FLOAT& _DT);
-	VOID	LateUpdate_FontManager(CONST FLOAT& _DT);
-	VOID	Render_FontManager();
+	HRESULT		Ready_FontManager(LPDIRECT3DDEVICE9 _GRPDEV);
+	INT			Update_FontManager(CONST FLOAT& _DT);
+	VOID		LateUpdate_FontManager(CONST FLOAT& _DT);
+	VOID		Render_FontManager();
 
-	HRESULT	Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _vec2 _Position, _int _TextScale, wstring _FontTag,
+	HRESULT		Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _vec2 _Position, _int _TextScale, wstring _FontTag,
 		wstring _FontType, D3DCOLOR _Color = D3DCOLOR_ARGB(255, 255, 255, 255), _int TextWeight = 100, BOOL _Visible = TRUE);
+
 	FontObject* Find_FontObject(wstring _Text);
 private:
 	
-	ID3DXSprite*	DXSprite;
+	ID3DXSprite*					DXSprite;
 
 	map<CONST TCHAR*, FontObject*>	FontList;
+
 private:
-	map<const _tchar*, FontObject*>			m_mapFont;
-  virtual	VOID Free();
+	virtual		VOID	Free();
 };
 
 END

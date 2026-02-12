@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "FontManager.h"
 
 class NPCTalk : public GameObject {
 private:
@@ -13,8 +14,9 @@ public:
 	virtual VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
 	virtual VOID		Render_GameObject();
 
-	VOID	Activate_NPCTalk(NPC_CHARACTER _NPCC, FLOAT _DT);
-	VOID	Make_ShadowOutline(FLOAT _DT);
+	BOOL	Activate_NPCTalk(NPC_CHARACTER _NPCC, FLOAT _DT);
+	BOOL	Shadow_FadeIn(FLOAT _Timer);
+	BOOL	Shadow_FadeOut(FLOAT _Timer);
 
 public:
 	HRESULT Component_Initialize();
@@ -27,8 +29,26 @@ public:
 private:
 	SpriteObject* Component_Sprite;
 
-	FLOAT Timer01;
-	_int	ContextPassing;
+	FLOAT		Timer01;
+	_int		ContextPassing;
+
+	BOOL		ShadowCast;
+
+	SpriteINFO* BackGround;
+	SpriteINFO* GRD_Top;
+	SpriteINFO* GRD_Bottom;
+
+	SpriteINFO* Sprite_Yeon;
+	SpriteINFO* Sprite_Tif;
+
+	SpriteINFO* NameBar;
+	SpriteINFO* Square;
+
+	FontObject* Name;
+	FontObject* Talk;
+
+	Player*		PlayerObject;
+
 private:
 	virtual	VOID		Free();
 };

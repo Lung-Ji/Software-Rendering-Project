@@ -14,19 +14,19 @@ HRESULT	DebugScene::Ready_Scene() {
 
 	KeyManager::GetInstance()->Ready_KeyManager(hInst, hWnd);
 	UIManager::GetInstance()->Ready_UIManager(GRPDEV);
-	//CollisionManager::GetInstance()->Get_AllObjectOfScene();
+	CollisionManager::GetInstance()->Get_AllObjectOfScene();
 
 	return S_OK;
 }
 INT	 DebugScene::Update_Scene(CONST FLOAT& _DT) {
-	//CollisionManager::GetInstance()->Update_CollisionManager();
+	CollisionManager::GetInstance()->Update_CollisionManager();
 	UIManager::GetInstance()->Update_UIManager(_DT);
 	return Scene::Update_Scene(_DT);
 }
 VOID DebugScene::LateUpdate_Scene(CONST FLOAT& _DT) {
 	UIManager::GetInstance()->LateUpdate_UIManager(_DT);
-	//CollisionManager::GetInstance()->LateUpdate_CollisionManager();
-	//CollisionManager::GetInstance()->Render_CollisionManager();
+	CollisionManager::GetInstance()->LateUpdate_CollisionManager();
+	CollisionManager::GetInstance()->Render_CollisionManager();
 	Scene::LateUpdate_Scene(_DT);
 }
 VOID DebugScene::Render_Scene() {
@@ -47,8 +47,9 @@ HRESULT DebugScene::Ready_UserInterface_Layer() {
 	//Add_GameObjectToScene<MainMenuButton>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"MainButton");
 	//Add_GameObjectToScene<MainMenu>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"MainMenu");
 	Add_GameObjectToScene<MainUI>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"MainUI");
-	//Add_GameObjectToScene<Inventory>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"Inventory");
-	//Add_GameObjectToScene<NPCTalk>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"NPCTalk");
+	Add_GameObjectToScene<PlayerInven>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"PlayerInven");
+	//Add_GameObjectToScene<Augments>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"Augments");
+	Add_GameObjectToScene<NPCTalk>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"NPCTalk");
 	return S_OK;
 }
 DebugScene* DebugScene::Create(LPDIRECT3DDEVICE9 _GRPDEV) {

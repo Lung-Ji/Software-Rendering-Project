@@ -30,8 +30,8 @@ HRESULT Player::Ready_GameObject() {
 	_slideTime			= 0.f;
 	_g					= 30.f;
 	_frame				= 1;
-	_arrowCount = 0;
-
+	_arrowCount			= 0;
+	_isStop				= false;
 	{
 		_pStatus.hp				= 6;
 		_pStatus.Dash_Count = 3;
@@ -102,7 +102,7 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	//SetOnTerrain(); - 광윤 디버그
 
 	_frameTick += _DT;
-
+	if (_isStop) return 0;
 	switch (_pState)
 	{
 	case pState::STATE_IDLE:
@@ -1183,6 +1183,13 @@ Player* Player::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 		return nullptr;
 	}
 	return PLAYER;
+}
+void Player::Set_PlayerStop(bool isStop) {
+	_isStop = isStop;
+	if (_isStop)
+		_weaponSlot[_equipNum]->Set_Bow_Equip(false);
+	else
+		_weaponSlot[_equipNum]->Set_Bow_Equip(true);
 }
 VOID	Player::Free() {
 	GameObject::Free();

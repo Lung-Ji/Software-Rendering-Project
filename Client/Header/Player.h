@@ -139,6 +139,8 @@ public:
 	
 	int		Get_Token() { return _token; }
 	void	Set_Token(INT _value) { _token = _value; }
+
+	void    Set_PlayerStop(bool isStop);
 	//////////////////////
 private:
 	virtual VOID Free();
@@ -183,6 +185,7 @@ private:
 	int				_coin;			// 플레이어 coin
 	int				_crystal;		// 플레이어 crystal
 	int				_token;			// 플레이어 스킬 횟수(다이아몬드 모양)
+	bool			_isStop;
 	/////////////////////
 	float			_g;
 	float			_slideTime;

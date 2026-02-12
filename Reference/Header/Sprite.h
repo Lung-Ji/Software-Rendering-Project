@@ -43,6 +43,8 @@ struct ENGINE_DLL ItemINFO {
 	wstring ItemName;
 	wstring ItemClass;
 
+	wstring ItemEffect[3];
+
 	wstring ItemDesc;
 	wstring ItemExDesc;
 	_int	ItemPrice;
@@ -80,8 +82,8 @@ public:
 	INT			Update_Sprite();
 	VOID		Render_Sprite();
 
-	HRESULT		Import_Sprite(CONST TCHAR* _PATH, CONST TCHAR* _KEY, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY = 255);
-	HRESULT		Import_SpriteEX(wstring _RootPath, CONST TCHAR* _PATH, CONST TCHAR* _KEY, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY = 255);
+	SpriteINFO*		Import_Sprite(CONST TCHAR* _PATH, CONST TCHAR* _KEY, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY = 255);
+	SpriteINFO*		Import_SpriteEX(wstring _RootPath, CONST TCHAR* _PATH, CONST TCHAR* _KEY, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY = 255);
 
 	vector<SpriteINFO>* Get_TextureList() { return &TextureList; }
 	SpriteINFO*			Get_Texture(wstring _KEY);

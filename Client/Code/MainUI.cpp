@@ -364,17 +364,17 @@ HRESULT MainUI::Text_Initialize() {
 	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"0", { 52.f, 178.f }, 16, L"CrystalCountText",	L"08서울한강체 L", D3DCOLOR_ARGB(200, 255, 255, 255));
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////// WEAPON ///////////////////////////////////////////////////////
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"∞", { 1220.f, 687.f }, 16, L"ArrowCountText",		L"08서울한강체 L", D3DCOLOR_ARGB(200, 255, 255, 255));
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"∞", { 1220.f, 687.f }, 16, L"ArrowCountText",	L"08서울한강체 L", D3DCOLOR_ARGB(200, 255, 255, 255));
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////// INTERACTION ////////////////////////////////////////////////////
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 810.f, 600.f }, 16, L"Interaction_Text", L"08서울한강체 M", D3DCOLOR_ARGB(200, 255, 255, 255));
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 810.f, 600.f }, 16, L"Interaction_Text",	L"08서울한강체 L", D3DCOLOR_ARGB(200, 255, 255, 255));
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// ////////////////////////////////////////////// GETITEM ///////////////////////////////////////////////////////
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 1430.f, 330.f }, 20, L"ItemInfo", L"08서울한강체 L", D3DCOLOR_ARGB(200, 255, 255, 255));
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 1430.f, 400.f }, 12, L"ItemClass", L"08서울한강체 L", D3DCOLOR_ARGB(200, 255, 255, 255));
+	// ////////////////////////////////////////////// GETITEM ///////////////////////////////////////////////////
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 1430.f, 330.f }, 20, L"ItemInfo",			L"08서울한강체 L", D3DCOLOR_ARGB(200, 255, 255, 255));
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 1430.f, 400.f }, 12, L"ItemClass",		L"08서울한강체 L", D3DCOLOR_ARGB(200, 255, 255, 255));
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////// SPEECH ///////////////////////////////////////////////////////
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 180.f, 550.f + 30.f }, 13, L"TifNotice_Text", L"08서울한강체 M", D3DCOLOR_ARGB(0, 255, 255, 255));
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 180.f, 550.f + 30.f }, 13, L"TifNotice_Text", L"08서울한강체 L", D3DCOLOR_ARGB(0, 255, 255, 255));
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	return S_OK;

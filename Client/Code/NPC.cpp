@@ -23,6 +23,8 @@ HRESULT NPC::Ready_GameObject() {
 
 	Component_Transform->Rotation(ROT_X, 90.f - _cameraAngle);
 
+	
+
 	return S_OK;
 }
 INT	NPC::Update_GameObject(const _float& _DT) {
@@ -39,6 +41,30 @@ VOID NPC::LateUpdate_GameObject(const _float& _DT) {
 		Tif_AnimIDX = Tif_AnimIDX % 7 + 1;
 		Timer_Tif = 0.f;
 	}
+
+	_matrix		matBill, matWorld, matView;
+
+	matWorld = *Component_Transform->Get_World();
+	GRPDEV->GetTransform(D3DTS_VIEW, &matView);
+
+	D3DXMatrixIdentity(&matBill);
+
+	// y축 회전만 제거
+	matBill._11 = matView._11;
+	matBill._13 = matView._13;
+	matBill._31 = matView._31;
+	matBill._33 = matView._33;
+
+	D3DXMatrixInverse(&matBill, 0, &matBill);
+
+	// 주의 할 것
+	matWorld = matBill * matWorld;
+
+	Component_Transform->Set_World(&matWorld);
+
+	_vec3		vPos;
+	Component_Transform->Get_Info(INFO_POS, &vPos);
+	AlphaSorting(&vPos);
 }
 VOID NPC::Render_GameObject() {
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
@@ -113,8 +139,12 @@ BOOL NPC::OnCollisionExit(GameObject* _Other) {
 VOID NPC::TalkWithNPC(FLOAT _DT) {
 	if (Interaction_Possible) {
 		if (ObjectTAG == L"NPC_Tif") 
-			NPCTalkUI->Activate_NPCTalk(NPC_CHARACTER::NPC_TIF, _DT);
+			if (NPCTalkUI->Activate_NPCTalk(NPC_CHARACTER::NPC_TIF, _DT) == TRUE) {
+				Interaction_Possible = FALSE;
+			}
 		if (ObjectTAG == L"NPC_Shop")
-			NPCTalkUI->Activate_NPCTalk(NPC_CHARACTER::NPC_SHOP, _DT);
+			if(NPCTalkUI->Activate_NPCTalk(NPC_CHARACTER::NPC_SHOP, _DT) == TRUE) {
+				Interaction_Possible = FALSE;
+			}
 	}
 }
