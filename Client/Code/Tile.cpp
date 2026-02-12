@@ -94,9 +94,8 @@ VOID Tile::Render_GameObject()
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
 	
 	{
-
-		if (m_eMode == TILEMODE_CHANGE::MODE_END)
-			GRPDEV->SetTexture(0, nullptr);
+		if (m_eMode == TILEMODE_CHANGE::MODE_END || m_eTileInstall == INSTALL_MODE::MODE_MOVE)
+			GRPDEV->SetTexture(0, NULL);
 		else
 			GRPDEV->SetTexture(0, ResourceManager::GetInstance()->Find_Texture(m_pTileName));
 
@@ -116,7 +115,7 @@ VOID Tile::Render_GameObject()
 			break;
 		}
 	}
-	GRPDEV->SetTexture(0, nullptr);
+	GRPDEV->SetTexture(0, NULL);
 }
 
 void Tile::Mode_Change()
@@ -671,10 +670,10 @@ void Tile::Set_AnimationCount(_int* icnt)
 		   ||!_tcscmp(m_pTileName, L"Object_Pillar01_Hp100_%d.png")
 		   ||!_tcscmp(m_pTileName, L"Object_Pillar02_Hp100_%d.png") 
 		   ||!_tcscmp(m_pTileName, L"Object_StoneWell_Hp100_%d.png")
-		   ||!_tcscmp(m_pTileName, L"Object_StoneWell2_Hp100_%d.png")) *icnt = 3;
+		   ||!_tcscmp(m_pTileName, L"Object_StoneWell2_Hp100_%d.png")) *icnt = 2;
 
 	else if (!_tcscmp(m_pTileName, L"Object_InfectionTower_Hp100_%d.png")
-		  || !_tcscmp(m_pTileName, L"Object_Pillar04_Hp100_%d.png"))*icnt = 4;
+		  || !_tcscmp(m_pTileName, L"Object_Pillar04_Hp100_%d.png"))*icnt = 3;
 
 	else if (!_tcscmp(m_pTileName, L"spr_bush_01_%d.png")
 		  || !_tcscmp(m_pTileName, L"spr_bush_02_%d.png")
@@ -996,7 +995,6 @@ void Tile::Check_TilePoint()
 					if (m_eTileState == STATE_UNDERTILE)
 					{
 						pTile = CXZTile::Create(GRPDEV, m_eTile, m_eTileState,  m_vecUVXY[(_int)m_iTileUnderNumber].x1, m_vecUVXY[(_int)m_iTileUnderNumber].x2, m_vecUVXY[(_int)m_iTileUnderNumber].y, m_vecUVXY[(_int)m_iTileUnderNumber].y2);
-					
 					}
 					pTile = CXZTile::Create(GRPDEV,m_eTile,m_eTileState, m_vecUVXY[(_int)m_iTileUnderNumber].x1, m_vecUVXY[(_int)m_iTileUnderNumber].x2, m_vecUVXY[(_int)m_iTileUnderNumber].y, m_vecUVXY[(_int)m_iTileUnderNumber].y2);
 					break;
@@ -1019,9 +1017,14 @@ void Tile::Check_TilePoint()
 							Set_AnimationCount(&i);
 							  dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAnimaiton(m_pTileName, i, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x, m_vNextPos, m_bOnlyAnimation);
 						}
+						else if (m_eTileState == STATE_UNDERTILE)
+						{
+							//dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileBackGround(m_pTileName, 0, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x, m_vNextPos, m_bOnlyAnimation);
+
+						}
 						else
 						{
-							dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAll(m_pPathName, m_pTileName, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x, m_vNextPos);
+							dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAll(m_pPathName, m_pTileName, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z* VTXCNTX + (_int)vMouseCheck.x, m_vNextPos);
 							dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))
 								->Set_TextureID(ResourceManager::GetInstance()->Find_Texture(dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileTextureName().c_str()));
 						}

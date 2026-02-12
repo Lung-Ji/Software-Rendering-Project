@@ -59,11 +59,12 @@ HRESULT	MapScene::Ready_Scene() {
 		ReadFile(hFile, &uv,			  sizeof(UvXY),			   &dwByte, NULL);
 		
 	
+		
 		GameObject* GOBJ = nullptr;
 		//GRPDEV->AddRef();
 		GOBJ = CXZTile::Create(GRPDEV, eTileSide, eTileState,uv.x1,uv.x2,uv.y,uv.y2);
 		GOBJ->Set_ObjectTag(L"CXZTile");
-	
+		dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileStage(eTileStage);
 		if (eTileState == TILE_STATE::STATE_DESTORY || eTileState == TILE_STATE::STATE_ANIMATION || eTileState == TILE_STATE::STATE_POTALEFFECT)
 			dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAnimaiton(cTileName, iTileTextureCnt, eTileSide, eTileState, eTileMode, iTilenum, vNextPos, bAni);
 		else
@@ -81,7 +82,7 @@ HRESULT	MapScene::Ready_Scene() {
 		if (0 == dwByte)
 			break;
 	}
-
+	
 	MSG_BOX("로드 성공");
 	CloseHandle(hFile);
 }

@@ -541,14 +541,14 @@ void Player::ATTACK_STATE(const _float& _DT)
 	GetCursorPos(&point);
 	ScreenToClient(hWnd, &point);
 
-	if (MOUSE_RBUTTON) {
-		_pState = pState::STATE_DASH;
-		_dashStart = true;
-		_frame = 1;
-	}
-	else if (!mouseLB) {
-		_pState = pState::STATE_IDLE;
-	}
+	//if (MOUSE_RBUTTON) {
+	//	_pState = pState::STATE_DASH;
+	//	_dashStart = true;
+	//	_frame = 1;
+	//}
+	//else if (!mouseLB) {
+	//	_pState = pState::STATE_IDLE;
+	//}
 
 	_vec2 playerPos = { WINCX / 2 , WINCY / 2 };
 

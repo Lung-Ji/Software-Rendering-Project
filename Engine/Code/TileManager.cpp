@@ -3,7 +3,7 @@
 #include "Component.h"
 
 IMPLEMENT_SINGLETON(TileManager)
-TileManager::TileManager() : m_eMode(TILEMODE_CHANGE::MODE_END), m_bCheck(false){}
+TileManager::TileManager() : m_eMode(TILEMODE_CHANGE::MODE_END), m_eStage(TILE_STAGE::TILE_STAGE1), m_bCheck(false), m_bStageChange(false){}
 TileManager::~TileManager()
 {
 	Free();
@@ -21,6 +21,7 @@ HRESULT TileManager::Add_Tile(GameObject* pObject, _vec3 vPos, TILE_STAGE eStage
 	TileInfo* pInfo = dynamic_cast<TileInfo*>(pObject->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO));
 	
 	pInfo->Set_OnlyAnimation(bAni);
+	pInfo->Set_TileStage(eStage);
 	if ( eSid != TILE_SIDE::TILE_OTHER)
 	{
 		_float fHeight(0.f);
@@ -29,6 +30,7 @@ HRESULT TileManager::Add_Tile(GameObject* pObject, _vec3 vPos, TILE_STAGE eStage
 		pTransform->Set_Pos(vPos.x, fHeight, vPos.z);
 	}
 	else pTransform->Set_Pos(vPos.x, 0.f, vPos.z);
+
 
 	m_vecTileBuffer[eStage][eMode].push_back(pObject);
 
@@ -185,12 +187,33 @@ void TileManager::Delete_Tile(_vec3 vPos, _vec3 Origin, _vec3 vDir)
 
 HRESULT TileManager::Update_TileList(const _float& fTimeDetla)
 {
+	if (m_bStageChange) //스테이지 스왑용
+	{
+		m_eStage = m_eCurrent;
+		m_bStageChange = false;
+	}
+
 	for(size_t i = 0; i < TILE_STAGE::STAGE_END; ++i)
 	{
 		for (size_t j = 0; j < TILEMODE_CHANGE::MODE_END; ++j)
 		{
-			for (auto& iter : m_vecTileBuffer[i][j])
-				iter->Update_GameObject(fTimeDetla);
+			for (auto iter = m_vecTileBuffer[i][j].begin(); iter != m_vecTileBuffer[i][j].end();++iter)
+			{
+
+				(*iter)->Update_GameObject(fTimeDetla);
+
+				//_bool bDead = (*iter)->Get_ObjectDead();
+				//
+				//if (bDead == TRUE)
+				//{
+				//	Safe_Release((*iter));
+				//	iter = m_vecTileBuffer[i][j].erase(iter);
+				//}
+				//
+				//if (iter != m_vecTileBuffer[i][j].end())
+				//	++iter;	
+			}
+		
 		}
 	}
 	
@@ -299,6 +322,9 @@ void TileManager::Save_Tile(HWND g_hWnd)
 				WriteFile(hFile, &vNextPos,		   sizeof(_vec3), &dwByte, NULL);
 				WriteFile(hFile, &bOnlyAni,		   sizeof(_bool), &dwByte, NULL);
 				WriteFile(hFile, &Uv,			   sizeof(UvXY), &dwByte, NULL);
+			
+				if (eTileStage == TILE_STAGE::TILE_STAGE2)
+					_int i = 0;
 			}
 		}
 	}

@@ -269,6 +269,7 @@ void Bow::CreateArrow(const _float& _DT)
 
 				arrow->Set_ObjectTag(arrowTag);
 				arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
+				arrow->Set_ObjectTag(L"PlayerArrow");
 
 				SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow);
 			}
