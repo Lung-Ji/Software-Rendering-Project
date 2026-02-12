@@ -222,7 +222,27 @@ void Bow::CreateArrow(const _float& _DT)
 
 			_arrowPos = { _playerPos->x + offsetX , _playerPos->y, _playerPos->z - offsetY };
 
-			MakeArrow(_arrowPos, dir2D);
+			_vec2 side = { -dir2D.y, dir2D.x };
+			D3DXVec2Normalize(&side, &side);
+			_vec3 rightPos = _arrowPos;
+			_vec3 leftPos = _arrowPos;
+			switch (_type)
+			{
+			case BowType::FairyBow :
+				MakeArrow(_arrowPos, dir2D);
+				break;
+			case BowType::IceBow:
+				MakeArrow(_arrowPos, dir2D);
+				rightPos.x += side.x * 1.5f;
+				rightPos.z += side.y * 1.5f;
+				leftPos.x -= side.x * 1.5f;
+				leftPos.z -= side.y * 1.5f;
+				MakeArrow(rightPos, dir2D);
+				MakeArrow(leftPos, dir2D);
+			default :
+				MakeArrow(_arrowPos, dir2D);
+				break;
+			}
 
 			_attackDelay = 0.f;
 		}
