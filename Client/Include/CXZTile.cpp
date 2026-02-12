@@ -71,27 +71,27 @@ VOID CXZTile::Render_GameObject()
 		GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
 		break;
 	case TILE_STATE::STATE_POTALEFFECT:
-		//if (m_pTileInfo->Get_PotalOpen())
-		//{
+		if (m_pTileInfo->Get_PotalOpen())
+		{
 			GRPDEV->SetTexture(0, ResourceManager::GetInstance()->Find_Texture(m_pTileInfo->Get_AnimationName((_uint)(m_fFrame))));
-		//}
-		//else return;
+		}
+		else return;
 		break;
 	case TILE_STATE::STATE_TRIGGER:
 		GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
 		break;
 	case TILE_STATE::STATE_POTALGASI:
-		//if (!m_pTileInfo->Get_PotalOpen())
-		//{
+		if (!m_pTileInfo->Get_PotalOpen())
+		{
 
 			GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
 			
-		//}
-		//else return;
+		}
 			break;
 	case TILE_STATE::STATE_POTALGASI_EFFECT:
-		//if (!m_pTileInfo->Get_PotalOpen())
-		//{
+		
+		if (!m_pTileInfo->Get_PotalOpen())
+		{
 		
 
 		GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -104,10 +104,8 @@ VOID CXZTile::Render_GameObject()
 		GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 		GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE); //위에 두개 옵션 혼합해라
 		GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TFACTOR);
-		
 		GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
-		//}
-		//else return;
+		}
 		break;
 	case TILE_STATE::STATE_UNDERTILE:
 	{
@@ -123,6 +121,12 @@ VOID CXZTile::Render_GameObject()
 		//GRPDEV->SetTextureStageState(1, D3DTSS_ALPHAARG1, D3DTA_CURRENT);
 
 	}
+		break;
+	case TILE_STATE::STATE_POTALGASI_BREAK:
+		if (!m_pTileInfo->Get_PotalOpen())
+		{
+			GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
+		}
 		break;
 	}
 
@@ -206,6 +210,10 @@ void CXZTile::Frame_Move(const FLOAT& _DT)
 	case TILE_STATE::STATE_POTALGASI:
 		break;
 	case TILE_STATE::STATE_POTALGASI_EFFECT:
+
+		//Tile_Gasi_Destory();
+		break;
+	case TILE_STATE::STATE_POTALGASI_BREAK:
 		Tile_Gasi_Destory();
 		break;
 	}

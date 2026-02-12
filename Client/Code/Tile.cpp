@@ -340,7 +340,7 @@ void Tile::Imgui_ModeChanger()
 	_bool bSetTexture = false;
 	_int  iChoice(0);
 	static const char* cTile[]	         = { "TILE_FRONT","TILE_RIGHT","TILE_LEFT","TILE_OTHER"};
-	static const char* cTileStater[]     = { "NORMAL", "COLLISION", "TRIGGER","ANIMATION","DESTORY","POTAL","POTALEFFECT","POTALGASI","POTALGASIEFFECT","UNDERTILE","END"};
+	static const char* cTileStater[]     = { "NORMAL", "COLLISION", "TRIGGER","ANIMATION","DESTORY","POTAL","POTALEFFECT","POTALGASI","POTALGASIEFFECT","UNDERTILE","GASIBREAK","END"};
 	static const char* cTileMode[]	     = { "TILE","CUBE","OBJECT","END" };
 	static const char* cTileStage[]      = { "STAGE1", "STAGE2", "STAGE3", "STAGE4", "STAGE5","STAGE6","STAGE7","STAGE8", "STAGE9" ,"STAGE10","BOSSSTAGE" };
 	static const char* cTIleInstall[]    = { "Install", "MOVE" };
@@ -463,6 +463,7 @@ void Tile::Imgui_ModeChanger()
 						else if (!strcmp(cSelect_State, cTileStater[7]))  m_eTileState = TILE_STATE::STATE_POTALGASI;
 						else if (!strcmp(cSelect_State, cTileStater[8]))  m_eTileState = TILE_STATE::STATE_POTALGASI_EFFECT;
 						else if (!strcmp(cSelect_State, cTileStater[9]))  m_eTileState = TILE_STATE::STATE_UNDERTILE;
+						else if (!strcmp(cSelect_State, cTileStater[10]))  m_eTileState = TILE_STATE::STATE_POTALGASI_BREAK;
 					}
 					if (bSelect)
 						ImGui::SetItemDefaultFocus();

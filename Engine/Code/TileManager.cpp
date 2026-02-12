@@ -197,10 +197,12 @@ HRESULT TileManager::Update_TileList(const _float& fTimeDetla)
 	{
 		for (size_t j = 0; j < TILEMODE_CHANGE::MODE_END; ++j)
 		{
-			for (auto iter = m_vecTileBuffer[i][j].begin(); iter != m_vecTileBuffer[i][j].end();++iter)
+			for (auto iter = m_vecTileBuffer[i][j].begin(); iter != m_vecTileBuffer[i][j].end();)
 			{
 
 				(*iter)->Update_GameObject(fTimeDetla);
+
+
 
 				//_bool bDead = (*iter)->Get_ObjectDead();
 				//
@@ -208,10 +210,10 @@ HRESULT TileManager::Update_TileList(const _float& fTimeDetla)
 				//{
 				//	Safe_Release((*iter));
 				//	iter = m_vecTileBuffer[i][j].erase(iter);
-				//}
 				//
-				//if (iter != m_vecTileBuffer[i][j].end())
-				//	++iter;	
+			    //	}
+				if (iter != m_vecTileBuffer[i][j].end())
+					++iter;	
 			}
 		
 		}
