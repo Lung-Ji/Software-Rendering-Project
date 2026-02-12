@@ -16,6 +16,7 @@ HRESULT Bat::Ready_GameObject() {
 
 	Timer1 = 0.f;
 	Timer2 = 0.f;
+	_hp = 100;
 
 	Default_Speed = 1.f;
 	Speed = Default_Speed;
@@ -28,6 +29,9 @@ INT	Bat::Update_GameObject(const _float& _DT)
 	GameObject::Update_GameObject(_DT);
 
 	m_tTexInfo._frameTick += _DT;
+
+	if (_hp <= 0)
+		return -1;
 
 	Set_Target(L"Player");
 
@@ -96,6 +100,16 @@ VOID Bat::Render_GameObject() {
 
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
+BOOL Bat::OnCollisionEnter(GameObject* _Other)
+{
+	if (_Other->Get_ObjectTag() == L"PlayerArrow")
+	{
+		int atk = dynamic_cast<Arrow*>(_Other)->Get_Atk();
+		_hp -= atk;
+	}
+
+	return 0;
+}
 HRESULT Bat::Component_Initialize() {
 
 	Component_Buffer = ADD_COMPONENT_RECTTEX;
@@ -108,7 +122,7 @@ HRESULT Bat::Component_Initialize() {
 	Component_Collider = ADD_COMPONENT_COLLIDER;
 	Component_Collider->Set_CenterPos(Component_Transform);
 
-	Component_Collider->Set_Scale(0.3f, 1.3f, 0.3f);
+	Component_Collider->Set_Scale(0.3f, 0.3f, 0.3f);
 
 	return S_OK;
 }

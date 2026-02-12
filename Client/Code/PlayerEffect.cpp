@@ -19,6 +19,7 @@ HRESULT PlayerEffect::Ready_Effect(PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, B
 	else if (_SKILLTYPE == PLAYER_SKILL::EVILHEAD_PULSE) { Make_TextureList(L"EvilHeadBow_Pulse"); }
 	else if (_SKILLTYPE == PLAYER_SKILL::WIND_PULSE) { Make_TextureList(L"Wind_Charge"); }
 	else if (_SKILLTYPE == PLAYER_SKILL::WIND_CHARGING) { Make_TextureList(L"Wind_Charging"); }
+	else if (_SKILLTYPE == PLAYER_SKILL::FAIRY_HITEFFECT) { Make_TextureList(L"Fariy_HitEffect"); }
 
 	if (!AngleChase)
 	{

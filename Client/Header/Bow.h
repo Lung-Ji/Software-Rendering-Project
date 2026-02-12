@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Player.h"
 
+static int			_arrowCount = 1;
 enum class BowType {
 	FairyBow,
 	IceBow,
@@ -37,11 +38,14 @@ public:
 public:
 	void			Set_PlayerPos(_vec3* pos) { _playerPos = pos; }
 	void			Set_Destroy() { _isDestroied = true; }
+
 private:
 	HRESULT			Component_Initialize();
 	void			SetGrahpic();
 	void			CreateArrow(const _float& _DT);
 	void			CreateEffect(const _float& _DT);
+	void			Late_Ready();
+	void			MakeArrow(_vec3 pos, _vec2 arrowDir);
 private:
 	Buffer* Component_Buffer;
 	Transform* Component_Transform;
@@ -64,6 +68,7 @@ private:
 private:
 	BowType		_type;
 	BowStat		_Stat;
+	bool		_lateReady;
 
 	bool		_isEquip;
 	bool		_isDestroied;
@@ -73,6 +78,5 @@ private:
 	_vec3		_pulsepos;
 	_vec3		_arrowPos;
 	float		_attackDelay;
-	int			_arrowCount;
 };
 

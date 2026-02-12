@@ -1,5 +1,6 @@
 #include "../Include/PCH.h"
 #include "Bow.h"
+#include <random>
 
 Bow::Bow(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV) {}
 Bow::Bow(const GameObject& _RHS) : GameObject(_RHS) {}
@@ -9,6 +10,7 @@ HRESULT Bow::Ready_GameObject()
 {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
+	_lateReady = true;
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
 		Get_GameObject(L"Camera"));
 
@@ -22,63 +24,22 @@ HRESULT Bow::Ready_GameObject()
 
 	Component_Transform->Set_Scale({ 1.f, 1.f, 1.f });
 
-	switch (_type) {
-	case BowType::FairyBow:
-		_Stat.bowLv = 1;
-		_Stat.minAtk = 20;
-		_Stat.maxAtk = 23;
-		_Stat.maxArrow = 987654321;
-		_Stat.curArrow = 987654321;
-		_Stat.range = 10.f;
-		_Stat.delay = 0.6f;
-		break;
-	case BowType::IceBow:
-		_Stat.bowLv = 1;
-		_Stat.minAtk = 20;
-		_Stat.maxAtk = 23;
-		_Stat.maxArrow = 180;
-		_Stat.curArrow = 180;
-		_Stat.range = 10.f;
-		_Stat.delay = 0.6f;
-		break;
-	case BowType::EvilHeadBow:
-		_Stat.bowLv = 1;
-		_Stat.minAtk = 20;
-		_Stat.maxAtk = 23;
-		_Stat.maxArrow = 150;
-		_Stat.curArrow = 150;
-		_Stat.range = 10.f;
-		_Stat.delay = 0.6f;
-		break;
-	case BowType::WindBow:
-		_Stat.bowLv = 1;
-		_Stat.minAtk = 20;
-		_Stat.maxAtk = 23;
-		_Stat.maxArrow = 180;
-		_Stat.curArrow = 180;
-		_Stat.range = 10.f;
-		_Stat.delay = 0.6f;
-		break;
-	}
-
 	return S_OK;
 }
 
 INT Bow::Update_GameObject(const _float& _DT)
 {
+	if (_lateReady) {
+		Late_Ready();
+		_lateReady = false;
+	}
+		
+
 	if (_isEquip) {
 		GameObject::Update_GameObject(_DT);
 		RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
 		if (_isDestroied) return -1;
-
-		Player* player = dynamic_cast<Player*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Player"));
-		PSTATUS* playerStatus = player->Get_Status();
-
-		// 최대 화살 수
-		_Stat.maxArrow	*= playerStatus->maxBowRatio;
-		_Stat.minAtk	+= playerStatus->atk;
-		_Stat.maxAtk	+= playerStatus->atk;
 
 		float alphaSpeed = 3.f;
 
@@ -261,17 +222,7 @@ void Bow::CreateArrow(const _float& _DT)
 
 			_arrowPos = { _playerPos->x + offsetX , _playerPos->y, _playerPos->z - offsetY };
 
-			{
-				GameObject* arrow = Arrow::Create(GRPDEV, ArrowType::IceArrow_LV1, &_arrowPos);
-
-				TCHAR arrowTag[128] = L"";
-				wsprintfW(arrowTag, L"PlayerArrow_%d", _arrowCount++);
-
-				arrow->Set_ObjectTag(arrowTag);
-				arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
-
-				SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow);
-			}
+			MakeArrow(_arrowPos, dir2D);
 
 			_attackDelay = 0.f;
 		}
@@ -335,6 +286,76 @@ void Bow::CreateEffect(const _float& _DT)
 			
 		}
 	}
+}
+
+void Bow::Late_Ready()
+{
+	switch (_type) {
+	case BowType::FairyBow:
+		_Stat.bowLv = 1;
+		_Stat.minAtk = 20;
+		_Stat.maxAtk = 23;
+		_Stat.maxArrow = 987654321;
+		_Stat.curArrow = 987654321;
+		_Stat.range = 10.f;
+		_Stat.delay = 0.6f;
+		break;
+	case BowType::IceBow:
+		_Stat.bowLv = 1;
+		_Stat.minAtk = 20;
+		_Stat.maxAtk = 23;
+		_Stat.maxArrow = 180;
+		_Stat.curArrow = 180;
+		_Stat.range = 10.f;
+		_Stat.delay = 0.6f;
+		break;
+	case BowType::EvilHeadBow:
+		_Stat.bowLv = 1;
+		_Stat.minAtk = 20;
+		_Stat.maxAtk = 23;
+		_Stat.maxArrow = 150;
+		_Stat.curArrow = 150;
+		_Stat.range = 10.f;
+		_Stat.delay = 0.6f;
+		break;
+	case BowType::WindBow:
+		_Stat.bowLv = 1;
+		_Stat.minAtk = 20;
+		_Stat.maxAtk = 23;
+		_Stat.maxArrow = 180;
+		_Stat.curArrow = 180;
+		_Stat.range = 10.f;
+		_Stat.delay = 0.6f;
+		break;
+	}
+	Player* player = dynamic_cast<Player*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Player"));
+	PSTATUS* playerStatus = player->Get_Status();
+
+	// 최대 화살 수
+	_Stat.maxArrow *= playerStatus->maxBowRatio;
+	_Stat.minAtk += playerStatus->atk;
+	_Stat.maxAtk += playerStatus->atk;
+}
+
+void Bow::MakeArrow(_vec3 pos, _vec2 arrowDir)
+{
+	_arrowPos = pos;
+
+	std::random_device rd;
+	std::uniform_int_distribution<int> distribution(0, 100);
+
+	int arrowAtk = distribution(rd) % (_Stat.maxAtk - _Stat.minAtk) + _Stat.minAtk;
+
+	GameObject* arrow = Arrow::Create(GRPDEV, _type, _Stat.bowLv, arrowAtk, &_arrowPos, arrowDir);
+
+	TCHAR arrowTag[128] = L"";
+	wsprintfW(arrowTag, L"PlayerArrow_%d", _arrowCount++);
+
+	arrow->Set_ObjectTag(arrowTag);
+	arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
+	arrow->Set_ObjectTag(L"PlayerArrow");
+
+	SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow);
 }
 
 Bow* Bow::Create(LPDIRECT3DDEVICE9 _GRPDEV)

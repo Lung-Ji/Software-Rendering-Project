@@ -117,6 +117,14 @@ public:
 	BowType			Get_Weapon_Type()	{ return _weaponSlot[_equipNum]->Get_Bow_Type(); }	// 현재 장착한 활 타입
 	BowStat*		Get_CurBow_Stat()	{ return _weaponSlot[_equipNum]->Get_Bow_Stat(); }	// 현재 장착한 활 스텟
 
+	void			Set_PlayerStop(bool isStop) {
+		_isStop = isStop; 
+		if (_isStop)
+			_weaponSlot[_equipNum]->Set_Bow_Equip(false);
+		else
+			_weaponSlot[_equipNum]->Set_Bow_Equip(true);
+	}
+
 	static Player* Create(LPDIRECT3DDEVICE9 _GRPDEV);
 	float	Get_Speed()				{ return _speed;}
 	////////////////////// 광윤 추가
@@ -147,8 +155,8 @@ private:
 	D3DXVECTOR3			MousePicker_NonTarget(HWND _hWnd, Buffer* _TerrainBuffer, Transform* _TerrainTransform);
 	D3DXVECTOR3			RayOnTerrain();
 	D3DXVECTOR3			SetOnTerrain();
-
-	void			Destroy_Weapon();
+	
+	void			Destroy_Weapon(int idx);
 
 	void			IDLE_STATE(const _float& _DT);
 	void			DASH_STATE(const _float& _DT);
@@ -162,6 +170,7 @@ private:
 private:
 	bool			Debug;
 	float			_cameraAngle;
+	bool			_isStop;
 
 	PSTATUS			_pStatus;
 	pState			_pState;

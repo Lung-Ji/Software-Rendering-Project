@@ -5,29 +5,57 @@ Arrow::Arrow(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV) {}
 Arrow::Arrow(const GameObject& _RHS) : GameObject(_RHS) {}
 Arrow::~Arrow() {}
 
-HRESULT Arrow::Ready_GameObject(ArrowType _ARROWTYPE, _vec3* _PlayerPOS)
+HRESULT Arrow::Ready_GameObject(BowType _BOWTYPE, int _LVEL, int arrowAtk, _vec3* _PlayerPOS, _vec2 _arrowDir)
 {
     if (FAILED(Component_Initialize())) return E_FAIL;
 
-    _type = ArrowType::IceArrow_LV1;
     _speed = 15.f;
     _sumSpeed = 0.f;
     _lifeTime = 0.f;
     _frame = 1;
-
+    _size = 1.f;
+    _frameDelay = 0.f;
     _playerPos = { _PlayerPOS->x, _PlayerPOS->y, _PlayerPOS->z };
+    _arrowAtk = arrowAtk;
+    _hp = 1;
 
-    POINT MousePoint{ 0, 0 };
-    GetCursorPos(&MousePoint);
-    ScreenToClient(hWnd, &MousePoint);
+    //POINT MousePoint{ 0, 0 };
+    //GetCursorPos(&MousePoint);
+    //ScreenToClient(hWnd, &MousePoint);
+    //
+    //_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
+    //_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
+    //
+    //_vec2 dir2D = mousePos - screenCenter;
+    //D3DXVec2Normalize(&dir2D, &dir2D);
+    //
+    //_angle = atan2f(dir2D.y, dir2D.x);
 
-    _vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
-    _vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
+    _angle = atan2f(_arrowDir.y, _arrowDir.x);
 
-    _vec2 dir2D = mousePos - screenCenter;
-    D3DXVec2Normalize(&dir2D, &dir2D);
-
-    _angle = atan2f(dir2D.y, dir2D.x);
+    {
+        switch (_BOWTYPE)
+        {
+        case BowType::FairyBow :
+            _type = ArrowType::FairyArrow;
+            _size = 0.8;
+            break;
+        case BowType::IceBow :
+            if(_LVEL == 1) _type = ArrowType::IceArrow_LV1;
+            else if(_LVEL == 2) _type = ArrowType::IceArrow_LV2;
+            break;
+        case BowType::EvilHeadBow:
+            _type = ArrowType::EvilHead_Arrow;
+            _size = 0.6;
+            break;
+        case BowType::WindBow:
+            _type = ArrowType::Wind_Arrow;
+            break;
+        default:
+            _type = ArrowType::FairyArrow;
+            break;
+        }
+    }
 
     return S_OK;
 }
@@ -37,14 +65,32 @@ INT Arrow::Update_GameObject(const _float& _DT)
     GameObject::Update_GameObject(_DT);
     RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
+    if (_hp <= 0){
+        TCHAR FileName[128] = L"";
+        _vec3 Size = { 1.f, 1.f, 1.f };
+
+        switch (_type) {
+        case ArrowType::FairyArrow:
+            // PLAY_PLAYER_EFFECT_ONCE(PLAYER_SKILL::FAIRY_HITEFFECT, &effectPos, 0.5f, Size);
+            break;
+        default:
+            break;
+        }
+        return -1;
+    }
+        
+
     _vec3		upDir, rightDir;
     upDir = { 0.f, 0.f, 1.f };
     rightDir = { 1.f, 0.f, 0.f };
 
     _lifeTime += _DT;
+    _frameDelay += _DT;
 
+    // Á×À»¶§
     if (_lifeTime > 0.5f)
         return -1;
+        
 
     {
         CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Camera"));
@@ -57,7 +103,7 @@ INT Arrow::Update_GameObject(const _float& _DT)
 
         _matrix matSize;
         D3DXMatrixIdentity(&matSize);
-        D3DXMatrixScaling(&matSize, 1.f, 1.f, 1.f);
+        D3DXMatrixScaling(&matSize, _size, _size, _size);
 
         _matrix matBillboard;
         D3DXMatrixLookAtLH(&matBillboard, &eye, &at, &up);
@@ -74,6 +120,7 @@ INT Arrow::Update_GameObject(const _float& _DT)
         matWorld._43 = _playerPos.z - _sumSpeed * sinf(_angle);
 
         Component_Transform->Set_World(&matWorld);
+        Component_Transform->Set_Pos({ matWorld._41 , matWorld._42 , matWorld._43 });
     }
 
     return S_OK;
@@ -103,7 +150,10 @@ HRESULT Arrow::Component_Initialize()
 {
     Component_Buffer = ADD_COMPONENT_RECTTEX;
     Component_Transform = ADD_COMPONENT_TRANSFORM;
-    Component_Texture = ADD_COMPONENT_TEXTURE;
+
+    Component_Collider = ADD_COMPONENT_COLLIDER;					
+    Component_Collider->Set_CenterPos(Component_Transform);			
+    Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);			
 
     return S_OK;
 }
@@ -112,33 +162,54 @@ void Arrow::SetGrahpic()
 {
     TCHAR FileName[128] = L"";
 
+
+    if (_frameDelay > 0.06f) _frame++;
+       
     switch (_type) {
+    case ArrowType::FairyArrow:
+        _frame = 1;
+        wsprintfW(FileName, L"FairyArrow.png");
+        break;
     case ArrowType::IceArrow_LV1:
         if (_frame > 6) _frame = 1;
-        wsprintfW(FileName, L"IceArrow_LV1_%d.png", _frame++);
+        wsprintfW(FileName, L"IceArrow_%d.png", _frame);
         break;
-    case ArrowType::IceArrow_LV2:
+    case ArrowType::EvilHead_Arrow:
+        if (_frame > 7) _frame = 1;
+        wsprintfW(FileName, L"EvilHead_Arrow%d.png", _frame);
+        break;
+    case ArrowType::Wind_Arrow:
         if (_frame > 6) _frame = 1;
-        wsprintfW(FileName, L"IceArrow_%d.png", _frame++);
+        wsprintfW(FileName, L"Wind_Arrow%d.png", _frame);
         break;
     default:
         if (_frame > 6) _frame = 1;
-        wsprintfW(FileName, L"IceArrow_LV1_%d.png", _frame++);
+        wsprintfW(FileName, L"IceArrow_LV1_%d.png", _frame);
         break;
     }
     
     GRPDEV->SetTexture(0, (ResourceManager::GetInstance()->Find_Texture(FileName)));
 }
 
-Arrow* Arrow::Create(LPDIRECT3DDEVICE9 _GRPDEV, ArrowType _ARROWTYPE, _vec3* _PlayerPOS)
+Arrow* Arrow::Create(LPDIRECT3DDEVICE9 _GRPDEV, BowType _BOWTYPE, int _LVEL, int arrowAtk, _vec3* _PlayerPOS, _vec2 _arrowDir)
 {
     Arrow* arrow = new Arrow(_GRPDEV);
-    if (FAILED(arrow->Ready_GameObject(_ARROWTYPE, _PlayerPOS))) {
+    if (FAILED(arrow->Ready_GameObject(_BOWTYPE, _LVEL, arrowAtk, _PlayerPOS, _arrowDir))) {
         MSG_BOX("Cannot Create arrow.");
         Safe_Release(arrow);
         return nullptr;
     }
     return arrow;
+}
+
+BOOL Arrow::OnCollisionEnter(GameObject* _Other)
+{
+    if (_Other->Get_ObjectTag() == L"Bat")
+    {
+        _hp = 0;
+    }
+
+    return 0;
 }
 
 VOID Arrow::Free()
