@@ -145,6 +145,9 @@
     <Filter Include="04. UI\03. 병합예정">
       <UniqueIdentifier>{0342db50-c41a-444b-be99-85b8ffe4f75f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Scene\02.DocheolScene">
+      <UniqueIdentifier>{e7b56a2d-1555-4e8c-9652-a748c6efddaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Header\GameManager.h">
@@ -306,6 +309,12 @@
     <ClInclude Include="..\Header\NPCTalk.h">
       <Filter>04. UI\04. NPCTalk</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Spawner.h">
+      <Filter>03. GameObject\05. Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\DoCheolScene.h">
+      <Filter>02. Scene\02.DocheolScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -451,6 +460,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\PlayerInven.cpp">
       <Filter>04. UI\InventoryUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Spawner.cpp">
+      <Filter>03. GameObject\05. Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\DoCheolScene.cpp">
+      <Filter>02. Scene\02.DocheolScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

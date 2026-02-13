@@ -21,14 +21,15 @@ public:
 public:
     void            Set_Buffer(TILE_SIDE eid);
     D3DMATERIAL9            Set_Material();
-    void            Frame_Move      (CONST FLOAT& _DT);
-    void            Tile_Animation  (CONST FLOAT& _DT);
-    void            Tile_Destory    (CONST FLOAT& _DT);
-    void            Tile_Potal      (CONST FLOAT& _DT);
-    void            Tile_Potal_Effect(CONST FLOAT& _DT);
-    void            Tile_Trigger      ();
-    void            Tile_Gasi_Destory();
-    Transform*       Crash_Player();
+    void                    Frame_Move      (CONST FLOAT& _DT);
+    void                    Tile_Animation  (CONST FLOAT& _DT);
+    void                    Tile_Destory    (CONST FLOAT& _DT);
+    void                    Tile_Potal      (CONST FLOAT& _DT);
+    void                    Tile_Potal_Effect(CONST FLOAT& _DT);
+    void                    Tile_Trigger      ();
+    void                    Tile_Gasi_Destory();
+    Transform*              Crash_Player();
+    Transform*              Crash_Arrow();
 private:
     HRESULT			Component_Initialize(TILE_SIDE eid, TILE_STATE eState, FLOAT& X1, FLOAT& X2, FLOAT& Y1 , FLOAT& Y2);
     
@@ -36,9 +37,9 @@ private:
     Transform*              m_pTransform;
     Buffer*                 m_pBuffer;
     Buffer*                 m_CubeBuffer;
-    NoCloneBuffer*          m_pNoCloneBuff;
     D3DMATERIAL9            m_Material;
 private:
+    _float                  m_fAlpha;
     _float                  m_fFrame;
     _float                  m_fTime;
     _bool                   m_bStopFrame;

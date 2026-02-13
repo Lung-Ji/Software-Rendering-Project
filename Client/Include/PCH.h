@@ -65,6 +65,7 @@
 #include "TileDestoryEffect.h"
 #include "PlayerInven.h"
 #include "Augments.h"
+#include "Spawner.h"
 //////////////////////////////////////////// Scene List
 
 #include "StartScene.h"

@@ -162,8 +162,7 @@ call Copy.bat</Command>
     <ClInclude Include="..\Header\Engine_Struct.h" />
     <ClInclude Include="..\Header\Engine_Typedef.h" />
     <ClInclude Include="..\Header\FontManager.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\KeyManager.h" />
     <ClInclude Include="..\Header\ResourceManager.h" />
@@ -194,8 +193,7 @@ call Copy.bat</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\FontManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\EffectManager.cpp" />
     <ClCompile Include="..\Code\NoCloneBuffer.cpp" />

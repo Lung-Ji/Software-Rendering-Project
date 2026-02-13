@@ -45,3 +45,4 @@ public:
 
 	static	HRESULT			Flip_Horizontal(Transform* TransCom, _vec3* pDir, _float Buffer);
 };
+

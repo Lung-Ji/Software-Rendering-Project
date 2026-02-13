@@ -3,7 +3,7 @@
 #include "Component.h"
 
 IMPLEMENT_SINGLETON(TileManager)
-TileManager::TileManager() : m_eMode(TILEMODE_CHANGE::MODE_END), m_bCheck(false){}
+TileManager::TileManager() : m_eMode(TILEMODE_CHANGE::MODE_END), m_eStage(TILE_STAGE::TILE_STAGE1), m_bCheck(false), m_bStageChange(false){}
 TileManager::~TileManager()
 {
 	Free();
@@ -21,6 +21,7 @@ HRESULT TileManager::Add_Tile(GameObject* pObject, _vec3 vPos, TILE_STAGE eStage
 	TileInfo* pInfo = dynamic_cast<TileInfo*>(pObject->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO));
 	
 	pInfo->Set_OnlyAnimation(bAni);
+	pInfo->Set_TileStage(eStage);
 	if ( eSid != TILE_SIDE::TILE_OTHER)
 	{
 		_float fHeight(0.f);
@@ -29,6 +30,7 @@ HRESULT TileManager::Add_Tile(GameObject* pObject, _vec3 vPos, TILE_STAGE eStage
 		pTransform->Set_Pos(vPos.x, fHeight, vPos.z);
 	}
 	else pTransform->Set_Pos(vPos.x, 0.f, vPos.z);
+
 
 	m_vecTileBuffer[eStage][eMode].push_back(pObject);
 
@@ -185,15 +187,27 @@ void TileManager::Delete_Tile(_vec3 vPos, _vec3 Origin, _vec3 vDir)
 
 HRESULT TileManager::Update_TileList(const _float& fTimeDetla)
 {
+	if (m_bStageChange) //스테이지 스왑용
+	{
+		m_eStage = m_eCurrent;
+		m_bStageChange = false;
+	}
+
 	for(size_t i = 0; i < TILE_STAGE::STAGE_END; ++i)
 	{
 		for (size_t j = 0; j < TILEMODE_CHANGE::MODE_END; ++j)
 		{
-			for (auto& iter : m_vecTileBuffer[i][j])
-				iter->Update_GameObject(fTimeDetla);
+			for (auto iter = m_vecTileBuffer[i][j].begin(); iter != m_vecTileBuffer[i][j].end();)
+			{
+
+				(*iter)->Update_GameObject(fTimeDetla);
+		
+				if (iter != m_vecTileBuffer[i][j].end())
+					++iter;	
+			}
+		
 		}
 	}
-	
 	
 	
 	return S_OK;
@@ -265,18 +279,23 @@ void TileManager::Save_Tile(HWND g_hWnd)
 	_vec3		     vNextPos	     = {};
 	_bool			 bOnlyAni		 = {};
 	UvXY			 Uv				 = {};
+	TILE_SPAWNER     eSpawn			 = TILE_SPAWNER::SPAWN_END;
 	for (size_t i = 0; i < TILE_STAGE::STAGE_END; ++i)
 	{
 		for (size_t j = 0; j < TILEMODE_CHANGE::MODE_END; ++j)
 		{
 			for (auto& pTile : m_vecTileBuffer[i][j])
 			{
+				pTile->Update_GameObject(0); //안하면 큰일남;;
+				pTile->LateUpdate_GameObject(0);
+
 
 				iTilenum = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileNumber();
 				eTileSide = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileSideName();
 				eTileState = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileStateName();
 				eTileMode = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileMode();
 				eTileStage = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileStage();
+				eSpawn = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_Spawner();
 				iTileTextureCnt = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileTextureNumber();
 				vNextPos	= dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_NextPos();
 				ua_tcscpy_s(cTileName, 128, dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileTextureName().c_str());
@@ -286,19 +305,21 @@ void TileManager::Save_Tile(HWND g_hWnd)
 				dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_Info(INFO_POS, &Info);
 				bOnlyAni	= dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_OnlyAnimation();
 
-				WriteFile(hFile, &Info,			   sizeof(_vec3), &dwByte, NULL);
-				WriteFile(hFile, &iTilenum,		   sizeof(_int), &dwByte, NULL);
-				WriteFile(hFile, &eTileSide,	   sizeof(TILE_SIDE), &dwByte, NULL);
-				WriteFile(hFile, &eTileState,	   sizeof(TILE_STATE), &dwByte, NULL);
+				WriteFile(hFile, &Info,			   sizeof(_vec3),			&dwByte, NULL);
+				WriteFile(hFile, &iTilenum,		   sizeof(_int),			&dwByte, NULL);
+				WriteFile(hFile, &eTileSide,	   sizeof(TILE_SIDE),		&dwByte, NULL);
+				WriteFile(hFile, &eTileState,	   sizeof(TILE_STATE),		&dwByte, NULL);
 				WriteFile(hFile, &eTileMode,	   sizeof(TILEMODE_CHANGE), &dwByte, NULL);
-				WriteFile(hFile, &cTileName,	   sizeof(_tchar) * 128, &dwByte, NULL);
-				WriteFile(hFile, &Scale,		   sizeof(_vec3), &dwByte, NULL);
-				WriteFile(hFile, &Rotation,		   sizeof(_vec3), &dwByte, NULL);
-				WriteFile(hFile, &eTileStage,	   sizeof(TILE_STAGE), &dwByte, NULL);
-				WriteFile(hFile, &iTileTextureCnt, sizeof(_int),  &dwByte, NULL);
-				WriteFile(hFile, &vNextPos,		   sizeof(_vec3), &dwByte, NULL);
-				WriteFile(hFile, &bOnlyAni,		   sizeof(_bool), &dwByte, NULL);
-				WriteFile(hFile, &Uv,			   sizeof(UvXY), &dwByte, NULL);
+				WriteFile(hFile, &cTileName,	   sizeof(_tchar) * 128,	&dwByte, NULL);
+				WriteFile(hFile, &Scale,		   sizeof(_vec3),			&dwByte, NULL);
+				WriteFile(hFile, &Rotation,		   sizeof(_vec3),			&dwByte, NULL);
+				WriteFile(hFile, &eTileStage,	   sizeof(TILE_STAGE),		&dwByte, NULL);
+				WriteFile(hFile, &iTileTextureCnt, sizeof(_int),			&dwByte, NULL);
+				WriteFile(hFile, &vNextPos,		   sizeof(_vec3),			&dwByte, NULL);
+				WriteFile(hFile, &bOnlyAni,		   sizeof(_bool),			&dwByte, NULL);
+				WriteFile(hFile, &Uv,			   sizeof(UvXY),			&dwByte, NULL);
+				WriteFile(hFile, &eSpawn,		   sizeof(TILE_SPAWNER),	&dwByte, NULL);
+				
 			}
 		}
 	}
@@ -329,6 +350,8 @@ void TileManager::Free()
 		{
 			for (auto& iter : m_vecTileBuffer[i][j])
 				Safe_Release(iter);
+
+			m_vecTileBuffer[i][j].clear();
 		}
 	}
 

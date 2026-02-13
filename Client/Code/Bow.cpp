@@ -176,7 +176,7 @@ VOID Bow::Render_GameObject()
 
 		GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
-		// ÃÊ±âÈ­
+		// ì´ˆê¸°í™”
 		GRPDEV->SetRenderState(D3DRS_TEXTUREFACTOR, 0xFFFFFFFF);
 		GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 		GRPDEV->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
@@ -338,7 +338,7 @@ void Bow::CreateEffect(const _float& _DT)
 
 	if (mouseLB)
 	{
-		// ÀÌÆåÆ®
+		// ì´í™íŠ¸
 		if (_attackDelay > 0.6) {
 			_vec3 Size = { 1.f, 1.f, 1.f };
 			switch (_type)
@@ -429,7 +429,7 @@ void Bow::CreateChargingEffect(const _float& _DT)
 	{
 		if (_ChargingTime > 1.f)
 		{
-			// ÀÌÆåÆ®
+			// ì´í™íŠ¸
 			_vec3 Size = { 1.5f, 1.5f, 1.5f };
 			switch (_type)
 			{
@@ -496,7 +496,7 @@ void Bow::Late_Ready()
 	Player* player = dynamic_cast<Player*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"Player"));
 	PSTATUS* playerStatus = player->Get_Status();
 
-	// ÃÖ´ë È­»ì ¼ö
+	// ìµœëŒ€ í™”ì‚´ ìˆ˜
 	_Stat.maxArrow *= playerStatus->maxBowRatio;
 	_Stat.minAtk += playerStatus->atk;
 	_Stat.maxAtk += playerStatus->atk;

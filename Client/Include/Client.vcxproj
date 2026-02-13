@@ -171,6 +171,7 @@
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\Docheol.h" />
+    <ClInclude Include="..\Header\DoCheolScene.h" />
     <ClInclude Include="..\Header\Fireball.h" />
     <ClInclude Include="..\Header\MonsterEffect.h" />
     <ClInclude Include="..\Header\Object_Explain.h" />
@@ -184,7 +185,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\Inventory.h" />
-    <ClInclude Include="..\Header\NPCTalk.h" />
+    <ClInclude Include="..\Header\NPCTalk.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Header\PlayerEffect.h" />
     <ClInclude Include="..\Header\GameManager.h" />
     <ClInclude Include="..\Header\GUIManager.h" />
@@ -204,10 +207,18 @@
     <ClInclude Include="..\Header\imstb_truetype.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\Header\MainMenu.h" />
-    <ClInclude Include="..\Header\MainMenuButton.h" />
-    <ClInclude Include="..\Header\MainMenuLogo.h" />
-    <ClInclude Include="..\Header\MainUI.h" />
+    <ClInclude Include="..\Header\MainMenu.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Header\MainMenuButton.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Header\MainMenuLogo.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Header\MainUI.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Header\MapScene.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -226,6 +237,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\ScorpionEvilSoul.h" />
+    <ClInclude Include="..\Header\Spawner.h" />
     <ClInclude Include="..\Header\StartScene.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
@@ -267,6 +279,7 @@
       </ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\Docheol.cpp" />
+    <ClCompile Include="..\Code\DoCheolScene.cpp" />
     <ClCompile Include="..\Code\Fireball.cpp" />
     <ClCompile Include="..\Code\MonsterEffect.cpp" />
     <ClCompile Include="..\Code\Object_Explain.cpp" />
@@ -280,7 +293,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\Inventory.cpp" />
-    <ClCompile Include="..\Code\NPCTalk.cpp" />
+    <ClCompile Include="..\Code\NPCTalk.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Code\PlayerEffect.cpp" />
     <ClCompile Include="..\Code\GameManager.cpp" />
     <ClCompile Include="..\Code\GUIManager.cpp" />
@@ -310,10 +325,18 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\Code\MainMenu.cpp" />
-    <ClCompile Include="..\Code\MainMenuButton.cpp" />
-    <ClCompile Include="..\Code\MainMenuLogo.cpp" />
-    <ClCompile Include="..\Code\MainUI.cpp" />
+    <ClCompile Include="..\Code\MainMenu.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainMenuButton.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainMenuLogo.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Code\MainUI.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Code\MapScene.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -330,6 +353,7 @@
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayerInven.cpp" />
     <ClCompile Include="..\Code\ScorpionEvilSoul.cpp" />
+    <ClCompile Include="..\Code\Spawner.cpp" />
     <ClCompile Include="..\Code\StartScene.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\Tile.cpp" />

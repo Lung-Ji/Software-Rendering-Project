@@ -23,7 +23,7 @@ HRESULT Tile::Component_Initialize() {
 	m_vecName[TILE_STATE::STATE_NORMAL].push_back	(L"../../Tile/Stage1");
 	m_vecName[TILE_STATE::STATE_ANIMATION].push_back(L"../../Tile/AnimationObject");
 	m_vecName[TILE_STATE::STATE_DESTORY].push_back	(L"../../Tile/DestroyObject");
-	m_vecName[TILE_STATE::STATE_POTAL].push_back	(L"../../Tile/Stage1/Potal");
+	m_vecName[TILE_STATE::STATE_POTAL].push_back	(L"../../Tile/Stage1/");
 
 	_float fMax(128);
 	_float x = 1.f / 128.f;//0.2f / 2048.f;
@@ -94,9 +94,8 @@ VOID Tile::Render_GameObject()
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
 	
 	{
-
-		if (m_eMode == TILEMODE_CHANGE::MODE_END)
-			GRPDEV->SetTexture(0, nullptr);
+		if (m_eMode == TILEMODE_CHANGE::MODE_END || m_eTileInstall == INSTALL_MODE::MODE_MOVE)
+			GRPDEV->SetTexture(0, NULL);
 		else
 			GRPDEV->SetTexture(0, ResourceManager::GetInstance()->Find_Texture(m_pTileName));
 
@@ -116,7 +115,7 @@ VOID Tile::Render_GameObject()
 			break;
 		}
 	}
-	GRPDEV->SetTexture(0, nullptr);
+	GRPDEV->SetTexture(0, NULL);
 }
 
 void Tile::Mode_Change()
@@ -280,7 +279,7 @@ void Tile::Imgui_Setting()
 		
 		///////////////////POTAL//////////////////////////
 		Imgui_ObjectValue("PotalPos", "##4", "Potal", &m_vNextPos, fPosMax, fPosMin);
-
+		m_vNextPos.y = 0.5f;
         ///////////////////MoveTile/////////////////////////
 		Imgui_ObjectValue("MoveTilePos", "##5","Move", &m_vOriginal, fMovePosMax, fMovePosMin);
 		Imgui_ObjectValue("MoveTileScale", "##6", "MScale", &m_vScalePivot, fMoveScaleMax, fMoveScaleMin);
@@ -341,17 +340,20 @@ void Tile::Imgui_ModeChanger()
 	_bool bSetTexture = false;
 	_int  iChoice(0);
 	static const char* cTile[]	         = { "TILE_FRONT","TILE_RIGHT","TILE_LEFT","TILE_OTHER"};
-	static const char* cTileStater[]     = { "NORMAL", "COLLISION", "TRIGGER","ANIMATION","DESTORY","POTAL","POTALEFFECT","POTALGASI","POTALGASIEFFECT","UNDERTILE","END"};
+	static const char* cTileStater[]     = { "NORMAL", "COLLISION", "TRIGGER","ANIMATION","DESTORY","POTAL","POTALEFFECT","POTALGASI","POTALGASIEFFECT","UNDERTILE","GASIBREAK","END"};
 	static const char* cTileMode[]	     = { "TILE","CUBE","OBJECT","END" };
-	static const char* cTileStage[]      = { "STAGE1", "STAGE2", "STAGE3", "STAGE4", "STAGE5","STAGE6","STAGE7","STAGE8", "STAGE9" ,"STAGE10","BOSSSTAGE" };
+	static const char* cTileStage[]      = { "STAGE1", "STAGE2", "STAGE3", "STAGE4", "FIRSTBOSS","DOCHER1","DOCHER2","DOCHERBOSS", "END" };
 	static const char* cTIleInstall[]    = { "Install", "MOVE" };
 	static const char* cTileAnimation[]  = {"TRUE", "FALSE"};
+	static const char* cTileSpawner[] = { "NPC1", "NPC2", "ITEM_SPAWN1", "ITEM_SPAWN2", "ITEM_SPAWN3", "ITEM_SPAWN4", "ITEM_SAPWN5","ITEM_SPAWN6", "MONSTER_SPAWN1", "MONSTER_SPAWN2", "MONSTER_SPAWN3", "MONSTER_SPAWN4", "BOSS_SPAWN","SPAWN_END"};
 	static const char* cSelect_Tile      = nullptr;
 	static const char* cSelect_State     = nullptr;
 	static const char* cSelect_Stage     = nullptr;
 	static const char* cSelect_Mode	     = nullptr;
 	static const char* cSelect_Install   = nullptr;
 	static const char* cSelect_Animat    = nullptr;
+	static const char* cSelect_Spawner = nullptr;
+	
 	if (!ImGui::CollapsingHeader("TILEMode"))
 		return;
 	else
@@ -426,13 +428,10 @@ void Tile::Imgui_ModeChanger()
 						else if (!strcmp(cSelect_Stage, cTileStage[1])) m_eStage = TILE_STAGE::TILE_STAGE2;
 						else if (!strcmp(cSelect_Stage, cTileStage[2])) m_eStage = TILE_STAGE::TILE_STAGE3;
 						else if (!strcmp(cSelect_Stage, cTileStage[3])) m_eStage = TILE_STAGE::TILE_STAGE4;
-						else if (!strcmp(cSelect_Stage, cTileStage[4])) m_eStage = TILE_STAGE::TILE_STAGE5;
-						else if (!strcmp(cSelect_Stage, cTileStage[5])) m_eStage = TILE_STAGE::TILE_STAGE6;
-						else if (!strcmp(cSelect_Stage, cTileStage[6])) m_eStage = TILE_STAGE::TILE_STAGE7;
-						else if (!strcmp(cSelect_Stage, cTileStage[7])) m_eStage = TILE_STAGE::TILE_STAGE8;
-						else if (!strcmp(cSelect_Stage, cTileStage[8])) m_eStage = TILE_STAGE::TILE_STAGE9;
-						else if (!strcmp(cSelect_Stage, cTileStage[9])) m_eStage = TILE_STAGE::TILE_STAGE10;
-						else if (!strcmp(cSelect_Stage, cTileStage[10])) m_eStage = TILE_STAGE::TILE_BOSS;
+						else if (!strcmp(cSelect_Stage, cTileStage[4])) m_eStage = TILE_STAGE::TILE_FIRSTBOSS;
+						else if (!strcmp(cSelect_Stage, cTileStage[5])) m_eStage = TILE_STAGE::TILE_DOCHER1;
+						else if (!strcmp(cSelect_Stage, cTileStage[6])) m_eStage = TILE_STAGE::TILE_DOCHER2;
+						else if (!strcmp(cSelect_Stage, cTileStage[7])) m_eStage = TILE_STAGE::STAGE_END;
 					}
 					if (bSelect)
 						ImGui::SetItemDefaultFocus();
@@ -453,17 +452,56 @@ void Tile::Imgui_ModeChanger()
 					_bool bSelect = (cSelect_State == cTileStater[i]);
 					if (ImGui::Selectable(cTileStater[i], bSelect))
 					{
+						cSelect_Spawner = "SPAWN_END";
+						m_eSpawner = TILE_SPAWNER::SPAWN_END;
 						cSelect_State = cTileStater[i];
-						if      (!strcmp(cSelect_State, cTileStater[0]))  m_eTileState = TILE_STATE::STATE_NORMAL;
-						else if (!strcmp(cSelect_State, cTileStater[1]))  m_eTileState = TILE_STATE::STATE_COLLISION;
-						else if (!strcmp(cSelect_State, cTileStater[2]))  m_eTileState = TILE_STATE::STATE_TRIGGER;
-						else if (!strcmp(cSelect_State, cTileStater[3]))  m_eTileState = TILE_STATE::STATE_ANIMATION;
-						else if (!strcmp(cSelect_State, cTileStater[4]))  m_eTileState = TILE_STATE::STATE_DESTORY;	
-						else if (!strcmp(cSelect_State, cTileStater[5]))  m_eTileState = TILE_STATE::STATE_POTAL;
-						else if (!strcmp(cSelect_State, cTileStater[6]))  m_eTileState = TILE_STATE::STATE_POTALEFFECT;
-						else if (!strcmp(cSelect_State, cTileStater[7]))  m_eTileState = TILE_STATE::STATE_POTALGASI;
-						else if (!strcmp(cSelect_State, cTileStater[8]))  m_eTileState = TILE_STATE::STATE_POTALGASI_EFFECT;
-						else if (!strcmp(cSelect_State, cTileStater[9]))  m_eTileState = TILE_STATE::STATE_UNDERTILE;
+						if      (!strcmp(cSelect_State, cTileStater[0]))   m_eTileState = TILE_STATE::STATE_NORMAL;
+						else if (!strcmp(cSelect_State, cTileStater[1]))   m_eTileState = TILE_STATE::STATE_COLLISION;
+						else if (!strcmp(cSelect_State, cTileStater[2]))   m_eTileState = TILE_STATE::STATE_TRIGGER;
+						else if (!strcmp(cSelect_State, cTileStater[3]))   m_eTileState = TILE_STATE::STATE_ANIMATION;
+						else if (!strcmp(cSelect_State, cTileStater[4]))   m_eTileState = TILE_STATE::STATE_DESTORY;	
+						else if (!strcmp(cSelect_State, cTileStater[5]))   m_eTileState = TILE_STATE::STATE_POTAL;
+						else if (!strcmp(cSelect_State, cTileStater[6]))   m_eTileState = TILE_STATE::STATE_POTALEFFECT;
+						else if (!strcmp(cSelect_State, cTileStater[7]))   m_eTileState = TILE_STATE::STATE_POTALGASI;
+						else if (!strcmp(cSelect_State, cTileStater[8]))   m_eTileState = TILE_STATE::STATE_POTALGASI_EFFECT;
+						else if (!strcmp(cSelect_State, cTileStater[9]))   m_eTileState = TILE_STATE::STATE_UNDERTILE;
+						else if (!strcmp(cSelect_State, cTileStater[10]))  m_eTileState = TILE_STATE::STATE_POTALGASI_BREAK;
+						else if (!strcmp(cSelect_State, cTileStater[11]))  m_eTileState = TILE_STATE::STATE_END;
+					}
+					if (bSelect)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+		}
+		////////////////////TILE_Spawnser/////////////////////
+		{
+			ImGui::Text("TileSpawnser");
+			ImGui::SameLine(140.0f, 0.f);
+
+			if (ImGui::BeginCombo("##Spawner", cSelect_Spawner))
+			{
+				for (_int i = 0; i < IM_ARRAYSIZE(cTileSpawner); i++)
+				{
+					_bool bSelect = (cSelect_Spawner == cTileSpawner[i]);
+					if (ImGui::Selectable(cTileSpawner[i], bSelect))
+					{
+						cSelect_State = "NORMAL";
+						m_eTileState = TILE_STATE::STATE_NORMAL;
+						cSelect_Spawner = cTileSpawner[i];
+						if (!strcmp(cSelect_Spawner, cTileSpawner[0]))        m_eSpawner = TILE_SPAWNER::NPC1;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[1]))   m_eSpawner = TILE_SPAWNER::NPC2;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[2]))   m_eSpawner = TILE_SPAWNER::ITEM_SPAWN1;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[3]))   m_eSpawner = TILE_SPAWNER::ITEM_SPAWN2;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[4]))   m_eSpawner = TILE_SPAWNER::ITEM_SPAWN3;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[5]))   m_eSpawner = TILE_SPAWNER::ITEM_SPAWN4;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[6]))   m_eSpawner = TILE_SPAWNER::ITEM_SPAWN5;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[7]))   m_eSpawner = TILE_SPAWNER::ITEM_SPAWN6;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[8]))   m_eSpawner = TILE_SPAWNER::MONSTER_SPAWN1;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[9]))   m_eSpawner = TILE_SPAWNER::MONSTER_SPAWN2;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[10]))  m_eSpawner = TILE_SPAWNER::MONSTER_SPAWN3;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[11]))  m_eSpawner = TILE_SPAWNER::MONSTER_SPAWN4;
+						else if (!strcmp(cSelect_Spawner, cTileSpawner[12]))  m_eSpawner = TILE_SPAWNER::SPAWN_END;
 					}
 					if (bSelect)
 						ImGui::SetItemDefaultFocus();
@@ -493,7 +531,6 @@ void Tile::Imgui_ModeChanger()
 				ImGui::EndCombo();
 			}
 		}
-
 		////////////////////Animation//////////////////////
 		{
 			
@@ -663,40 +700,42 @@ void Tile::Set_AnimationCount(_int* icnt)
 {
 	//누가 아이디어좀;;
 	//_tcscmp
-	if (     !_tcscmp(m_pTileName, L"Object_InfectionPillar01_Hp100_%d.png")
-		   ||!_tcscmp(m_pTileName, L"Object_InfectionWall1_Hp100_%d.png")
-		   ||!_tcscmp(m_pTileName, L"Object_InfectionWall2_Hp100_%d.png") 
-		   ||!_tcscmp(m_pTileName, L"Object_InfectionWall3_Hp100_%d.png")
-		   ||!_tcscmp(m_pTileName, L"Object_InfectionWall4_Hp100_%d.png")
-		   ||!_tcscmp(m_pTileName, L"Object_Pillar01_Hp100_%d.png")
-		   ||!_tcscmp(m_pTileName, L"Object_Pillar02_Hp100_%d.png") 
-		   ||!_tcscmp(m_pTileName, L"Object_StoneWell_Hp100_%d.png")
-		   ||!_tcscmp(m_pTileName, L"Object_StoneWell2_Hp100_%d.png")) *icnt = 3;
+	if (!_tcscmp(m_pTileName, L"Object_InfectionPillar01_Hp100_%d.png")
+		|| !_tcscmp(m_pTileName, L"Object_InfectionWall1_Hp100_%d.png")
+		|| !_tcscmp(m_pTileName, L"Object_InfectionWall2_Hp100_%d.png")
+		|| !_tcscmp(m_pTileName, L"Object_InfectionWall3_Hp100_%d.png")
+		|| !_tcscmp(m_pTileName, L"Object_InfectionWall4_Hp100_%d.png")
+		|| !_tcscmp(m_pTileName, L"Object_Pillar01_Hp100_%d.png")
+		|| !_tcscmp(m_pTileName, L"Object_Pillar02_Hp100_%d.png")
+		|| !_tcscmp(m_pTileName, L"Object_StoneWell_Hp100_%d.png")
+		|| !_tcscmp(m_pTileName, L"Object_StoneWell2_Hp100_%d.png")) *icnt = 2;
 
 	else if (!_tcscmp(m_pTileName, L"Object_InfectionTower_Hp100_%d.png")
-		  || !_tcscmp(m_pTileName, L"Object_Pillar04_Hp100_%d.png"))*icnt = 4;
+		|| !_tcscmp(m_pTileName, L"Object_Pillar04_Hp100_%d.png"))*icnt = 3;
 
 	else if (!_tcscmp(m_pTileName, L"spr_bush_01_%d.png")
-		  || !_tcscmp(m_pTileName, L"spr_bush_02_%d.png")
-		  || !_tcscmp(m_pTileName, L"spr_bush_03_%d.png")
-		  || !_tcscmp(m_pTileName, L"spr_bush_04_%d.png")
-		  || !_tcscmp(m_pTileName, L"spr_bush_05_%d.png")) *icnt = 7;
+		|| !_tcscmp(m_pTileName, L"spr_bush_02_%d.png")
+		|| !_tcscmp(m_pTileName, L"spr_bush_03_%d.png")
+		|| !_tcscmp(m_pTileName, L"spr_bush_04_%d.png")
+		|| !_tcscmp(m_pTileName, L"spr_bush_05_%d.png")) *icnt = 7;
 
-	else if (!_tcscmp(m_pTileName, L"Spr_Deco_BushFlower01_0%d.png") 
-		  || !_tcscmp(m_pTileName, L"Spr_Deco_BushFlower02_0%d.png")) *icnt = 8;
+	else if (!_tcscmp(m_pTileName, L"Spr_Deco_BushFlower01_0%d.png")
+		|| !_tcscmp(m_pTileName, L"Spr_Deco_BushFlower02_0%d.png")) *icnt = 8;
+	else if (!_tcscmp(m_pTileName, L"spr_spawneffect0%d.png") || !_tcscmp(m_pTileName, L"BossPotal%d.png") ||
+		!_tcscmp(m_pTileName, L"NPCPotal%d.png")) *icnt = 7;
+
 	else if (!_tcscmp(m_pTileName, L"spr_spawneffect0%d.png")) *icnt = 7;
-	
-	if (!_tcscmp(m_pTileName, L"spr_spawneffect0%d.png")) *icnt = 7;
 
-	if (!_tcscmp(m_pTileName, L"pr_InfectionThorns_05.png") ||
+	else if (!_tcscmp(m_pTileName, L"pr_InfectionThorns_05.png") ||
 		!_tcscmp(m_pTileName, L"pr_InfectionThorns_06.png") ||
-		!_tcscmp(m_pTileName, L"Spr_InfectionDoor_Thorns03_05.png") || 
-	    !_tcscmp(m_pTileName, L"Spr_InfectionDoor_Thorns05_03.png") ||
+		!_tcscmp(m_pTileName, L"Spr_InfectionDoor_Thorns03_05.png") ||
+		!_tcscmp(m_pTileName, L"Spr_InfectionDoor_Thorns05_03.png") ||
 		!_tcscmp(m_pTileName, L"Spr_InfectionDoor_Thorns05_04.png") ||
 		!_tcscmp(m_pTileName, L"Spr_InfectionDoor_Thorns05_05.png") ||
 		!_tcscmp(m_pTileName, L"Spr_InfectionThorns_01.png") ||
 		!_tcscmp(m_pTileName, L"Spr_InfectionThorns_DestructionEffect_00.png")) *icnt = 1;
 
+	else if (!_tcscmp(m_pTileName, L"Spr_SpecialRoom_Tombstone_RuinsRoom_0%d.png")) *icnt = 8;
 }
 HRESULT Tile::Load_Image(const _tchar* pName, TILE_STATE eid)
 {
@@ -993,12 +1032,20 @@ void Tile::Check_TilePoint()
 				switch (m_eMode)
 				{
 				case TILEMODE_CHANGE::MODE_TILE:
-					if (m_eTileState == STATE_UNDERTILE)
+					if (m_eTileState == TILE_STATE::STATE_NORMAL && m_eSpawner != TILE_SPAWNER::SPAWN_END)
+					{
+						pTile = Spawner::Create(GRPDEV, m_eTile, m_eSpawner);
+
+					}
+					else if (m_eTileState == STATE_UNDERTILE)
 					{
 						pTile = CXZTile::Create(GRPDEV, m_eTile, m_eTileState,  m_vecUVXY[(_int)m_iTileUnderNumber].x1, m_vecUVXY[(_int)m_iTileUnderNumber].x2, m_vecUVXY[(_int)m_iTileUnderNumber].y, m_vecUVXY[(_int)m_iTileUnderNumber].y2);
-					
 					}
-					pTile = CXZTile::Create(GRPDEV,m_eTile,m_eTileState, m_vecUVXY[(_int)m_iTileUnderNumber].x1, m_vecUVXY[(_int)m_iTileUnderNumber].x2, m_vecUVXY[(_int)m_iTileUnderNumber].y, m_vecUVXY[(_int)m_iTileUnderNumber].y2);
+					else if (m_eTileState != STATE_END)
+					{
+						pTile = CXZTile::Create(GRPDEV, m_eTile, m_eTileState, m_vecUVXY[(_int)m_iTileUnderNumber].x1, m_vecUVXY[(_int)m_iTileUnderNumber].x2, m_vecUVXY[(_int)m_iTileUnderNumber].y, m_vecUVXY[(_int)m_iTileUnderNumber].y2);
+					}
+					
 					break;
 				case TILEMODE_CHANGE::MODE_CUBE:
 					pTile = CubeTile::Create(GRPDEV);
@@ -1012,12 +1059,25 @@ void Tile::Check_TilePoint()
 					//GRPDEV->AddRef();
 					switch (m_eMode)
 					{
+
 					case TILEMODE_CHANGE::MODE_TILE:
-						if (m_eTileState == STATE_ANIMATION || m_eTileState == STATE_DESTORY || m_eTileState == STATE_POTALEFFECT)
+						if (m_eTileState == TILE_STATE::STATE_NORMAL && m_eSpawner != TILE_SPAWNER::SPAWN_END)
+						{
+							dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileSpawnerDefault(m_pTileName, 0, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x, m_vNextPos, m_bOnlyAnimation, m_eSpawner);
+							dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))
+								->Set_TextureID(ResourceManager::GetInstance()->Find_Texture(dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileTextureName().c_str()));
+					
+						}
+						else if (m_eTileState == STATE_ANIMATION || m_eTileState == STATE_DESTORY || m_eTileState == STATE_POTALEFFECT)
 						{
 							_int i(0);
 							Set_AnimationCount(&i);
-							  dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAnimaiton(m_pTileName, i, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x, m_vNextPos, m_bOnlyAnimation);
+							dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAnimaiton(m_pTileName, i, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x, m_vNextPos, m_bOnlyAnimation);
+						}
+						else if (m_eTileState == STATE_UNDERTILE)
+						{
+							//dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileBackGround(m_pTileName, 0, m_eTile, m_eTileState, m_eMode, (_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x, m_vNextPos, m_bOnlyAnimation);
+
 						}
 						else
 						{
@@ -1028,8 +1088,8 @@ void Tile::Check_TilePoint()
 						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(*m_pTransform->Get_Scale());
 						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Rotation(*m_pTransform->Get_Rotation());
 						TileManager::GetInstance()->Add_Tile(pTile, vMouseCheck, m_eStage, m_eMode, m_eTile, m_vPosPivot, m_bOnlyAnimation);
-						
 						break;
+				
 					case TILEMODE_CHANGE::MODE_CUBE:
 						dynamic_cast<CubeTile*>(pTile)->Set_TileNumber((_int)vMouseCheck.z * VTXCNTX + (_int)vMouseCheck.x);
 						dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Set_Scale(*m_pTransform->Get_Scale());
