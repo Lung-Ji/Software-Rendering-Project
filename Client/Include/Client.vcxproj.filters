@@ -285,9 +285,6 @@
     <ClInclude Include="..\Header\Object_Explain.h">
       <Filter>04. UI\InventoryUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Augments.h">
-      <Filter>04. UI\AugmentUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\Bullet_Standard.h">
       <Filter>03. GameObject\07. ProJectile\01.Bullet_Standard</Filter>
     </ClInclude>
@@ -315,9 +312,6 @@
     <ClInclude Include="..\Header\ScorpionBullet.h">
       <Filter>03. GameObject\07. ProJectile\03.ScorpionBullet</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\ShotGunEvilSoul.h">
-      <Filter>03. GameObject\02. Monster\02. Monster\03. ShotGunEvilSoul</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\EvilSlime.h">
       <Filter>03. GameObject\02. Monster\02. Monster\04. EvilSlime</Filter>
     </ClInclude>
@@ -332,6 +326,9 @@
     </ClInclude>
     <ClInclude Include="..\Header\DoCheolScene.h">
       <Filter>02. Scene\02.DocheolScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\Augment.h">
+      <Filter>04. UI\AugmentUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -437,9 +434,6 @@
     <ClCompile Include="..\Code\Object_Explain.cpp">
       <Filter>04. UI\InventoryUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Augments.cpp">
-      <Filter>04. UI\AugmentUI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Bullet_Standard.cpp">
       <Filter>03. GameObject\07. ProJectile\01.Bullet_Standard</Filter>
     </ClCompile>
@@ -467,9 +461,6 @@
     <ClCompile Include="..\Code\ScorpionBullet.cpp">
       <Filter>03. GameObject\07. ProJectile\03.ScorpionBullet</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\MonsterEffect.cpp">
-      <Filter>03. GameObject\06. Effect\02. MonsterEffect\00. MonsterEffect</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\ShotGunEvilSoul.cpp">
       <Filter>03. GameObject\02. Monster\02. Monster\03. ShotGunEvilSoul</Filter>
     </ClCompile>
@@ -477,7 +468,6 @@
       <Filter>03. GameObject\02. Monster\02. Monster\04. EvilSlime</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\MonsterEffect.cpp" />
-    </ClCompile>
     <ClCompile Include="..\Code\FieldApostle.cpp">
       <Filter>04. UI\AugmentUI</Filter>
     </ClCompile>
@@ -489,6 +479,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\DoCheolScene.cpp">
       <Filter>02. Scene\02.DocheolScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MonsterEffect.cpp">
+      <Filter>03. GameObject\06. Effect\02. MonsterEffect\00. MonsterEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Augment.cpp">
+      <Filter>04. UI\AugmentUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

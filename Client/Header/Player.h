@@ -148,8 +148,6 @@ public:
 	int		Get_Token() { return _token; }
 	void	Set_Token(INT _value) { _token = _value; }
 
-	void    Set_PlayerStop(bool isStop);
-
 	_int	GetBowCharging() { return _weaponSlot[_equipNum]->Get_Charging(); }
 
 	//////////////////////
@@ -175,7 +173,6 @@ private:
 private:
 	bool			Debug;
 	float			_cameraAngle;
-	bool			_isStop;
 
 	PSTATUS			_pStatus;
 	pState			_pState;

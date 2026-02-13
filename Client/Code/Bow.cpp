@@ -278,12 +278,12 @@ void Bow::CreateArrow(const _float& _DT)
 				cosf(angle + convergeAngle),
 				sinf(angle + convergeAngle)
 			};
-      GameObject* arrow = Arrow::Create(GRPDEV, ArrowType::IceArrow_LV1, &_arrowPos);
-
-				arrow->Set_ObjectTag(L"PlayerArrow");
-				arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
-
-				SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow);
+			//GameObject* arrow = Arrow::Create(GRPDEV, ArrowType::IceArrow_LV1, &_arrowPos);
+			//
+			//arrow->Set_ObjectTag(L"PlayerArrow");									
+			//arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);					
+			//
+			//SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow); // 오류나서 지웠습니다. 한 번 확인해주세요
 			switch (_type)
 			{
 			case BowType::FairyBow :

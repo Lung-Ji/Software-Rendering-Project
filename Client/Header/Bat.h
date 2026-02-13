@@ -18,7 +18,6 @@ public:
 	virtual			INT			Update_GameObject(CONST FLOAT& _DT);
 	virtual			VOID		LateUpdate_GameObject(CONST FLOAT& _DT);
 	virtual			VOID		Render_GameObject();
-	virtual			BOOL		OnCollisionEnter(GameObject* _Other);
 
 private:
 	HRESULT			Component_Initialize();
@@ -55,9 +54,6 @@ private:
 	BAT_STATE PrevState;
 
 	VOID Change_State(BAT_STATE eState);
-	VOID State_Appear(const _float& _DT);
-	VOID State_Idle();
-	VOID State_Tracking(const _float& _DT);
 	VOID State_Attacking(const _float& _DT);
 
 	_float Timer1;

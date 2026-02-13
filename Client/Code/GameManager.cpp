@@ -60,7 +60,7 @@ HRESULT GameManager::Ready_SceneSetting() {
 	if (FAILED(SceneManager::GetInstance()->Scene_Transition(EnterScene))) {
 
 		MSG_BOX("Cannot Setting LogoScene.");
-		Safe_Release(MapScene);
+		Safe_Release(EnterScene);
 		return E_FAIL;
 	}
 	return S_OK;

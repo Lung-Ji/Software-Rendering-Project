@@ -53,11 +53,11 @@ VOID	PlayerInven::LateUpdate_GameObject(CONST FLOAT& _DT) {
 }
 VOID	PlayerInven::Render_GameObject() {	
 	if (UIManager::GetInstance()->Get_Active() == TRUE) {
-		PlayerObject->Set_PlayerStop(FALSE);
+		PlayerObject->Set_PlayerStop(TRUE);
 		Component_Sprite->Render_Sprite();
 	}
 	else if(UIManager::GetInstance()->Get_Active() == FALSE){
-		PlayerObject->Set_PlayerStop(TRUE);
+		PlayerObject->Set_PlayerStop(FALSE);
 	}
 }	
 HRESULT PlayerInven::Component_Initialize() {

@@ -110,16 +110,16 @@ VOID Bat::Render_GameObject() {
 
 	GRPDEV->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
-BOOL Bat::OnCollisionEnter(GameObject* _Other)
-{
-	if (_Other->Get_ObjectTag() == L"PlayerArrow")
-	{
-		int atk = dynamic_cast<Arrow*>(_Other)->Get_Atk();
-		_hp -= atk;
-	}
-
-	return 0;
-}
+//BOOL Bat::OnCollisionEnter(GameObject* _Other)				// OnCollisionEnter 정의가 2개라서 하나 지웠습니다. push > pull req 하시기 전에 컴파일까지 다 하고 올려주세요.
+//{
+//	if (_Other->Get_ObjectTag() == L"PlayerArrow")
+//	{
+//		int atk = dynamic_cast<Arrow*>(_Other)->Get_Atk();
+//		_hp -= atk;
+//	}
+//
+//	return 0;
+//}
 HRESULT Bat::Component_Initialize() {
 
 	Component_Buffer = ADD_COMPONENT_RECTTEX;
