@@ -71,7 +71,7 @@ VOID CXZTile::Render_GameObject()
 		GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
 		break;
 	case TILE_STATE::STATE_POTALEFFECT:
-		if (m_pTileInfo->Get_PotalOpen())
+		if (!m_pTileInfo->Get_PotalOpen())
 		{
 			GRPDEV->SetTexture(0, ResourceManager::GetInstance()->Find_Texture(m_pTileInfo->Get_AnimationName((_uint)(m_fFrame))));
 		}
@@ -85,8 +85,9 @@ VOID CXZTile::Render_GameObject()
 		{
 
 			GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
-			
+
 		}
+		else return;
 			break;
 	case TILE_STATE::STATE_POTALGASI_EFFECT:
 		
@@ -106,6 +107,7 @@ VOID CXZTile::Render_GameObject()
 		GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TFACTOR);
 		GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
 		}
+		else return;
 		break;
 	case TILE_STATE::STATE_UNDERTILE:
 	{
@@ -127,6 +129,8 @@ VOID CXZTile::Render_GameObject()
 		{
 			GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
 		}
+		else
+			return;
 		break;
 	}
 
@@ -226,7 +230,7 @@ void CXZTile::Tile_Animation(const FLOAT& _DT)
 	if (m_pTileInfo->Get_OnlyAnimation())
 	{
 		m_fTime += _DT;					//지난 시간
-		if (m_fTime > 0.05f) //0.1초가 지나면
+		if (m_fTime > 0.15f) //0.1초가 지나면
 		{
 			++m_fFrame;     //프레임 증가
 			m_fTime = 0.f;	//시간 초기화
@@ -320,8 +324,12 @@ void CXZTile::Tile_Potal_Effect(const FLOAT& _DT)
 void CXZTile::Tile_Trigger()
 {
 	if (Crash_Player() != nullptr)
+	{
+		TileManager::GetInstance()->Change_Stage(m_pTileInfo->Get_TileStage());
 		TileManager::GetInstance()->Set_Trigger(m_pTileInfo->Get_TileStage(),
 			m_pTileInfo->Get_TileMode(), TILE_STATE::STATE_POTALEFFECT);
+	}
+
 }
 void CXZTile::Tile_Gasi_Destory()
 {

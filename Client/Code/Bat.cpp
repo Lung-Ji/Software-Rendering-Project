@@ -8,7 +8,6 @@ HRESULT Bat::Ready_GameObject() {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
 	Component_Transform->Get_Info(INFO_LOOK, &vDir);
-
 	pTarget = nullptr;
 	pTargetPos = nullptr;
 	CurrState = BAT_IDLE;

@@ -201,9 +201,6 @@ HRESULT TileManager::Update_TileList(const _float& fTimeDetla)
 			{
 
 				(*iter)->Update_GameObject(fTimeDetla);
-
-
-
 				//_bool bDead = (*iter)->Get_ObjectDead();
 				//
 				//if (bDead == TRUE)
@@ -219,7 +216,28 @@ HRESULT TileManager::Update_TileList(const _float& fTimeDetla)
 		}
 	}
 	
-	
+	for (size_t i = 0; i < TILE_STAGE::STAGE_END; ++i)
+	{
+		for (size_t j = 0; j < TILEMODE_CHANGE::MODE_END; ++j)
+		{
+			for (auto iter = m_vecTileBuffer[i][j].begin(); iter != m_vecTileBuffer[i][j].end();)
+			{
+
+				(*iter)->Update_GameObject(fTimeDetla);
+				//_bool bDead = (*iter)->Get_ObjectDead();
+				//
+				//if (bDead == TRUE)
+				//{
+				//	Safe_Release((*iter));
+				//	iter = m_vecTileBuffer[i][j].erase(iter);
+				//
+				//	}
+				if (iter != m_vecTileBuffer[i][j].end())
+					++iter;
+			}
+
+		}
+	}
 	
 	return S_OK;
 }
@@ -290,6 +308,7 @@ void TileManager::Save_Tile(HWND g_hWnd)
 	_vec3		     vNextPos	     = {};
 	_bool			 bOnlyAni		 = {};
 	UvXY			 Uv				 = {};
+	TILE_SPAWNER     eSpawn			 = TILE_SPAWNER::SPAWN_END;
 	for (size_t i = 0; i < TILE_STAGE::STAGE_END; ++i)
 	{
 		for (size_t j = 0; j < TILEMODE_CHANGE::MODE_END; ++j)
@@ -302,6 +321,7 @@ void TileManager::Save_Tile(HWND g_hWnd)
 				eTileState = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileStateName();
 				eTileMode = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileMode();
 				eTileStage = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileStage();
+				eSpawn = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_Spawner();
 				iTileTextureCnt = dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileTextureNumber();
 				vNextPos	= dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_NextPos();
 				ua_tcscpy_s(cTileName, 128, dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_TileTextureName().c_str());
@@ -311,22 +331,21 @@ void TileManager::Save_Tile(HWND g_hWnd)
 				dynamic_cast<Transform*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM))->Get_Info(INFO_POS, &Info);
 				bOnlyAni	= dynamic_cast<TileInfo*>(pTile->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Get_OnlyAnimation();
 
-				WriteFile(hFile, &Info,			   sizeof(_vec3), &dwByte, NULL);
-				WriteFile(hFile, &iTilenum,		   sizeof(_int), &dwByte, NULL);
-				WriteFile(hFile, &eTileSide,	   sizeof(TILE_SIDE), &dwByte, NULL);
-				WriteFile(hFile, &eTileState,	   sizeof(TILE_STATE), &dwByte, NULL);
+				WriteFile(hFile, &Info,			   sizeof(_vec3),			&dwByte, NULL);
+				WriteFile(hFile, &iTilenum,		   sizeof(_int),			&dwByte, NULL);
+				WriteFile(hFile, &eTileSide,	   sizeof(TILE_SIDE),		&dwByte, NULL);
+				WriteFile(hFile, &eTileState,	   sizeof(TILE_STATE),		&dwByte, NULL);
 				WriteFile(hFile, &eTileMode,	   sizeof(TILEMODE_CHANGE), &dwByte, NULL);
-				WriteFile(hFile, &cTileName,	   sizeof(_tchar) * 128, &dwByte, NULL);
-				WriteFile(hFile, &Scale,		   sizeof(_vec3), &dwByte, NULL);
-				WriteFile(hFile, &Rotation,		   sizeof(_vec3), &dwByte, NULL);
-				WriteFile(hFile, &eTileStage,	   sizeof(TILE_STAGE), &dwByte, NULL);
-				WriteFile(hFile, &iTileTextureCnt, sizeof(_int),  &dwByte, NULL);
-				WriteFile(hFile, &vNextPos,		   sizeof(_vec3), &dwByte, NULL);
-				WriteFile(hFile, &bOnlyAni,		   sizeof(_bool), &dwByte, NULL);
-				WriteFile(hFile, &Uv,			   sizeof(UvXY), &dwByte, NULL);
-			
-				if (eTileStage == TILE_STAGE::TILE_STAGE2)
-					_int i = 0;
+				WriteFile(hFile, &cTileName,	   sizeof(_tchar) * 128,	&dwByte, NULL);
+				WriteFile(hFile, &Scale,		   sizeof(_vec3),			&dwByte, NULL);
+				WriteFile(hFile, &Rotation,		   sizeof(_vec3),			&dwByte, NULL);
+				WriteFile(hFile, &eTileStage,	   sizeof(TILE_STAGE),		&dwByte, NULL);
+				WriteFile(hFile, &iTileTextureCnt, sizeof(_int),			&dwByte, NULL);
+				WriteFile(hFile, &vNextPos,		   sizeof(_vec3),			&dwByte, NULL);
+				WriteFile(hFile, &bOnlyAni,		   sizeof(_bool),			&dwByte, NULL);
+				WriteFile(hFile, &Uv,			   sizeof(UvXY),			&dwByte, NULL);
+				WriteFile(hFile, &eSpawn,		   sizeof(TILE_SPAWNER),	&dwByte, NULL);
+				
 			}
 		}
 	}

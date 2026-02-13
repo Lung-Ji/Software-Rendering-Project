@@ -88,6 +88,7 @@ private:
     TILE_STATE                   m_eTileState;
     TILEMODE_CHANGE              m_eMode;
     TILE_STAGE                   m_eStage;
+    TILE_SPAWNER                 m_eSpawner;
     INSTALL_MODE                 m_eTileInstall;
 public:
     static      Tile* Create(LPDIRECT3DDEVICE9 pGraphicDev);

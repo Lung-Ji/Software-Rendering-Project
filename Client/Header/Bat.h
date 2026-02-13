@@ -37,7 +37,7 @@ private:
 	GameObject* pTarget;
 	_vec3*		pTargetPos;
 	_vec3		vDir;
-
+	_vec3       vPos;
 	BAT_STATE CurrState;
 	BAT_STATE PrevState;
 

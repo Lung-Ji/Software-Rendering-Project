@@ -41,6 +41,7 @@ HRESULT	MapScene::Ready_Scene() {
 	_vec3			 vNextPos = {};
 	_bool		     bAni = false;
     UvXY				 uv ={};
+	TILE_SPAWNER		eSpawn = TILE_SPAWNER::SPAWN_END;
 	TileManager::GetInstance()->Render_TileList();
 	while (true)
 	{
@@ -57,6 +58,7 @@ HRESULT	MapScene::Ready_Scene() {
 		ReadFile(hFile, &vNextPos,		  sizeof(_vec3),		   &dwByte, NULL);
 		ReadFile(hFile, &bAni,			  sizeof(_bool),	       &dwByte, NULL);
 		ReadFile(hFile, &uv,			  sizeof(UvXY),			   &dwByte, NULL);
+		ReadFile(hFile, &eSpawn,		  sizeof(TILE_SPAWNER),    &dwByte, NULL);
 		
 	
 		
@@ -65,6 +67,7 @@ HRESULT	MapScene::Ready_Scene() {
 		GOBJ = CXZTile::Create(GRPDEV, eTileSide, eTileState,uv.x1,uv.x2,uv.y,uv.y2);
 		GOBJ->Set_ObjectTag(L"CXZTile");
 		dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileStage(eTileStage);
+		dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileSpawner(eSpawn);
 		if (eTileState == TILE_STATE::STATE_DESTORY || eTileState == TILE_STATE::STATE_ANIMATION || eTileState == TILE_STATE::STATE_POTALEFFECT)
 			dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAnimaiton(cTileName, iTileTextureCnt, eTileSide, eTileState, eTileMode, iTilenum, vNextPos, bAni);
 		else

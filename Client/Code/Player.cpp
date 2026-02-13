@@ -549,7 +549,7 @@ void Player::ATTACK_STATE(const _float& _DT)
 	//else if (!mouseLB) {
 	//	_pState = pState::STATE_IDLE;
 	//}
-
+	_pState = pState::STATE_IDLE;
 	_vec2 playerPos = { WINCX / 2 , WINCY / 2 };
 
 	if (point.x <= playerPos.x && point.y >= playerPos.y) {
@@ -747,16 +747,16 @@ void Player::Idle_Final_Input(const _float& _DT)
 {
 	bool mouseLB = KeyManager::GetInstance()->Get_MouseState(DIM_LB) & 0x80;
 
-	if (MOUSE_RBUTTON) {
-		_pState = pState::STATE_DASH;
-		_dashStart = true;
-		_frame = 1;
-	}
-	else if (mouseLB) {
-		_pState = pState::STATE_ATTACK;
-		_attackDelay = 2.0f;
-		_frame = 1;
-	}
+	//if (MOUSE_RBUTTON) {
+	//	_pState = pState::STATE_DASH;
+	//	_dashStart = true;
+	//	_frame = 1;
+	//}
+	//else if (mouseLB) {
+	//	_pState = pState::STATE_ATTACK;
+	//	_attackDelay = 2.0f;
+	//	_frame = 1;
+	//}
 }
 
 void Player::SetGrahpic()

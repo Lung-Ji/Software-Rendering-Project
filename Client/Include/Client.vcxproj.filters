@@ -306,6 +306,9 @@
     <ClInclude Include="..\Header\NPCTalk.h">
       <Filter>04. UI\04. NPCTalk</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\Spawner.h">
+      <Filter>03. GameObject\05. Tile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameManager.cpp">
@@ -451,6 +454,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\PlayerInven.cpp">
       <Filter>04. UI\InventoryUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Spawner.cpp">
+      <Filter>03. GameObject\05. Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
