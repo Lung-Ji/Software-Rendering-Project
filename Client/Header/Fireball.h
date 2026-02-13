@@ -3,7 +3,7 @@
 
 class Fireball : public GameObject
 {
-private:
+public:
 	explicit Fireball(LPDIRECT3DDEVICE9 _GRPDEV);
 	explicit Fireball(CONST GameObject& _RHS);
 	virtual ~Fireball();

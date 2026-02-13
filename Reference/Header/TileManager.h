@@ -35,13 +35,16 @@ public:
     _bool           Choice_Tile(_int* eState, _int* eMode, _int* iTileNumber, _vec3 Origin, _vec3 vDir, _vec3* returnPos, _vec3* returnScale, _vec3* returnRot);
     void            Set_Tile(_vec3 vPos, _vec3 returnPos, _vec3 returnRot, _int eStage, _int eMode, _int TileNumber);
     void            Move_Tile(_vec3 vPos, _vec3 Origin, _vec3 vDir);
-    void            Change_Tile(TILE_STAGE eStage) { m_eStage = eStage; }
+    void            Change_Stage(TILE_STAGE eStage) { m_eCurrent = eStage; m_bStageChange = true; }
     void            Reset_TileList();
 private:
+    _bool                   m_bStageChange;
     _bool                   m_bCheck;
+    TILE_STAGE              m_eCurrent;
     TILE_STAGE              m_eStage;
     TILEMODE_CHANGE         m_eMode;
     vector<GameObject*>     m_vecTileBuffer[TILE_STAGE::STAGE_END][TILEMODE_CHANGE::MODE_END];
+
 private:
     virtual void            Free();
 };

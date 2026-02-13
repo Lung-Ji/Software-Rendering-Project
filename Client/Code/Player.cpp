@@ -95,13 +95,14 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
 
 	if (KEY_DOWN(DIK_Y)) {
-		Set_ObjectDead(TRUE);
+		//Set_ObjectDead(TRUE);
 	}
 
 	//SetOnTerrain(); - 광윤 디버그
 
 	_frameTick += _DT;
 	if (_isStop) return 0;
+
 	switch (_pState)
 	{
 	case pState::STATE_IDLE:
@@ -119,11 +120,11 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	default:
 		break;
 	}
-	return 0;
+	return S_OK;
 }
 VOID Player::LateUpdate_GameObject(const _float& _DT) {
 	GameObject::LateUpdate_GameObject(_DT);
-
+	if (_isStop) return;
 	Set_Effect(_DT);
 }
 VOID Player::Render_GameObject() {
@@ -490,46 +491,6 @@ void Player::ATTACK_STATE(const _float& _DT)
 	bool mouseLB = KeyManager::GetInstance()->Get_MouseState(DIM_LB) & 0x80;
 	_attackDelay += _DT;
 
-	// 이펙트
-	//if (_attackDelay > 0.6) {
-	//	_vec3* playerPos = Component_Transform->Get_Position();
-	//
-	//	POINT MousePoint{ 0, 0 };
-	//	GetCursorPos(&MousePoint);
-	//	ScreenToClient(hWnd, &MousePoint);
-	//
-	//	_vec2 mousePos = { (float)MousePoint.x, (float)MousePoint.y };
-	//	_vec2 screenCenter = { WINCX * 0.5f, WINCY * 0.5f };
-	//
-	//	_vec2 dir2D = mousePos - screenCenter;
-	//	D3DXVec2Normalize(&dir2D, &dir2D);
-	//
-	//	float angle = atan2f(dir2D.y, dir2D.x);
-	//
-	//	float radius = 1.8f;
-	//
-	//	float offsetX = cosf(angle) * radius;
-	//	float offsetY = sinf(angle) * radius;
-	//
-	//	_pulsepos = { playerPos->x + offsetX , playerPos->y, playerPos->z - offsetY };
-	//
-	//	PLAY_PLAYER_EFFECT(PLAYER_SKILL::ICEARROW_PULSE, &_pulsepos, 0.2f);
-	//
-	//	{
-	//		GameObject* arrow = Arrow::Create(GRPDEV, ArrowType::IceArrow_LV1, &_pulsepos);
-	//
-	//		TCHAR arrowTag[128] = L"";
-	//		wsprintfW(arrowTag, L"PlayerArrow_%d", _arrowCount++);
-	//
-	//		arrow->Set_ObjectTag(arrowTag);
-	//		arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
-	//
-	//		SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow);
-	//	}
-	//
-	//	_attackDelay = 0.f;
-	//}
-
 	_vec3		upDir, rightDir;
 	upDir = { 0.f, 0.f, 1.f };
 	rightDir = { 1.f, 0.f, 0.f };
@@ -545,7 +506,7 @@ void Player::ATTACK_STATE(const _float& _DT)
 		_dashStart = true;
 		_frame = 1;
 	}
-	else if (!mouseLB) {
+	else if (!mouseLB && !KEY_HOLD(DIK_SPACE)) {
 		_pState = pState::STATE_IDLE;
 	}
 
@@ -754,6 +715,10 @@ void Player::Idle_Final_Input(const _float& _DT)
 	else if (mouseLB) {
 		_pState = pState::STATE_ATTACK;
 		_attackDelay = 2.0f;
+		_frame = 1;
+	}
+	else if (KEY_HOLD(DIK_SPACE)) {
+		_pState = pState::STATE_ATTACK;
 		_frame = 1;
 	}
 }
@@ -1169,10 +1134,10 @@ D3DXVECTOR3 Player::SetOnTerrain() {
 
 	return D3DXVECTOR3(Position->x, 1.f, Position->z);
 }
-void Player::Destroy_Weapon()
+void Player::Destroy_Weapon(int idx)
 {
-	_weaponSlot[_equipNum]->Set_Destroy();
-	_weaponSlot[_equipNum] = nullptr;
+	_weaponSlot[idx]->Set_Destroy();
+	_weaponSlot[idx] = nullptr;
 }
 Player* Player::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 	Player* PLAYER = new Player(_GRPDEV);

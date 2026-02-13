@@ -45,7 +45,7 @@ HRESULT StartScene::Ready_GameLogic_Layer() {
 	Add_GameObjectToScene<Bat>				(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_MONSTER, L"Bat");
 	Add_GameObjectToScene<ScorpoinEvilSoul>	(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_MONSTER, L"ScorpoinEvilSoul");
 
-	Add_GameObjectToScene<Docheol>			(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_MONSTER, L"Docheol");
+	//Add_GameObjectToScene<Docheol>			(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_MONSTER, L"Docheol");
 	//Add_GameObjectToScene<Fireball>			(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_MONSTER, L"Fireball");
 	Add_GameObjectToScene<NPC>				(LAYER_TYPE::LAYER_DYNAMIC_OBJECT, GAMEOBJECT_TYPE::OBJECT_NPC	  , L"NPC_Tif"		);
 	return S_OK;
@@ -54,11 +54,12 @@ HRESULT StartScene::Ready_UserInterface_Layer() {
 	Add_GameObjectToScene<MainMenuButton>	(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  ,	L"MainButton"	);
 	Add_GameObjectToScene<MainMenu>			(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  ,	L"MainMenu"		);
 	Add_GameObjectToScene<MainUI>			(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  , L"MainUI"		);
-	Add_GameObjectToScene<PlayerInven>		(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  , L"PlayerInven"	);
-	//Add_GameObjectToScene<Inventory>		(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  , L"PlayerInven"	);
-	//Add_GameObjectToScene<Augments>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"Augments");
-	// 화면 가리고 있어서 잠깐 주석 걸었습니다. pull받으시고 해제 바람
+
+	Add_GameObjectToScene<PlayerInven>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"PlayerInven");
+	Add_GameObjectToScene<Augments>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"Augments");
+
 	Add_GameObjectToScene<NPCTalk>			(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI	  , L"NPCTalk"		);
+	//Add_GameObjectToScene<SpeechBubble>(LAYER_TYPE::LAYER_USER_INTERFACE, GAMEOBJECT_TYPE::OBJECT_UI, L"NpcField");
 	return S_OK;
 }
 StartScene* StartScene::Create(LPDIRECT3DDEVICE9 _GRPDEV) {

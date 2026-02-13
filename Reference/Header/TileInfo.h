@@ -46,8 +46,37 @@ public:
         }
     
     }
-    void            Set_TileState(TILE_STATE eid)        { m_eTileState = eid; }
+   void            Set_TileSpawnerDefault(const _tchar* pName, _int iCnt, Engine::TILE_SIDE eId, TILE_STATE eState, TILEMODE_CHANGE eMode, _int iTileNumber = 0, _vec3 vNext = {}, _bool bAni = false, TILE_SPAWNER eSpawn = TILE_SPAWNER::SPAWN_END)
+    {
+        m_iTextureCount = iCnt;
+        m_pTileName = pName;
+        m_eTileSide = eId;
+        m_eTileState = eState;
+        m_eTileMode = eMode;
+        m_iTileNumber = iTileNumber;
+        m_NextPos = vNext;
+        m_bOnlyAnimation = bAni;
+        m_eTileSpawner = eSpawn;
 
+    }
+    void            Set_TileBackGround(const _tchar* pName, _int iCnt, Engine::TILE_SIDE eId, TILE_STATE eState, TILEMODE_CHANGE eMode, _int iTileNumber = 0, _vec3 vNext = {}, _bool bAni = false)
+    {
+        m_iTextureCount = iCnt;
+        m_pTileName = pName;
+        m_eTileSide = eId;
+        m_eTileState = eState;
+        m_eTileMode = eMode;
+        m_iTileNumber = iTileNumber;
+        m_NextPos = vNext;
+        m_bOnlyAnimation = bAni;
+        m_vecBackGround.push_back(L"Stage1-1_startroom_1.png");
+        m_vecBackGround.push_back(L"SMT_Stage01_ToughGrass.png");
+        m_vecBackGround.push_back(L"SMT_Stage02_Base3.png");
+        
+    }
+    void                   Set_TileState(TILE_STATE eid)        { m_eTileState = eid; }
+    void                   Set_TileStage(TILE_STAGE eid)        { m_eTileStage = eid; }
+    void                   Set_TileSpawner(TILE_SPAWNER eid)    { m_eTileSpawner = eid; }
     _int                   Get_TileNumber()              { return m_iTileNumber;}
     TILE_SIDE              Get_TileSideName()            { return m_eTileSide;  }
     TILE_STATE             Get_TileStateName()           { return m_eTileState; }
@@ -55,13 +84,14 @@ public:
     _int                   Get_TileTextureNumber()       { return m_iTextureCount; }
     wstring                Get_TileTextureName()         { return m_pTileName;  }
     const _tchar*          Get_AnimationName(_uint iCnt) { return m_vecAnimationName[iCnt].c_str(); }
+    const _tchar*          Get_BackGroundName(_uint iCnt) { return m_vecBackGround[iCnt].c_str(); }
     TILE_STAGE             Get_TileStage()               { return m_eTileStage; }
     _vec3                  Get_NextPos()                 { return m_NextPos; }
     _bool                  Get_PotalOpen()               { return m_bPortal; }
     _bool                  Get_OnlyAnimation()           { return m_bOnlyAnimation; }
     UvXY                   Get_Uv()                      { return m_Uv; }
-
-    void                   Set_OnlyAnimation(_bool bAni)           { m_bOnlyAnimation = bAni; }
+    TILE_SPAWNER           Get_Spawner()                 { return m_eTileSpawner; }
+    void                   Set_OnlyAnimation(_bool bAni) { m_bOnlyAnimation = bAni; }
     void                   Set_PotalOpen()               { m_bPortal = true; }
     void                   Set_Uv(UvXY uv)               { m_Uv = uv; }
     void                   Set_TextureID(IDirect3DBaseTexture9* pTexture) { 
@@ -81,11 +111,12 @@ private:
     TILE_STATE             m_eTileState;
     TILEMODE_CHANGE        m_eTileMode;
     TILE_STAGE             m_eTileStage;
-
+    TILE_SPAWNER           m_eTileSpawner;
     wstring                m_pTileName;
     IDirect3DBaseTexture9* m_pTexture;
            
     vector<wstring>  m_vecAnimationName;
+    vector<wstring>  m_vecBackGround;
 private:
     _bool                  m_bPortal;
     _bool                  m_bOnlyAnimation;

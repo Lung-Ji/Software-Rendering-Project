@@ -4,19 +4,10 @@
 #define SCROPOINEVILSOULIMGX 143
 #define SCROPOINEVILSOULIMGY 224
 
-enum SCROPOINEVILSOUL_STATE {
-	SCROPOINEVILSOUL_APPEAR,
-	SCROPOINEVILSOUL_IDLE,
-	SCROPOINEVILSOUL_TRACKING,
-	SCROPOINEVILSOUL_CHARGING,
-	SCROPOINEVILSOUL_ATTACKING,
-	SCROPOINEVILSOUL_HIT,
-	SCROPOINEVILSOUL_DISAPPEAR
-};
 
 class ScorpoinEvilSoul : public GameObject
 {
-private:
+public:
 	explicit ScorpoinEvilSoul(LPDIRECT3DDEVICE9 _GRPDEV);
 	explicit ScorpoinEvilSoul(CONST GameObject& _RHS);
 	virtual ~ScorpoinEvilSoul();
@@ -36,30 +27,23 @@ private:
 	Collider*		Component_Collider;
 
 public:
-	static ScorpoinEvilSoul* Create(LPDIRECT3DDEVICE9 _GRPDEV);
+	static			ScorpoinEvilSoul* Create(LPDIRECT3DDEVICE9 _GRPDEV);
+	BOOL			OnCollisionEnter(GameObject* _Other)	override;
+	BOOL			OnCollisionStay(GameObject* _Other)		override;
+	BOOL			OnCollisionExit(GameObject* _Other)		override;
+	MONSTERINFO*		Get_Info() { return &m_tInfo; }
+
 private:
 	virtual VOID Free();
 
 	VOID Set_Target(CONST TCHAR* _TAG);
+	
+	MONINFO m_tInfo;
 
-	GameObject* m_pTarget;
-	_vec3		m_vDir;
-
-	SCROPOINEVILSOUL_STATE CurrState;
-	SCROPOINEVILSOUL_STATE PrevState;
-
-	VOID Change_State(SCROPOINEVILSOUL_STATE eState);
-	VOID State_Appear();
+	VOID State_Summon(const _float& _DT);
 	VOID State_Idle(const _float& _DT);
 	VOID State_Tracking(const _float& _DT);
-	VOID State_Charging(const _float& _DT);
-	//VOID State_Attacking(const _float& _DT);
-
-	_float m_fTimer1;
-	_float m_fTimer2;
-
-	_float m_fDefault_Speed;
-	_float m_fSpeed;
-
-	TEXINFO m_tTexInfo;
+	VOID State_Casting(const _float& _DT);
+	VOID State_Channeling(const _float& _DT);
+	VOID State_Dead();
 };

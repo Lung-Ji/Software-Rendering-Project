@@ -16,7 +16,6 @@ public:
 	virtual BOOL		OnCollisionEnter(GameObject* _Other);
 	virtual BOOL		OnCollisionStay (GameObject* _Other);
 	virtual BOOL		OnCollisionExit (GameObject* _Other);
-
 public:
 	HRESULT						Ready_Effect(PLAYER_SKILL _SKILLTYPE, _vec3* _PlayerPOS, BOOL _Repeatable, FLOAT _PlayTime, _vec3 _Size);
 	HRESULT						Make_TextureList(wstring _FileName);

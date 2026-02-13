@@ -1,7 +1,7 @@
 #include "CXZTile.h"
 #include "../Include/PCH.h"
 
-CXZTile::CXZTile(LPDIRECT3DDEVICE9 _GRPDEV) : m_pNoCloneBuff(nullptr),m_CubeBuffer(nullptr), GameObject(_GRPDEV), m_fTime(0), m_fFrame(0), m_bStopFrame(false), m_pBuffer(nullptr), m_pTransform(nullptr), m_pTileInfo(nullptr) { ZeroMemory(&m_Material, sizeof(D3DMATERIAL9)); }
+CXZTile::CXZTile(LPDIRECT3DDEVICE9 _GRPDEV) : m_fAlpha(0), m_CubeBuffer(nullptr), GameObject(_GRPDEV), m_fTime(0), m_fFrame(0), m_bStopFrame(false), m_pBuffer(nullptr), m_pTransform(nullptr), m_pTileInfo(nullptr) { ZeroMemory(&m_Material, sizeof(D3DMATERIAL9)); }
 CXZTile::CXZTile(const GameObject& _RHS) : GameObject(_RHS) {}
 CXZTile::~CXZTile() {  }
 
@@ -17,7 +17,19 @@ INT	CXZTile::Update_GameObject(const _float& _DT) {
 
 	Frame_Move(_DT);
 	RenderManager::GetInstance()->Add_RenderGroup(RENDER_TILE, this);
-		return 0;
+	
+	if (m_fAlpha< 1.f)
+		m_fAlpha+= _DT * m_fAlpha;
+	if (m_fAlpha> 1.f)
+		m_fAlpha= 1.f;
+	else
+	{
+		if (m_fAlpha > 0.f)
+			m_fAlpha -= _DT * m_fAlpha;
+		if (m_fAlpha < 0.f)
+			m_fAlpha = 0.f;
+	}
+	return 0;
 
 }
 VOID CXZTile::LateUpdate_GameObject(const _float& _DT) {
@@ -32,10 +44,11 @@ VOID CXZTile::LateUpdate_GameObject(const _float& _DT) {
 }
 VOID CXZTile::Render_GameObject()
 {
+	DWORD Argb = D3DCOLOR_ARGB( 255, 255, 255, 255);
 
-	GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	GRPDEV->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-	GRPDEV->SetRenderState(D3DRS_ALPHAREF, 0xc0);
+	//GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	//GRPDEV->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	//GRPDEV->SetRenderState(D3DRS_ALPHAREF, 0xc0);
 
 	GRPDEV->SetTransform(D3DTS_WORLD, m_pTransform->Get_World());
 	
@@ -58,70 +71,89 @@ VOID CXZTile::Render_GameObject()
 		GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
 		break;
 	case TILE_STATE::STATE_POTALEFFECT:
-		//if (m_pTileInfo->Get_PotalOpen())
-		//{
+		if (!m_pTileInfo->Get_PotalOpen())
+		{
 			GRPDEV->SetTexture(0, ResourceManager::GetInstance()->Find_Texture(m_pTileInfo->Get_AnimationName((_uint)(m_fFrame))));
-		//}
-		//else return;
+		}
+		else return;
 		break;
 	case TILE_STATE::STATE_TRIGGER:
 		GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
 		break;
 	case TILE_STATE::STATE_POTALGASI:
-		//if (!m_pTileInfo->Get_PotalOpen())
-		//{
+		if (!m_pTileInfo->Get_PotalOpen())
+		{
 
 			GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
-			
-		//}
-		//else return;
+
+		}
+		else return;
 			break;
 	case TILE_STATE::STATE_POTALGASI_EFFECT:
-		//if (!m_pTileInfo->Get_PotalOpen())
-		//{
-		GRPDEV->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_ARGB(255, 255, 255, 255));
+		
+		if (!m_pTileInfo->Get_PotalOpen())
+		{
+		
+
 		GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+		GRPDEV->SetRenderState(D3DRS_TEXTUREFACTOR, Argb);
+		
 		GRPDEV->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
 		GRPDEV->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
 		GRPDEV->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_TFACTOR);
-
+		
 		GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 		GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE); //위에 두개 옵션 혼합해라
 		GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TFACTOR);
-
 		GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
-		//}
-		//else return;
+		}
+		else return;
 		break;
 	case TILE_STATE::STATE_UNDERTILE:
 	{
-	//	GRPDEV->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	//	GRPDEV->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	//	GRPDEV->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-		GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
+		//GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
+		//GRPDEV->SetTexture(1, ResourceManager::GetInstance()->Find_Texture(m_pTileInfo->Get_BackGroundName(0)));
+		//
+		//GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+		//GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+		//
+		//GRPDEV->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATE);
+		//GRPDEV->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+		//GRPDEV->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+		//GRPDEV->SetTextureStageState(1, D3DTSS_ALPHAARG1, D3DTA_CURRENT);
 
 	}
+		break;
+	case TILE_STATE::STATE_POTALGASI_BREAK:
+		if (!m_pTileInfo->Get_PotalOpen())
+		{
+			GRPDEV->SetTexture(0, m_pTileInfo->Get_Texture());
+		}
+		else
+			return;
 		break;
 	}
 
 	
 	if (m_pBuffer != nullptr)
 		m_pBuffer->Render_Buffer();
-	else m_pNoCloneBuff->Render_Buffer();
-
-	if (m_pTileInfo->Get_TileStateName() == TILE_STATE::STATE_POTALGASI_EFFECT)
+	
+	if (m_pTileInfo->Get_TileStateName() == TILE_STATE::STATE_POTALGASI_EFFECT || m_pTileInfo->Get_TileStateName() == TILE_STATE::STATE_UNDERTILE)
 	{
 
 		GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTSS_ALPHAARG1);
 		GRPDEV->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 		GRPDEV->SetTextureStageState(0, D3DTSS_COLOROP, D3DTSS_COLORARG1);
 		GRPDEV->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+
 		GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
 		GRPDEV->SetRenderState(D3DRS_TEXTUREFACTOR, 0xFFFFFFFF);
 	}
 
 
-	GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	//GRPDEV->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	GRPDEV->SetTexture(0, NULL);
 }
 
 void CXZTile::Set_Buffer(TILE_SIDE eid)
@@ -168,7 +200,8 @@ void CXZTile::Frame_Move(const FLOAT& _DT)
 		Crash_Player();
 		break;
 	case TILE_STATE::STATE_DESTORY: //플레이어 또는 몬스터 총알에 닿았을떄
-		Tile_Destory(_DT);
+		//Tile_Destory(_DT);
+		//Crash_Arrow();
 		break;
 	case TILE_STATE::STATE_POTAL:
 		Tile_Potal(_DT);
@@ -181,6 +214,10 @@ void CXZTile::Frame_Move(const FLOAT& _DT)
 	case TILE_STATE::STATE_POTALGASI:
 		break;
 	case TILE_STATE::STATE_POTALGASI_EFFECT:
+
+		//Tile_Gasi_Destory();
+		break;
+	case TILE_STATE::STATE_POTALGASI_BREAK:
 		Tile_Gasi_Destory();
 		break;
 	}
@@ -193,7 +230,7 @@ void CXZTile::Tile_Animation(const FLOAT& _DT)
 	if (m_pTileInfo->Get_OnlyAnimation())
 	{
 		m_fTime += _DT;					//지난 시간
-		if (m_fTime > 0.1f) //0.1초가 지나면
+		if (m_fTime > 0.15f) //0.1초가 지나면
 		{
 			++m_fFrame;     //프레임 증가
 			m_fTime = 0.f;	//시간 초기화
@@ -230,33 +267,34 @@ void CXZTile::Tile_Animation(const FLOAT& _DT)
 void CXZTile::Tile_Destory(const FLOAT& _DT)
 {
 	_vec3 Pos, Scale, Rot;
-	if (m_fFrame == m_pTileInfo->Get_TileTextureNumber() - 1)
-		return;
-	m_pTransform->Get_Info(INFO_POS, &Pos);	
-	Scale = *m_pTransform->Get_Scale();
-	Rot   = *m_pTransform->Get_Rotation();
-	Transform* pTransform = Crash_Player();
-	TileDestoryEffect* pEffect = nullptr;
-		m_bStopFrame = true;
 
-	if (m_bStopFrame && pTransform != nullptr)
+	m_pTransform->Get_Info(INFO_POS, &Pos);
+	Scale = *m_pTransform->Get_Scale();
+	Rot = *m_pTransform->Get_Rotation();
+	Transform* pTransform = Crash_Arrow();
+
+	if (pTransform != nullptr)
+	{
+		m_bStopFrame = true;
+	}
+
+	if(pTransform != nullptr && m_pTileInfo->Get_OnlyAnimation() && m_fFrame < 1)
+	{
+		Scale.x *= 2.5;
+		EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::ENVIROMENT, TileDestoryEffect::Create(GRPDEV, OBJECT_DESTORY::POTALEFFECT, 7, Pos, Scale , Rot));
+		Set_ObjectDead(TRUE);
+		++m_fFrame;
+	}
+	
+	if (m_bStopFrame && pTransform != nullptr && m_fFrame < m_pTileInfo->Get_TileTextureNumber() - 1.f)
 	{
 		// 애니메이션 터트린후 프레임 ++
 		// 현재 이미지 개수보다 크지 않을때 까지 이펙트 터트리고 카운트
 		if(!m_pTileInfo->Get_OnlyAnimation())
-			EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::ENVIROMENT, TileDestoryEffect::Create(GRPDEV, OBJECT_DESTORY::STONE, 8, Pos,Scale,Rot));
-		else EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::ENVIROMENT, TileDestoryEffect::Create(GRPDEV, OBJECT_DESTORY::POTALEFFECT, 7, Pos, Scale, Rot));
-
-		if (!(m_fFrame >= m_pTileInfo->Get_TileTextureNumber() - 1))
-		{
-			++m_fFrame;
-			//이펙트;
-		}
-		else
-		{
-			m_bStopFrame = false;
-		}
-			
+			EffectManager::GetInstance()->Append_Effect(EFFECT_OWNER::ENVIROMENT, TileDestoryEffect::Create(GRPDEV, OBJECT_DESTORY::STONE, 8, Pos,Scale * 2,Rot));
+		++m_fFrame;
+		//Set_ObjectDead(TRUE);
+		m_bStopFrame = false;
 	}
 }
 void CXZTile::Tile_Potal(const FLOAT& _DT)
@@ -283,14 +321,16 @@ void CXZTile::Tile_Potal_Effect(const FLOAT& _DT)
 		}
 	}
 }
-
 void CXZTile::Tile_Trigger()
 {
 	if (Crash_Player() != nullptr)
+	{
+		TileManager::GetInstance()->Change_Stage(m_pTileInfo->Get_TileStage());
 		TileManager::GetInstance()->Set_Trigger(m_pTileInfo->Get_TileStage(),
 			m_pTileInfo->Get_TileMode(), TILE_STATE::STATE_POTALEFFECT);
-}
+	}
 
+}
 void CXZTile::Tile_Gasi_Destory()
 {
 	_vec3 Pos, Scale, Rot;
@@ -309,7 +349,6 @@ void CXZTile::Tile_Gasi_Destory()
 		m_bStopFrame = true;
 	}
 }
-
 Transform* CXZTile::Crash_Player()
 {
 	_vec3 vPos{}, vTilePos{};
@@ -323,45 +362,31 @@ Transform* CXZTile::Crash_Player()
 
 	if (vPos.x  > vTilePos.x - 1 && vPos.x < vTilePos.x + 1 && vPos.z > vTilePos.z - 1 && vPos.z  < vTilePos.z + 1 && vTilePos.y < 2)
 	{
-		//_vec3 vPlayerLength, vTileLength;
-		 // 중심 차이
-	
-		FLOAT fPlayerLength(0), fTileLength(0), fDistance(0),fBack;
-	
-
-		if (OriginPlayer->Get_Speed() == 0)
-			return pPlayer;
-
-		if (vPos.x < vTilePos.z)
-		{
-			if (vPos.x < vTilePos.x)
-			{
-				vPos.x -= 0.05f;
-			}
-			else
-			{
-				vPos.x += 0.05f;
-			}
-			pPlayer->Set_Pos(vPos);
-		}
-		else if(vPos.x > vTilePos.z)
-		{
-			if (vPos.z < vTilePos.z)
-			{
-				vPos.z -= 0.05f;
-			}
-			else
-			{
-				vPos.z += 0.05f;
-
-			}
-			pPlayer->Set_Pos(vPos);
-		}
-		//if(vPos.x )
 		return pPlayer;
 	}
 
 
+	return nullptr;
+}
+Transform* CXZTile::Crash_Arrow()
+{
+	_vec3 vPos{}, vTilePos{};
+	//플레이어와 부딪히면 다음 좌표로 이동
+	Arrow* pPArrow = nullptr;
+	pPArrow = dynamic_cast<Arrow*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"PlayerArrow"));
+	if (pPArrow == nullptr)
+		return nullptr;
+	Transform* ObjArrow = dynamic_cast<Transform*>(SceneManager::GetInstance()->Get_CurrentScene()->Get_GameObject(L"PlayerArrow")->Get_Component(COMPONENT_TYPE::COMPONENT_TRANSFORM));
+
+	ObjArrow->Get_Info(INFO_POS, &vPos);
+
+	m_pTransform->Get_Info(INFO_POS, &vTilePos);
+
+	if (vPos.x > vTilePos.x - 1 && vPos.x < vTilePos.x + 1 && vPos.z > vTilePos.z - 1 && vPos.z < vTilePos.z + 1 && vTilePos.y < 2)
+	{
+		pPArrow->Set_ObjectDead(TRUE);
+		return ObjArrow;
+	}
 	return nullptr;
 }
 HRESULT CXZTile::Component_Initialize(TILE_SIDE eid, TILE_STATE eState, FLOAT& X1, FLOAT& X2, FLOAT& Y1, FLOAT& Y2) {
@@ -369,9 +394,7 @@ HRESULT CXZTile::Component_Initialize(TILE_SIDE eid, TILE_STATE eState, FLOAT& X
 	m_pTransform = ADD_COMPONENT_TRANSFORM;
 	m_pTileInfo  = ADD_COMPONENT_TILEINFO;
 	
-	if (!(eState == TILE_STATE::STATE_UNDERTILE))
-	{
-		switch (eid)
+	switch (eid)
 		{
 		case TILE_SIDE::TILE_FRONT:
 			m_pBuffer = ADD_COMPONENT_TILEFRONT;
@@ -385,18 +408,8 @@ HRESULT CXZTile::Component_Initialize(TILE_SIDE eid, TILE_STATE eState, FLOAT& X
 		case TILE_SIDE::TILE_OTHER:
 			m_pBuffer = ADD_COMPONENT_TILE;
 			break;
-		}
 	}
-	else {
-		NoCloneBuffer* Noclone = NoCloneBuffer::Create(GRPDEV, X1, X2, Y1,Y2);
-		if(Noclone != nullptr)
-		m_pNoCloneBuff = Noclone;
-		UvXY uv = { X1,X2,Y1,Y2 };
-		m_pTileInfo->Set_Uv(uv);
-
-	}
-		
-
+	
 	//switch (eState)
 	//{
 	//case TILE_STATE::STATE_ANIMATION:
@@ -423,6 +436,7 @@ CXZTile* CXZTile::Create(LPDIRECT3DDEVICE9 _GRPDEV, TILE_SIDE eid, TILE_STATE eS
 	return pCXZTile;
 }
 VOID CXZTile::Free() {
-	Safe_Release(m_pNoCloneBuff);
+
+
 	GameObject::Free();
 }

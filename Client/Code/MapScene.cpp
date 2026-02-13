@@ -33,7 +33,7 @@ HRESULT	MapScene::Ready_Scene() {
 	TILEMODE_CHANGE  eTileMode = TILEMODE_CHANGE::MODE_END;
 	TILE_STAGE	     eTileStage = TILE_STAGE::STAGE_END;
 	_tchar			 cTileName[128] = {};
-	_vec3		     Info = {};
+	_vec3		     Info  = {};
 	_vec3			 Scale = {};
 	_vec3			 Rotation = {};
 	_tchar			 cPathName[128] = {};
@@ -41,6 +41,7 @@ HRESULT	MapScene::Ready_Scene() {
 	_vec3			 vNextPos = {};
 	_bool		     bAni = false;
     UvXY				 uv ={};
+	TILE_SPAWNER		eSpawn = TILE_SPAWNER::SPAWN_END;
 	TileManager::GetInstance()->Render_TileList();
 	while (true)
 	{
@@ -57,13 +58,16 @@ HRESULT	MapScene::Ready_Scene() {
 		ReadFile(hFile, &vNextPos,		  sizeof(_vec3),		   &dwByte, NULL);
 		ReadFile(hFile, &bAni,			  sizeof(_bool),	       &dwByte, NULL);
 		ReadFile(hFile, &uv,			  sizeof(UvXY),			   &dwByte, NULL);
+		ReadFile(hFile, &eSpawn,		  sizeof(TILE_SPAWNER),    &dwByte, NULL);
 		
 	
+		
 		GameObject* GOBJ = nullptr;
 		//GRPDEV->AddRef();
 		GOBJ = CXZTile::Create(GRPDEV, eTileSide, eTileState,uv.x1,uv.x2,uv.y,uv.y2);
 		GOBJ->Set_ObjectTag(L"CXZTile");
-	
+		dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileStage(eTileStage);
+		dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileSpawner(eSpawn);
 		if (eTileState == TILE_STATE::STATE_DESTORY || eTileState == TILE_STATE::STATE_ANIMATION || eTileState == TILE_STATE::STATE_POTALEFFECT)
 			dynamic_cast<TileInfo*>(GOBJ->Get_Component(COMPONENT_TYPE::COMPONENT_TILEINFO))->Set_TileAnimaiton(cTileName, iTileTextureCnt, eTileSide, eTileState, eTileMode, iTilenum, vNextPos, bAni);
 		else
@@ -81,7 +85,7 @@ HRESULT	MapScene::Ready_Scene() {
 		if (0 == dwByte)
 			break;
 	}
-
+	
 	MSG_BOX("로드 성공");
 	CloseHandle(hFile);
 }
