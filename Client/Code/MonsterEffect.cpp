@@ -5,18 +5,25 @@ MonsterEffect::MonsterEffect(LPDIRECT3DDEVICE9 _GRPDEV) : GameObject(_GRPDEV),	T
 MonsterEffect::MonsterEffect(CONST GameObject& _RHS)	: GameObject(_RHS),		TextureIndex(0), FrameTick(0.f)		{}
 MonsterEffect::~MonsterEffect()																						{}
 
-HRESULT MonsterEffect::Ready_Effect(CONST TCHAR* _Filename, _vec3 vPos, BOOL _Repeatable, FLOAT _PlayTime) {
+HRESULT MonsterEffect::Ready_Effect(MONSTER_EFFECT _SKILLTYPE, _vec3 vPos, BOOL _Repeatable, FLOAT _PlayTime) {
 	if (FAILED(Component_Initialize())) return E_FAIL;
 
-	if (FAILED(Make_TextureList(_Filename)))
+	Notify = 0;
+
+	m_eEffect = _SKILLTYPE;
+
+	switch (_SKILLTYPE)
 	{
-		ObjectDead = true;
-		return E_FAIL;
+	case MONSTER_EFFECT::MONSTER_SUMMONS01:		Make_TextureList(L"Spr_Effect_MonsterSummons01");		break;
+	case MONSTER_EFFECT::MONSTER_SUMMONS02:		Make_TextureList(L"Spr_Effect_MonsterSummons02");		break;
+	case MONSTER_EFFECT::MONSTER_SUMMONS03:		Make_TextureList(L"Spr_Effect_MonsterSummons03");		break;
+	case MONSTER_EFFECT::MONSTER_DEATH:			Make_TextureList(L"Spr_Effect_baseDeathEffect_B");		break;
+	case MONSTER_EFFECT::ALERT_CIRCLE:			TextureList.push_back(ResourceManager::GetInstance()->Find_Texture(L"AlertCircle.png")); break;
+	case MONSTER_EFFECT::SKILL_END:				default:		break;
 	}
 
-	//if		(_SKILLTYPE == MONSTER_SKILL::SKILL_1) { Make_TextureList(L"Spr_Effect_ExplosionNormal02_"); }
-	//else if (_SKILLTYPE == MONSTER_SKILL::SKILL_2) { Make_TextureList(L"Spr_Ui_Effect_BossClear_lraCharge_"); }
-	//else if (_SKILLTYPE == MONSTER_SKILL::SKILL_3) { Make_TextureList(L"Spr_Ui_Stage01_TureMapEffect_"); }
+
+	Component_Transform->Set_Scale(2.f, 2.f, 2.f);
 
 	Component_Transform->Set_Pos(vPos);
 	Repeatable = _Repeatable;
@@ -32,11 +39,12 @@ HRESULT MonsterEffect::Make_TextureList(CONST TCHAR* _Filename)
 	INT _frame = 0;
 	IDirect3DTexture9* pTexture = nullptr;
 
+	TCHAR Filename[256] = L"";
+
 	while (++_frame)
 	{
 		++ENDFRAME;
-		TCHAR Filename[256] = L"";
-		swprintf_s(Filename, 256, L"%s_%02d", _Filename, ENDFRAME);
+		swprintf_s(Filename, 256, L"%s_%02d.png", _Filename, ENDFRAME);
 		pTexture = ResourceManager::GetInstance()->Find_Texture(Filename);
 		if (nullptr == pTexture) break;
 		TextureList.push_back(pTexture);
@@ -49,7 +57,6 @@ HRESULT MonsterEffect::Make_TextureList(CONST TCHAR* _Filename)
 
 	return S_OK;
 }
-
 
 //HRESULT MonsterEffect::Make_TextureList(wstring _FileName) {
 //	INT FRAME = 0;
@@ -74,13 +81,11 @@ INT  MonsterEffect::Update_GameObject(CONST FLOAT& _DT) {
 }
 VOID MonsterEffect::LateUpdate_GameObject(CONST FLOAT& _DT) {
 	if (ObjectDead)	return;
-
-	//_matrix World = *Component_Transform->Get_World();
-	//_matrix BillBoard = RenderManager::Make_BillBoardMatrix(World, GRPDEV);
-	//World *= BillBoard;
-	//Component_Transform->Set_World(&World);
-
-	if (FrameTick > PlayTime / ENDFRAME) {
+	if (TextureList.size() == 1)
+	{
+		ObjectDead = FRAMETICK >= PlayTime;
+	}
+	else if (FrameTick > PlayTime / ENDFRAME) {
 		if (TextureIndex++ >= ENDFRAME - 2) {
 			if (Repeatable) { TextureIndex = 0; }
 			else {
@@ -89,6 +94,19 @@ VOID MonsterEffect::LateUpdate_GameObject(CONST FLOAT& _DT) {
 			}
 		}
 		FrameTick = 0.f;
+	}
+
+	if (TextureIndex > ENDFRAME / 2)
+		Notify = true;
+
+	switch (m_eEffect)
+	{
+	default:
+		Monster::BillBoard_Standard(GRPDEV, Component_Transform);
+		break;
+	case MONSTER_EFFECT::MONSTER_SUMMONS01:
+		Monster::BillBoard(Component_Transform, GRPDEV);
+		break;
 	}
 }
 VOID MonsterEffect::Render_GameObject() {
@@ -119,9 +137,9 @@ HRESULT			MonsterEffect::Component_Initialize() {
 
 	return S_OK;
 }
-MonsterEffect*	MonsterEffect::Create(LPDIRECT3DDEVICE9 _GRPDEV, CONST TCHAR* _Filename, _vec3 vPos, BOOL _Repeatable = false, FLOAT _PlayTime = 1.f){
+MonsterEffect*	MonsterEffect::Create(LPDIRECT3DDEVICE9 _GRPDEV, MONSTER_EFFECT _SKILLTYPE, _vec3 vPos, BOOL _Repeatable = false, FLOAT _PlayTime = 1.f){
 	MonsterEffect* EFT = new MonsterEffect(_GRPDEV);
-	if (FAILED(EFT->Ready_Effect(_Filename, vPos, _Repeatable, _PlayTime))) {
+	if (FAILED(EFT->Ready_Effect(_SKILLTYPE, vPos, _Repeatable, _PlayTime))) {
 		MSG_BOX("Cannot Create Effect.");
 		Safe_Release(EFT);
 		return nullptr;

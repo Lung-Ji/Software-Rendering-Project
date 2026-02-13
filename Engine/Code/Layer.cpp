@@ -47,7 +47,7 @@ GameObject* Layer::Get_GameObject(CONST TCHAR* _TAG) {
 HRESULT		Layer::Add_GameObject(GameObject* _GOBJ) {
 	if (_GOBJ == nullptr) return E_FAIL;
 	GameObjectList.push_back(_GOBJ);
-	CollisionManager::GetInstance()->Add_ColliderObject(_GOBJ);
+	//CollisionManager::GetInstance()->Add_ColliderObject(_GOBJ);
 	return S_OK;
 }
 Layer*		Layer::Create() {

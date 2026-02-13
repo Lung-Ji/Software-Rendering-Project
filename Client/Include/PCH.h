@@ -37,22 +37,19 @@
 #include "UIEffect.h"
 #include "NPC.h"
 #include "Object_Explain.h"
-//#include "Monster_State.h"
-//#include "Monster1.h"
-//#include "BossMonster.h"
 
 #include "Monster.h"
-#include "MonsterTest.h"
+#include "MonsterEffect.h"
 
-//#include "MonsterSummon01.h"
-//#include "MonsterSummon02.h"
-//#include "MonsterSummon03.h"
 #include "Bat.h"
 #include "ScorpionEvilSoul.h"
 #include "Docheol.h"
 
 #include "Bullet_Standard.h"
 #include "Fireball.h"
+#include "ScorpionBullet.h"
+#include "ShotGunEvilSoul.h"
+#include "EvilSlime.h"
 
 #include "Player.h"
 #include "Tile.h"

@@ -5,7 +5,7 @@ enum DOCHEOL_STATUS { DOCHEOL_IDLE };
 
 class Docheol : public GameObject
 {
-private:
+public:
 	explicit Docheol(LPDIRECT3DDEVICE9 _GRPDEV);
 	explicit Docheol(CONST GameObject& _RHS);
 	virtual ~Docheol();

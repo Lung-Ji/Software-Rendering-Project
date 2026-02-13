@@ -39,7 +39,7 @@ INT Bow::Update_GameObject(const _float& _DT)
 
 	if (_isEquip) {
 		GameObject::Update_GameObject(_DT);
-		RenderManager::GetInstance()->Add_RenderGroup(RENDER_ALPHA, this);
+		RenderManager::GetInstance()->Add_RenderGroup(RENDER_NONALPHA, this);
 
 		if (_isDestroied) return -1;
 
@@ -278,6 +278,12 @@ void Bow::CreateArrow(const _float& _DT)
 				cosf(angle + convergeAngle),
 				sinf(angle + convergeAngle)
 			};
+      GameObject* arrow = Arrow::Create(GRPDEV, ArrowType::IceArrow_LV1, &_arrowPos);
+
+				arrow->Set_ObjectTag(L"PlayerArrow");
+				arrow->Set_ObjectType(GAMEOBJECT_TYPE::OBJECT_PLAYER);
+
+				SceneManager::GetInstance()->Get_CurrentScene()->Get_Layer(LAYER_TYPE::LAYER_DYNAMIC_OBJECT)->Add_GameObject(arrow);
 			switch (_type)
 			{
 			case BowType::FairyBow :
@@ -299,7 +305,7 @@ void Bow::CreateArrow(const _float& _DT)
 				break;
 			default :
 				MakeArrow(_arrowPos, dir2D);
-				break;
+
 			}
 
 			_attackDelay = 0.f;
