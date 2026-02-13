@@ -145,6 +145,9 @@
     <Filter Include="04. UI\03. 병합예정">
       <UniqueIdentifier>{0342db50-c41a-444b-be99-85b8ffe4f75f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. UI\SpeechBubble">
+      <UniqueIdentifier>{9aae2f71-39a1-4a86-a57c-6ad0d8bad953}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02. Scene\02.DocheolScene">
       <UniqueIdentifier>{e7b56a2d-1555-4e8c-9652-a748c6efddaa}</UniqueIdentifier>
     </Filter>
@@ -309,6 +312,12 @@
     <ClInclude Include="..\Header\NPCTalk.h">
       <Filter>04. UI\04. NPCTalk</Filter>
     </ClInclude>
+    <ClInclude Include="..\Header\FieldApostle.h">
+      <Filter>04. UI\AugmentUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\SpeechBubble.h">
+      <Filter>04. UI\SpeechBubble</Filter>
+    </ClInclude>
     <ClInclude Include="..\Header\Spawner.h">
       <Filter>03. GameObject\05. Tile</Filter>
     </ClInclude>
@@ -460,6 +469,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\PlayerInven.cpp">
       <Filter>04. UI\InventoryUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\FieldApostle.cpp">
+      <Filter>04. UI\AugmentUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\SpeechBubble.cpp">
+      <Filter>04. UI\SpeechBubble</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Spawner.cpp">
       <Filter>03. GameObject\05. Tile</Filter>

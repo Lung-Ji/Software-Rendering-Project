@@ -17,12 +17,22 @@ class Augments : public GameObject
 		HRESULT Component_Initialize();
 		HRESULT Sprite_Initialize();
 		HRESULT Effect_Initialize();
+		HRESULT	Text_Initialize();
+
+		VOID Make_ShadowOutLine();
 
 		static	Augments* Create(LPDIRECT3DDEVICE9 _GRPDEV);
 
 	private:
 		SpriteObject* Component_Sprite;
 		vector<SpriteINFO>* TextureList;
+
+
+		// 임시 폰트용 멤버 변수
+		ID3DXFont* m_pFont;
+		RECT			 rc = { 550,80, 0, 0 };
+		D3DXCOLOR  color = { 255.f,255.f,255.f,255.f };
+
 	private:
 		virtual	VOID		Free();
 };
