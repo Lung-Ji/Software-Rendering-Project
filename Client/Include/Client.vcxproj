@@ -229,6 +229,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Header\ScorpionEvilSoul.h" />
+    <ClInclude Include="..\Header\SpeechBubble.h" />
     <ClInclude Include="..\Header\StartScene.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
@@ -336,6 +337,7 @@
     <ClCompile Include="..\Code\Player.cpp" />
     <ClCompile Include="..\Code\PlayerInven.cpp" />
     <ClCompile Include="..\Code\ScorpionEvilSoul.cpp" />
+    <ClCompile Include="..\Code\SpeechBubble.cpp" />
     <ClCompile Include="..\Code\StartScene.cpp" />
     <ClCompile Include="..\Code\Terrain.cpp" />
     <ClCompile Include="..\Code\Tile.cpp" />
