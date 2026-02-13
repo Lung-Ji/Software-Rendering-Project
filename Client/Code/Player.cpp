@@ -30,9 +30,8 @@ HRESULT Player::Ready_GameObject() {
 	_slideTime			= 0.f;
 	_g					= 30.f;
 	_frame				= 1;
-	_arrowCount = 0;
-	_isStop = false;
-
+	_arrowCount			= 0;
+	_isStop				= false;
 	{
 		_pStatus.hp				= 6;
 		_pStatus.Dash_Count = 3;
@@ -45,7 +44,6 @@ HRESULT Player::Ready_GameObject() {
 		_pStatus.critical		= 0.f;
 		_pStatus.maxBowRatio	= 1.f;
 	}
-
 	CameraObject* Camera = dynamic_cast<CameraObject*>(SceneManager::GetInstance()->Get_CurrentScene()->
 		Get_GameObject(L"Camera"));
 
@@ -103,8 +101,7 @@ INT	Player::Update_GameObject(const _float& _DT) {
 	//SetOnTerrain(); - 광윤 디버그
 
 	_frameTick += _DT;
-
-	if (_isStop) return S_OK;
+	if (_isStop) return 0;
 
 	switch (_pState)
 	{
@@ -151,11 +148,11 @@ HRESULT Player::Component_Initialize() {
 	Component_Collider->Set_CenterPos(Component_Transform);			// 충돌체가 오브젝트를 따라 다니도록
 	Component_Collider->Set_Scale(0.5f, 0.5f, 0.5f);				// 충돌체의 범위 조절
 
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Slide");
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Attack");
-	Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/NewDash");
+	//Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Stand");
+	//Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Run");
+	//Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Slide");
+	//Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/Attack");
+	//Component_Texture->Import_TextureFromFolder(L"../../Resource/Player/NewDash");
 
 	return S_OK;
 }
@@ -1150,6 +1147,13 @@ Player* Player::Create(LPDIRECT3DDEVICE9 _GRPDEV) {
 		return nullptr;
 	}
 	return PLAYER;
+}
+void Player::Set_PlayerStop(bool isStop) {
+	_isStop = isStop;
+	if (_isStop)
+		_weaponSlot[_equipNum]->Set_Bow_Equip(false);
+	else
+		_weaponSlot[_equipNum]->Set_Bow_Equip(true);
 }
 VOID	Player::Free() {
 	GameObject::Free();

@@ -39,33 +39,18 @@ struct ENGINE_DLL SpriteINFO {
 };
 
 struct ENGINE_DLL ItemINFO {
-	wstring ItemKey;
-	wstring ItemName;
-	wstring ItemClass;
+	enum ITINFO { KEY, NAME, CLASS, EFFECT01, EFFECT02, EFFECT03, DESC01, DESC02, DESC03, EXDESC, INVFRAME, INFFRAME};
 
-	wstring ItemDesc;
-	wstring ItemExDesc;
-	_int	ItemPrice;
+	LPDIRECT3DTEXTURE9		TEXTURE;
 
-	ItemINFO(wstring _ItemKey, wstring _ItemName, wstring _ItemClass, wstring _ItemDesc, wstring _ItemExDesc, _int _ItemPrice)
-		: ItemKey(_ItemKey), ItemName(_ItemName), ItemClass(_ItemClass), ItemDesc(_ItemDesc), ItemExDesc(_ItemExDesc), ItemPrice(_ItemPrice) {}
-public:
-	wstring	Get_ItemKey() { return ItemKey; }
+	vector<wstring>			ItemDesc;
 
-	VOID	Set_ItemName(wstring _Name) { ItemName = _Name; }
-	wstring Get_ItemName() { return ItemName; }
+	_int					ItemPrice;
+	_int					ItemType;
 
-	VOID	Set_ItemClass(wstring _Class) { ItemClass = _Class; }
-	wstring Get_ItemClass() { return ItemClass; }
-
-	VOID	Set_ItemDesc(wstring _Desc) { ItemDesc = _Desc; }
-	wstring Get_ItemDesc() { return ItemDesc; }
-
-	VOID	Set_ItemExDesc(wstring _ExDesc) { ItemExDesc = _ExDesc; }
-	wstring Get_ItemExDesc() { return ItemExDesc; }
-
-	VOID	Set_ItemPrice(_int _Price) { ItemPrice = _Price; }
-	_int	Get_ItemPrice() { return ItemPrice; }
+	ItemINFO() : TEXTURE(nullptr), ItemDesc{}, ItemPrice(0), ItemType(0) { ItemDesc.resize((LONG)ITINFO::INFFRAME + 1); }
+	//ItemINFO(LPDIRECT3DTEXTURE9 _TXT, wstring _ItemKey, wstring _ItemName, wstring _ItemClass, wstring* _ItemEffect, wstring _ItemDesc, wstring _ItemExDesc, _int _ItemPrice)
+	//	: TEXTURE(_TXT), ItemKey(_ItemKey), ItemName(_ItemName), ItemClass(_ItemClass), ItemEffect{_ItemEffect}, ItemDesc(_ItemDesc), ItemExDesc(_ItemExDesc), ItemPrice(_ItemPrice) {}
 };
 
 class ENGINE_DLL SpriteObject: public Component {
@@ -80,8 +65,8 @@ public:
 	INT			Update_Sprite();
 	VOID		Render_Sprite();
 
-	HRESULT		Import_Sprite(CONST TCHAR* _PATH, CONST TCHAR* _KEY, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY = 255);
-	HRESULT		Import_SpriteEX(wstring _RootPath, CONST TCHAR* _PATH, CONST TCHAR* _KEY, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY = 255);
+	SpriteINFO*		Import_Sprite(CONST TCHAR* _PATH, CONST TCHAR* _KEY, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY = 255);
+	SpriteINFO*		Import_SpriteEX(wstring _RootPath, CONST TCHAR* _PATH, CONST TCHAR* _KEY, FLOAT _POSX, FLOAT _POSY, UINT _WIDTH, UINT _HEIGHT, BOOL _VIS, INT _OPACITY = 255);
 
 	vector<SpriteINFO>* Get_TextureList() { return &TextureList; }
 	SpriteINFO*			Get_Texture(wstring _KEY);

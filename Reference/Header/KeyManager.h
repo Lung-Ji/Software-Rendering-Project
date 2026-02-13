@@ -23,7 +23,6 @@ public:
 	_byte			Get_MouseState(MOUSEKEYSTATE _MID)		{ return MouseState.rgbButtons[_MID];		}
 	LONG			Get_MouseMove(MOUSEMOVESTATE _MID)		{ return *(((_long*)&MouseState) + _MID);	}
 
-	KEY_STATE GetKeyState(KEY key)							{ return KeySet[(int)key].Current_KeyState; };
 
 public:
 	BOOL	KEY_STATE_HOLD(_ubyte _KEY) { return KeyState[_KEY] & 0x80 ? TRUE : FALSE; }

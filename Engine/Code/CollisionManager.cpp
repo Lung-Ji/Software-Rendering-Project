@@ -8,14 +8,12 @@ CollisionManager::CollisionManager()	: CollisionLine_Visibility(TRUE) {}
 CollisionManager::~CollisionManager()									 {}
 
 INT CollisionManager::Update_CollisionManager() {
-	
 	return 0;
 }
 
 VOID CollisionManager::LateUpdate_CollisionManager() {
-	if (KeyManager::GetInstance()->KEY_STATE_DOWN(DIK_F11) == TRUE) 
+	if (KeyManager::GetInstance()->KEY_STATE_DOWN(DIK_F4) == TRUE)
 		CollisionLine_Visibility ? CollisionLine_Visibility = FALSE : CollisionLine_Visibility = TRUE;
-	
 	AABB_Collision();
 }
 

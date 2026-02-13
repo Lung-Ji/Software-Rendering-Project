@@ -4,7 +4,6 @@
 
 #include "framework.h"
 #include <process.h>
-#include <io.h>
 #include <iostream>
 
 //////////////////////////////////////////// Engine Import

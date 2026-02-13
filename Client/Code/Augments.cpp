@@ -26,41 +26,43 @@ VOID	Augments::Render_GameObject() {
 
 	FontObject* pTitle = FontManager::GetInstance()->Find_FontObject(L"Testing");
 	if (pTitle) {
-		pTitle->Text = L"°¡È£ ¼±ÅÃ";
+		pTitle->Text = L"ê°€í˜¸ ì„ íƒ";
 		pTitle->Visible = TRUE; 
 	}
 	FontObject* pContent = FontManager::GetInstance()->Find_FontObject(L"Testing2");
 	if (pContent)
 	{
-		pContent->Text = L"°¡È£ÀÇ ´É·Â°ú °ü·ÃÇÑ ÅØ½ºÆ®";
+		pContent->Text = L"ê°€í˜¸ì˜ ëŠ¥ë ¥ê³¼ ê´€ë ¨í•œ í…ìŠ¤íŠ¸";
 		pContent->Visible = TRUE;
 	}
 	FontObject* pName = FontManager::GetInstance()->Find_FontObject(L"Testing3");
 	if(pName)
 		{
-			pName->Text = L"°¡È£ ÀÌ¸§";
+			pName->Text = L"ê°€í˜¸ ì´ë¦„";
 			pName->Visible = TRUE;
 		}
 }
 HRESULT Augments::Component_Initialize() {
 	Component_Sprite = ADD_COMPONENT_SPRITE;
 
-		//ÆùÆ® ÀÓ½Ã Ãâ·Â¿ë
+		//í°íŠ¸ ìž„ì‹œ ì¶œë ¥ìš©
 		//if (nullptr == m_pFont) {
 		//	D3DXCreateFont(GRPDEV, 45, 0, FW_BOLD, 1, FALSE, DEFAULT_CHARSET,
 		//	OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
-		//	L"¸¼Àº °íµñ", &m_pFont);
+		//	L"ë§‘ì€ ê³ ë”•", &m_pFont);
 		//}
 	return S_OK;
 }
 HRESULT Augments::Sprite_Initialize() {
-	// Sprite ¿¹½Ã¿ë
+	// Sprite ì˜ˆì‹œìš©
 	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_Ui_Apostle_BackGroun.png", L"Apostle_BackGround", 0.f, 0.f, 1280, 960, TRUE, 155);
 
 	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_Object_LevelUpBless_Effect.png", L"Apostle_Light", 540.f, 30.f, 180, 180, TRUE, 255);
 	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_Object_LevelUpBless_Birth_03.png", L"Apostle", 540.f, 30.f, 170, 170, TRUE, 255);
 
-	Component_Sprite->Import_Sprite(L"../../UI/Augments/Temp_Apostle.png", L"Apostle_Choose", 200.f, 70.f, 900, 70, TRUE, 255);
+	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_PerkIcon_1-04.png", L"Perk_01", 340.f, 270.f,80.f, 80.f, TRUE, 255);
+	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_PerkIcon_1-05.png", L"Perk_02", 590.f, 260.f, 108.f, 108.f, TRUE, 255);
+	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_PerkIcon_1-07.png", L"Perk_03", 820.f, 260.f, 108.f, 108.f, TRUE, 255);
 
 	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_Ui_ApostleLiberation_Background_Top.png", L"Y", 270.f, 400.f, 700, 80, TRUE, 255);
 	Component_Sprite->Import_Sprite(L"../../UI/Augments/Spr_Ui_ApostleLiberation_Background_Bottom.png", L"D", 270.f, 480.f, 700, 140, TRUE, 255);
@@ -80,9 +82,9 @@ HRESULT Augments::Sprite_Initialize() {
 	return S_OK;
 }
 HRESULT Augments::Text_Initialize(){
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 625.f, 90.f }, 30, L"Testing", L"08¼­¿ïÇÑ°­Ã¼ L", D3DCOLOR_ARGB(255, 255, 255, 255));
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 625.f,500.f }, 30, L"Testing2", L"08¼­¿ïÇÑ°­Ã¼ L", D3DCOLOR_ARGB(255, 255, 255, 255));
-	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 600.f,415.f }, 20, L"Testing3", L"08¼­¿ïÇÑ°­Ã¼ L", D3DCOLOR_ARGB(255, 255, 255, 255));
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 625.f, 90.f }, 30, L"Testing", L"08ì„œìš¸í•œê°•ì²´ L", D3DCOLOR_ARGB(255, 255, 255, 255));
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 625.f,500.f }, 30, L"Testing2", L"08ì„œìš¸í•œê°•ì²´ L", D3DCOLOR_ARGB(255, 255, 255, 255));
+	FontManager::GetInstance()->Add_FontSprite(GRPDEV, L"", { 600.f,415.f }, 20, L"Testing3", L"08ì„œìš¸í•œê°•ì²´ L", D3DCOLOR_ARGB(255, 255, 255, 255));
 	
 	return S_OK;
 }
@@ -90,7 +92,7 @@ HRESULT Augments::Text_Initialize(){
 
 HRESULT Augments::Effect_Initialize() {
 
-		// Effect¿¹½Ã¿ë//
+		// Effectì˜ˆì‹œìš©//
 //	PLAY_UI_EFFECT_ONCE(MAIN_UI_EFFECT::HP_EFFECT, L"HP_EFFECT1", 8.f, -30.f, 75, 75, 0.75f, 255);
 	return S_OK;
 }

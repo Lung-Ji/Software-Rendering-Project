@@ -28,15 +28,15 @@ VOID FontManager::Render_FontManager() {
 			FLOAT XPos = TXT.second->Position.x;
 			FLOAT YPos = TXT.second->Position.y;
 			RECT RT = { XPos, YPos, XPos + 1, YPos + 1 };
-			TXT.second->DXFont->DrawTextW(DXSprite, TXT.second->Text.c_str(), -1, &RT, DT_CENTER | DT_NOCLIP, TXT.second->TextColor);
+			TXT.second->DXFont->DrawTextW(DXSprite, TXT.second->Text.c_str(), -1, &RT, TXT.second->FORMAT | DT_NOCLIP, TXT.second->TextColor);
 		}
 	}
 
 	DXSprite->End();
 }
-HRESULT FontManager::Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _vec2 _Position, _int _TextScale, wstring _FontTag, wstring _FontType, D3DCOLOR _Color, _int TextWeight, BOOL _Visible) {
+FontObject* FontManager::Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _vec2 _Position, _int _TextScale, wstring _FontTag, wstring _FontType, D3DCOLOR _Color, _int TextWeight, BOOL _Visible, DWORD FORMAT) {
 
-	FontObject* FO = new FontObject(_Position, _Text, _TextScale, TextWeight, _FontTag, _FontType, _Color, _Visible);
+	FontObject* FO = new FontObject(_Position, _Text, _TextScale, TextWeight, _FontTag, _FontType, _Color, _Visible, FORMAT);
 
 	D3DXFONT_DESCW FontInfo;
 	ZeroMemory(&FontInfo, sizeof(FontInfo));
@@ -52,12 +52,12 @@ HRESULT FontManager::Add_FontSprite(LPDIRECT3DDEVICE9 _GRPDEV, wstring _Text, _v
 
 	if (FAILED(D3DXCreateFontIndirectW(_GRPDEV, &FontInfo, &FO->DXFont))) {
 		MSG_BOX("Cannot Create FontObject.");
-		return E_FAIL;
+		return nullptr;
 	}
 
 	FontList.insert({ FO->FontTag.c_str(), FO });
 
-	return S_OK;
+	return FO;
 }
 FontObject* FontManager::Find_FontObject(wstring _Text) {
 	auto iter = find_if(FontList.begin(), FontList.end(), CTag_Finder(_Text.c_str()));

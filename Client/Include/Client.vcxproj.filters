@@ -136,8 +136,8 @@
     <Filter Include="02. Scene\99. MapScene">
       <UniqueIdentifier>{76ac9252-3a58-4a11-91e2-f721f733b660}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. UI\03. 병합예정">
-      <UniqueIdentifier>{0342db50-c41a-444b-be99-85b8ffe4f75f}</UniqueIdentifier>
+    <Filter Include="04. UI\05. ShopUI">
+      <UniqueIdentifier>{6a5b2160-4d00-44e4-af69-b26e327508f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. GameObject\07. ProJectile\03.ScorpionBullet">
       <UniqueIdentifier>{64a83776-8b63-4f8c-a8e9-b5d925e51d43}</UniqueIdentifier>
@@ -306,11 +306,11 @@
     <ClInclude Include="..\Header\MainUI.h">
       <Filter>04. UI\02. MainUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Header\Inventory.h">
-      <Filter>04. UI\03. 병합예정</Filter>
-    </ClInclude>
     <ClInclude Include="..\Header\NPCTalk.h">
       <Filter>04. UI\04. NPCTalk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Header\ShopUI.h">
+      <Filter>04. UI\05. ShopUI</Filter>
     </ClInclude>
     <ClInclude Include="..\Header\ScorpionBullet.h">
       <Filter>03. GameObject\07. ProJectile\03.ScorpionBullet</Filter>
@@ -455,14 +455,14 @@
     <ClCompile Include="..\Code\MainUI.cpp">
       <Filter>04. UI\02. MainUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Inventory.cpp">
-      <Filter>04. UI\03. 병합예정</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\NPCTalk.cpp">
       <Filter>04. UI\04. NPCTalk</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\PlayerInven.cpp">
       <Filter>04. UI\InventoryUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ShopUI.cpp">
+      <Filter>04. UI\05. ShopUI</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\ScorpionBullet.cpp">
       <Filter>03. GameObject\07. ProJectile\03.ScorpionBullet</Filter>

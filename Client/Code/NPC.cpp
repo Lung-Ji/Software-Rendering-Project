@@ -22,7 +22,6 @@ HRESULT NPC::Ready_GameObject() {
 	_float _cameraAngle = angle / D3DX_PI * 180.f;
 
 	Component_Transform->Rotation(ROT_X, 90.f - _cameraAngle);
-
 	return S_OK;
 }
 INT	NPC::Update_GameObject(const _float& _DT) {
@@ -113,8 +112,12 @@ BOOL NPC::OnCollisionExit(GameObject* _Other) {
 VOID NPC::TalkWithNPC(FLOAT _DT) {
 	if (Interaction_Possible) {
 		if (ObjectTAG == L"NPC_Tif") 
-			NPCTalkUI->Activate_NPCTalk(NPC_CHARACTER::NPC_TIF, _DT);
+			if (NPCTalkUI->Activate_NPCTalk(NPC_CHARACTER::NPC_TIF, _DT) == TRUE) {
+				Interaction_Possible = FALSE;
+			}
 		if (ObjectTAG == L"NPC_Shop")
-			NPCTalkUI->Activate_NPCTalk(NPC_CHARACTER::NPC_SHOP, _DT);
+			if(NPCTalkUI->Activate_NPCTalk(NPC_CHARACTER::NPC_SHOP, _DT) == TRUE) {
+				Interaction_Possible = FALSE;
+			}
 	}
 }
