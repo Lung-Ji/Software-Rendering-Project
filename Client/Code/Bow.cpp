@@ -264,19 +264,19 @@ void Bow::CreateArrow(const _float& _DT)
 
 			_arrowPos = { _playerPos->x + offsetX , _playerPos->y, _playerPos->z - offsetY };
 
-			_vec2 side = { -dir2D.y, dir2D.x };
+			_vec2 side = { dir2D.y, dir2D.x };
 			D3DXVec2Normalize(&side, &side);
 			_vec3 rightPos = _arrowPos;
 			_vec3 leftPos = _arrowPos;
 			float convergeAngle = D3DXToRadian(5.f);
 			_vec2 rightDir = {
 				cosf(angle - convergeAngle),
-				-sinf(angle - convergeAngle)
+				sinf(angle - convergeAngle)
 			};
 			
 			_vec2 leftDir = {
 				cosf(angle + convergeAngle),
-				-sinf(angle + convergeAngle)
+				sinf(angle + convergeAngle)
 			};
 			switch (_type)
 			{
@@ -289,10 +289,10 @@ void Bow::CreateArrow(const _float& _DT)
 				}
 				else{
 					MakeArrow(_arrowPos, dir2D);
-					rightPos.x += side.x * 1.5f;
-					rightPos.z += side.y * 1.5f;
-					leftPos.x -= side.x * 1.5f;
-					leftPos.z -= side.y * 1.5f;
+					rightPos.x -= side.x * 1.5f;
+					rightPos.z -= side.y * 1.5f;
+					leftPos.x += side.x * 1.5f;
+					leftPos.z += side.y * 1.5f;
 					MakeArrow(rightPos, rightDir);
 					MakeArrow(leftPos, leftDir);
 				}
